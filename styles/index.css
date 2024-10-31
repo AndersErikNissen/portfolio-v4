@@ -1,0 +1,33 @@
+:root {
+}
+
+body {
+  font-size: 16px;
+  font-family: "KumbhSans", sans-serif;
+  font-weight: 400;
+}
+
+/* ---- HEADER ---- */
+/* ---- HEADER ---- */
+/* ---- HEADER ---- */
+#Header {
+  padding: 1rem 2rem;
+}
+
+.header-main {
+  display: flex;
+}
+
+#Logo {
+  flex: 0 0 auto;
+}
+
+.header-left,
+.header-right {
+  flex: 1 1 100%;
+}
+
+.header-right {
+  display: flex;
+  justify-content: flex-end;
+}
