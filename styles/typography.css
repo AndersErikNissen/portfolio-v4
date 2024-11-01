@@ -1,0 +1,27 @@
+.fs-small {
+  font-family: "KumbhSans", sans-serif;
+  font-size: 0.69444rem;
+}
+
+.fs-medium {
+  font-family: "KumbhSans", sans-serif;
+  font-size: 0.92592rem;
+}
+
+.fw-200 {
+  font-weight: 200;
+}
+
+.fw-400 {
+  font-weight: 400;
+}
+
+.fw-700 {
+  font-weight: 700;
+}
+
+@media (max-width: 1023px) {
+}
+
+@media (max-width: 767px) {
+}

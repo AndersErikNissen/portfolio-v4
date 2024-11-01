@@ -1,17 +1,23 @@
-:root {
+html {
+  font-size: 1vw;
+  font-family: "KumbhSans", sans-serif;
 }
 
-body {
-  font-size: 16px;
-  font-family: "KumbhSans", sans-serif;
-  font-weight: 400;
+[data-display]:not([data-display="night"]) [data-display-on="night"],
+[data-display]:not([data-display="day"]) [data-display-on="day"] {
+  display: none;
 }
 
 /* ---- HEADER ---- */
 /* ---- HEADER ---- */
 /* ---- HEADER ---- */
 #Header {
-  padding: 1rem 2rem;
+  padding: 1.1574rem 3.7037rem;
+}
+
+#Menu-btn svg {
+  width: 1.44675rem;
+  height: auto;
 }
 
 .header-main {
@@ -20,6 +26,8 @@ body {
 
 #Logo {
   flex: 0 0 auto;
+  height: auto;
+  width: 5.78703rem;
 }
 
 .header-left,
@@ -30,4 +38,10 @@ body {
 .header-right {
   display: flex;
   justify-content: flex-end;
+}
+
+#Clock {
+  display: flex;
+  align-items: center;
+  gap: 0.23148rem;
 }

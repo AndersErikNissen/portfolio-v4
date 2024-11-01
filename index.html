@@ -43,6 +43,7 @@
     </style>
 
     <link href="/styles/reset.css" rel="stylesheet" />
+    <link href="/styles/typography.css" rel="stylesheet" />
     <link href="/styles/index.css" rel="stylesheet" />
 
     <script src="/scripts/app.js" defer></script>
@@ -52,14 +53,14 @@
     <header id="Header">
       <div class="header-main">
         <div class="header-left">
-          <button id="Btn-menu">
+          <button id="Menu-btn">
             <svg
+              class="icon"
               xmlns="http://www.w3.org/2000/svg"
               width="30"
               height="30"
               viewBox="0 0 30 30"
               fill="none"
-              class="icon"
             >
               <path
                 fill-rule="evenodd"
@@ -119,10 +120,10 @@
         </svg>
 
         <div class="header-right">
-          <div class="wrapper-clock">
+          <div id="Clock" data-display="night">
             <div class="clock-icons">
               <svg
-                id="Icon-moon"
+                data-display-on="night"
                 class="icon"
                 xmlns="http://www.w3.org/2000/svg"
                 width="30"
@@ -139,7 +140,7 @@
               </svg>
 
               <svg
-                id="Icon-sun"
+                data-display-on="day"
                 class="icon"
                 xmlns="http://www.w3.org/2000/svg"
                 width="30"
@@ -156,10 +157,10 @@
               </svg>
             </div>
 
-            <div id="Clock"></div>
+            <span class="fs-medium fw-200" data-clock-time>09:53</span>
           </div>
-          <button id="Btn-contact">
-            <span>Tag en snak</span>
+          <button id="Contact-btn">
+            <span class="fs-small">TAG EN SNAK</span>
             <svg
               class="icon"
               xmlns="http://www.w3.org/2000/svg"
