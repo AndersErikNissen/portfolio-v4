@@ -1,3 +1,5 @@
+"use strict";
+
 class ComponentDigitalClock extends HTMLElement {
   constructor() {
     super();

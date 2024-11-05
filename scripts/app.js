@@ -1,3 +1,5 @@
+"use strict";
+
 class TheApp extends HTMLElement {
   constructor() {
     super();
