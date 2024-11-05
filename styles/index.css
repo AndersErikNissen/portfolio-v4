@@ -1,22 +1,47 @@
 html {
   font-size: 1vw;
+}
+
+body {
   font-family: "KumbhSans", sans-serif;
 }
 
-[data-display]:not([data-display="night"]) [data-display-on="night"],
-[data-display]:not([data-display="day"]) [data-display-on="day"] {
-  display: none;
+:root {
+  --scale-4: 0.231rem;
+  --scale-8: 0.463rem;
+  --scale-12: 0.694rem;
+  --scale-16: 0.926rem;
+  --scale-20: 1.157rem;
+  --scale-24: 1.389rem;
+  --scale-32: 1.852rem;
+  --scale-64: 3.704rem;
+  --scale-100: 5.787rem;
+  --scale-1142: 66.088rem;
 }
 
-/* ---- HEADER ---- */
-/* ---- HEADER ---- */
-/* ---- HEADER ---- */
+digital-clock {
+  display: flex;
+  align-items: center;
+  gap: var(--scale-4);
+}
+
+digital-clock svg {
+  width: var(--scale-20);
+  height: auto;
+}
+
+digital-clock span {
+  font-size: var(--scale-16);
+  font-family: "KumbhSans", sans-serif;
+  font-weight: 200;
+}
+
 #Header {
-  padding: 1.1574rem 3.7037rem;
+  padding: var(--scale-20) var(--scale-64);
 }
 
 #Menu-btn svg {
-  width: 1.44675rem;
+  width: var(--scale-24);
   height: auto;
 }
 
@@ -27,7 +52,7 @@ html {
 #Logo {
   flex: 0 0 auto;
   height: auto;
-  width: 5.78703rem;
+  width: var(--scale-100);
 }
 
 .header-left,
@@ -43,5 +68,5 @@ html {
 #Clock {
   display: flex;
   align-items: center;
-  gap: 0.23148rem;
+  gap: var(--scale-4);
 }
