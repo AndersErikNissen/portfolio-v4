@@ -5,50 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AENDERS - PORTFOLIO</title>
 
-    <style>
-      @font-face {
-        font-family: "Amarante";
-        font-style: normal;
-        font-weight: 400;
-        src: url(/fonts/Amarante-Regular.ttf) format("ttf");
-      }
+    <link href="./styles/reset.css" rel="stylesheet" />
+    <link href="./styles/typography.css" rel="stylesheet" />
+    <link href="./styles/index.css" rel="stylesheet" />
 
-      @font-face {
-        font-family: "AntonSC";
-        font-style: normal;
-        font-weight: 400;
-        src: url(/fonts/AntonSC-Regular.ttf) format("ttf");
-      }
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Amarante&family=Anton+SC&family=Kumbh+Sans:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
 
-      @font-face {
-        font-family: "KumbhSans";
-        font-style: normal;
-        font-weight: 200;
-        src: url(/fonts/KumbhSans-ExtraLight.ttf) format("ttf");
-      }
-
-      @font-face {
-        font-family: "KumbhSans";
-        font-style: normal;
-        font-weight: 400;
-        src: url(/fonts/KumbhSans-Regular.ttf) format("ttf");
-      }
-
-      @font-face {
-        font-family: "KumbhSans";
-        font-style: normal;
-        font-weight: 700;
-        src: url(/fonts/KumbhSans-Bold.ttf) format("ttf");
-      }
-    </style>
-
-    <link href="/styles/reset.css" rel="stylesheet" />
-    <link href="/styles/typography.css" rel="stylesheet" />
-    <link href="/styles/index.css" rel="stylesheet" />
-
-    <script src="/scripts/app.js" defer></script>
-    <script src="/scripts/index.js" defer></script>
-    <script src="/scripts/components/clock.js" defer></script>
+    <script src="./scripts/app.js" defer></script>
+    <script src="./scripts/index.js" defer></script>
+    <script src="./scripts/components/clock.js" defer></script>
   </head>
   <body>
     <header id="Header">
@@ -122,7 +92,7 @@
 
         <div class="header-right">
           <digital-clock></digital-clock>
-  
+
           <button id="Contact-btn">
             <span class="fs-small">TAG EN SNAK</span>
             <svg

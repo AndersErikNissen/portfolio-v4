@@ -3,7 +3,23 @@ html {
 }
 
 body {
-  font-family: "KumbhSans", sans-serif;
+  font-family: "Kumbh Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "YOPQ" 300;
+}
+
+.anton-sc-regular {
+  font-family: "Anton SC", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.amarante-regular {
+  font-family: "Amarante", serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 :root {
