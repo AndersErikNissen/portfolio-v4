@@ -1,29 +1,89 @@
 "use strict";
 
+const APP_TEMPLATES = {};
+
 class TheApp extends HTMLElement {
   constructor() {
     super();
 
     /* Data base */
-    this.db = {};
+    this.db = [
+      {
+        name: "Forside",
+        path: "/",
+        template: "index",
+      },
+      {
+        name: "Projekter",
+        path: "/projects",
+        template: "projects",
+      },
+      {
+        name: "Visuelle projekter",
+        path: "/visuals",
+        template: "visuals",
+      },
+      {
+        name: "404",
+        template: "404",
+        default_template: true,
+      },
+    ];
+  }
+
+  set location(url) {
+    if (location.href !== url.href) {
+      location.replace(url.href);
+    }
+  }
+
+  loadScript(name) {
+    return new Promise((resolve) => {
+      const SRC = `./templates/template_${name}.js`;
+
+      if (document.querySelector('[src="' + SRC + '"]')) {
+        resolve();
+      }
+
+      const SCRIPT = document.createElement("script");
+      SCRIPT.src = SRC;
+      SCRIPT.addEventListener("load", () => {
+        resolve();
+      });
+
+      document.body.appendChild(SCRIPT);
+    });
+  }
+
+  loadStylesheet(name) {
+    return new Promise((resolve) => {
+      const SCRIPT = document.createElement("script");
+      SCRIPT.src = `./templates/template_${name}.js`;
+      SCRIPT.addEventListener("load", () => {
+        resolve(SCRIPT);
+      });
+
+      document.body.appendChild(SCRIPT);
+    });
+  }
+
+  async findTemplate(name, data) {
+    const DATA =
+      data ||
+      this.db.find((data) => data.path === location.pathname) ||
+      this.db.find((data) => data.default_template === true);
+
+    let TEMPLATE_NAME = name || DATA.name;
+
+    if (!APP_TEMPLATES[TEMPLATE_NAME]) {
+      await this.loadScript(TEMPLATE_NAME);
+    }
+
+    return APP_TEMPLATES["template_" + TEMPLATE_NAME](DATA);
   }
 
   trimFetchObject(obj) {
     const TRIMMED_OBJECT = obj;
-    const UNWANTED_KEYS = [
-      "acf",
-      "id",
-      "class_list",
-      "date",
-      "date_gmt",
-      "guid",
-      "link",
-      "modified",
-      "modified_gmt",
-      "status",
-      "template",
-      "_links",
-    ];
 
     /* Plugin: Advanced Custom Fields - Data */
     const ACF = obj.acf;
@@ -31,24 +91,41 @@ class TheApp extends HTMLElement {
     TRIMMED_OBJECT.title = TRIMMED_OBJECT.title.rendered;
     TRIMMED_OBJECT.content = TRIMMED_OBJECT.content.rendered;
     Object.assign(TRIMMED_OBJECT, ACF);
-    UNWANTED_KEYS.forEach((key) => delete TRIMMED_OBJECT[key]);
+
+    delete TRIMMED_OBJECT.acf;
+    delete TRIMMED_OBJECT.id;
+    delete TRIMMED_OBJECT.class_list;
+    delete TRIMMED_OBJECT.date;
+    delete TRIMMED_OBJECT.date_gmt;
+    delete TRIMMED_OBJECT.guid;
+    delete TRIMMED_OBJECT.link;
+    delete TRIMMED_OBJECT.modified;
+    delete TRIMMED_OBJECT.modified_gmt;
+    delete TRIMMED_OBJECT.status;
+    delete TRIMMED_OBJECT._links;
+    delete TRIMMED_OBJECT.template;
+
+    if (obj.type === "project") {
+      TRIMMED_OBJECT.template = obj.type;
+      TRIMMED_OBJECT.path = "/projects/" + obj.slug;
+      TRIMMED_OBJECT.name = obj.title;
+    }
 
     return TRIMMED_OBJECT;
   }
 
   async fetchDataByType(type) {
-    const KEY = type.replace("portfolio_", "");
     const RESPONSE = await fetch(
       "https://api.aenders.dk/wp-json/wp/v2/" + type
     );
     const JSON = await RESPONSE.json();
-    const VALUE = JSON.map((obj) => this.trimFetchObject(obj));
-
-    this.db[KEY] = VALUE;
+    const ARRAY = JSON.map((obj) => this.trimFetchObject(obj));
+    this.db = this.db.concat(ARRAY);
   }
 
   async fetchDatabase() {
-    const SESSION_DB = sessionStorage.getItem("aenders_dk_db");
+    sessionStorage.clear();
+    const SESSION_DB = sessionStorage.getItem("aenders_dk_db") || false;
     if (SESSION_DB) {
       this.db = JSON.parse(SESSION_DB);
     }
@@ -64,6 +141,8 @@ class TheApp extends HTMLElement {
 
   async connectedCallback() {
     await this.fetchDatabase();
+    this.header = await this.findTemplate("index", {}); // empty object, since the template is static
+    this.template = await this.findTemplate();
   }
 }
 
