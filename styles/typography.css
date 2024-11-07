@@ -1,11 +1,13 @@
 .fs-small {
-  font-family: "KumbhSans", sans-serif;
-  font-size: 0.69444rem;
+  font-size: var(--scale-12);
 }
 
 .fs-medium {
-  font-family: "KumbhSans", sans-serif;
-  font-size: 0.92592rem;
+  font-size: var(--scale-16);
+}
+
+.fs-large {
+  font-size: var(--scale-20);
 }
 
 .fw-200 {
@@ -18,6 +20,10 @@
 
 .fw-700 {
   font-weight: 700;
+}
+
+.fc-grey {
+  color: var(--color-grey);
 }
 
 @media (max-width: 1023px) {

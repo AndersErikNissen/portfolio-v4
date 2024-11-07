@@ -41,7 +41,7 @@ class TheApp extends HTMLElement {
     return new Promise((resolve) => {
       const SRC = `./templates/template_${name}.js`;
 
-      if (document.querySelector('[src="' + SRC + '"]')) {
+      if (document.querySelector('script[src="' + SRC + '"]')) {
         resolve();
       }
 
@@ -57,13 +57,21 @@ class TheApp extends HTMLElement {
 
   loadStylesheet(name) {
     return new Promise((resolve) => {
-      const SCRIPT = document.createElement("script");
-      SCRIPT.src = `./templates/template_${name}.js`;
-      SCRIPT.addEventListener("load", () => {
-        resolve(SCRIPT);
+      const HREF = `./styles/${name}.css`;
+
+      if (document.querySelector('link[href="' + HREF + '"]')) {
+        resolve();
+      }
+
+      const LINK = document.createElement("link");
+      LINK.rel = "stylesheet";
+      LINK.href = HREF;
+
+      LINK.addEventListener("load", () => {
+        resolve();
       });
 
-      document.body.appendChild(SCRIPT);
+      document.head.appendChild(LINK);
     });
   }
 
@@ -141,8 +149,11 @@ class TheApp extends HTMLElement {
 
   async connectedCallback() {
     await this.fetchDatabase();
-    this.header = await this.findTemplate("index", {}); // empty object, since the template is static
+    this.header = await this.findTemplate("header", {}); // empty object, since the template is static
+
+    await this.loadStylesheet("404");
     this.template = await this.findTemplate();
+    this.innerHTML = this.template;
   }
 }
 
