@@ -1,0 +1,16 @@
+digital-clock {
+  display: flex;
+  align-items: center;
+  gap: var(--scale-4);
+}
+
+digital-clock svg {
+  width: var(--scale-20);
+  height: auto;
+}
+
+digital-clock span {
+  font-size: var(--scale-16);
+  font-family: "KumbhSans", sans-serif;
+  font-weight: 200;
+}

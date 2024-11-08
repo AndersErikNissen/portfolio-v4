@@ -10,7 +10,7 @@ console.log(
   "background-color: white; color: black; padding: 2px 4px;"
 );
 
-APP_TEMPLATES.template_index = (data) => {
+APP_TEMPLATES.index = (data) => {
   return `
     <h1>INDEX</h1>
   `;

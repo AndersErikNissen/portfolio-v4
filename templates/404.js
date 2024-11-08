@@ -10,7 +10,7 @@ console.log(
   "background-color: red; color: white; padding: 2px 4px;"
 );
 
-APP_TEMPLATES.template_404 = (data) => {
+APP_TEMPLATES["404"] = (data) => {
   return `
     <section class="template-404">
       <div class="inner-404">

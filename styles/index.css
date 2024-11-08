@@ -42,10 +42,9 @@ the-app {
   --scale-32: 1.852rem;
   --scale-40: 2.315rem;
   --scale-64: 3.704rem;
-  --scale-100: 5.787rem;
-  --scale-180: 10.417rem;
-  --scale-240: 13.889rem;
   --scale-1142: 66.088rem;
+
+  --space-edge: var(--scale-20);
 
   --color-black: #0c0c0c;
   --color-grey-intense: #2e2e2e;
@@ -66,63 +65,10 @@ the-app {
     --scale-32: 32px;
     --scale-40: 40px;
     --scale-64: 64px;
-    --scale-100: 100px;
-    --scale-180: 180px;
-    --scale-240: 240px;
     --scale-1142: 1142px;
+
+    --space-edge: 12px;
   }
-}
-
-digital-clock {
-  display: flex;
-  align-items: center;
-  gap: var(--scale-4);
-}
-
-digital-clock svg {
-  width: var(--scale-20);
-  height: auto;
-}
-
-digital-clock span {
-  font-size: var(--scale-16);
-  font-family: "KumbhSans", sans-serif;
-  font-weight: 200;
-}
-
-#Header {
-  padding: var(--scale-20) var(--scale-64);
-}
-
-#Menu-btn svg {
-  width: var(--scale-24);
-  height: auto;
-}
-
-.header-main {
-  display: flex;
-}
-
-#Logo {
-  flex: 0 0 auto;
-  height: auto;
-  width: var(--scale-100);
-}
-
-.header-left,
-.header-right {
-  flex: 1 1 100%;
-}
-
-.header-right {
-  display: flex;
-  justify-content: flex-end;
-}
-
-#Clock {
-  display: flex;
-  align-items: center;
-  gap: var(--scale-4);
 }
 
 .underlined-btn {

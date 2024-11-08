@@ -37,9 +37,9 @@ class TheApp extends HTMLElement {
     }
   }
 
-  loadScript(name) {
+  loadScript(name, path = "templates") {
     return new Promise((resolve) => {
-      const SRC = `./templates/template_${name}.js`;
+      const SRC = `./${path}/${name}.js`;
 
       if (document.querySelector('script[src="' + SRC + '"]')) {
         resolve();
@@ -75,7 +75,7 @@ class TheApp extends HTMLElement {
     });
   }
 
-  async findTemplate(name, data) {
+  async prepareTemplate(name, data) {
     const DATA =
       data ||
       this.db.find((data) => data.path === location.pathname) ||
@@ -87,7 +87,9 @@ class TheApp extends HTMLElement {
       await this.loadScript(TEMPLATE_NAME);
     }
 
-    return APP_TEMPLATES["template_" + TEMPLATE_NAME](DATA);
+    await this.loadStylesheet(TEMPLATE_NAME);
+
+    return APP_TEMPLATES[TEMPLATE_NAME](DATA);
   }
 
   trimFetchObject(obj) {
@@ -124,7 +126,7 @@ class TheApp extends HTMLElement {
 
   async fetchDataByType(type) {
     const RESPONSE = await fetch(
-      "https://api.aenders.dk/wp-json/wp/v2/" + type
+      "https://api.aenders.dk/wp-json/wp/v2/" + type + "?acf_format=standard"
     );
     const JSON = await RESPONSE.json();
     const ARRAY = JSON.map((obj) => this.trimFetchObject(obj));
@@ -147,13 +149,26 @@ class TheApp extends HTMLElement {
     }
   }
 
+  async prepareHeader() {
+    await this.loadStylesheet("component-clock");
+    await this.loadScript("clock", "components");
+
+    return await this.prepareTemplate("header", {}); // empty object, since the template is static
+  }
+
+  async insertContent() {
+    let markup = "";
+
+    // markup += await this.prepareHeader();
+    markup += await this.prepareTemplate();
+
+    this.innerHTML = markup;
+  }
+
   async connectedCallback() {
     await this.fetchDatabase();
-    this.header = await this.findTemplate("header", {}); // empty object, since the template is static
 
-    await this.loadStylesheet("404");
-    this.template = await this.findTemplate();
-    this.innerHTML = this.template;
+    await this.insertContent();
   }
 }
 

@@ -1,6 +1,6 @@
 .template-404,
 .inner-404 {
-  padding: var(--scale-40);
+  padding: var(--space-edge);
   width: 100%;
   height: 100%;
 }
@@ -24,7 +24,7 @@
 }
 
 .icon-404 {
-  width: var(--scale-240);
+  width: 13.889rem;
   height: auto;
 }
 
@@ -38,10 +38,10 @@
 @media (max-width: 767px) {
   .template-404,
   .inner-404 {
-    padding: var(--scale-16);
+    padding: var(--space-edge);
   }
 
   .icon-404 {
-    width: var(--scale-180);
+    width: 180px;
   }
 }

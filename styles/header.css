@@ -1,2 +1,34 @@
-header {
+#Header {
+  padding: var(--scale-20) var(--space-edge);
+}
+
+#Menu-btn svg {
+  width: var(--scale-24);
+  height: auto;
+}
+
+.header-main {
+  display: flex;
+}
+
+#Logo {
+  flex: 0 0 auto;
+  height: auto;
+  width: 5.787rem;
+}
+
+.header-left,
+.header-right {
+  flex: 1 1 100%;
+}
+
+.header-right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 767px) {
+  #Logo {
+    width: 100px;
+  }
 }
