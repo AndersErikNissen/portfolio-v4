@@ -71,7 +71,6 @@ class OverFlow extends HTMLElement {
           background-color: var(--color-grey-intense);
           border-radius: 99px;
         }
-
       </style>
       <div class="overflow-wrapper">
         <div class="overflow-content">
@@ -93,10 +92,15 @@ class OverFlow extends HTMLElement {
   init() {
     this.render();
 
-    if (this.isOverflowing) {
-      this.renderScrollbar();
-      this.scrollSetup();
-    }
+    setTimeout(() => {
+      if (this.isOverflowing) {
+        this.renderScrollbar();
+        this.scrollSetup();
+      }
+    }, 500);
+
+    // Prøv at lavet et customElement, som kan give den højde videre???
+    // Måske er der brug for en mutationObserver - kig på om noget bestemt styling er "sat" på elementet?
   }
 
   connectedCallback() {

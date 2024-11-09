@@ -83,11 +83,11 @@ class TheApp extends HTMLElement {
 
     let TEMPLATE_NAME = name || DATA.name;
 
+    await this.loadStylesheet(TEMPLATE_NAME);
+
     if (!APP_TEMPLATES[TEMPLATE_NAME]) {
       await this.loadScript(TEMPLATE_NAME);
     }
-
-    await this.loadStylesheet(TEMPLATE_NAME);
 
     const TEMPLATE = APP_TEMPLATES[TEMPLATE_NAME](DATA);
 
