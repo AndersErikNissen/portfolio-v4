@@ -10,8 +10,12 @@ console.log(
   "background-color: white; color: black; padding: 2px 4px;"
 );
 
-APP_TEMPLATES.index = (data) => {
-  return `
-    <h1>INDEX</h1>
-  `;
+APP_TEMPLATES.index = () => {
+  return {
+    scripts: [],
+    styles: [],
+    markup: `
+      <h1>INDEX</h1>
+    `,
+  };
 };

@@ -10,10 +10,12 @@ console.log(
   "background-color: red; color: white; padding: 2px 4px;"
 );
 
-APP_TEMPLATES["404"] = (data) => {
-  return `
-    <section class="template-404">
-      <div class="inner-404">
+APP_TEMPLATES["404"] = () => {
+  return {
+    scripts: [],
+    styles: [],
+    markup: `
+      <section class="template-404 container">
         <div class="main-404">
           <svg class="icon-404" xmlns="http://www.w3.org/2000/svg" width="240" height="264" viewBox="0 0 240 264" fill="none">
             <path d="M203.747 142.908V120.581H161.974V98.5735L188.622 1.9015H232.477V97.053H239.999V120.581H232.477V142.908H203.747ZM187.102 97.053H203.747V26.0695L187.102 97.053Z" fill="currentColor"/>
@@ -33,7 +35,7 @@ APP_TEMPLATES["404"] = (data) => {
           <a class="underlined-btn light" href="https://github.com/AndersErikNissen" target="_blank">GitHub</a>
           <a class="underlined-btn light" href="https://www.instagram.com/aendersledes/" target="_blank">Instagram</a>
         </div>
-      </div>
-    </section>
-  `;
+      </section>
+    `,
+  };
 };

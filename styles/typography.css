@@ -6,6 +6,7 @@
   font-size: var(--scale-16);
 }
 
+.rte,
 .fs-large {
   font-size: var(--scale-20);
 }

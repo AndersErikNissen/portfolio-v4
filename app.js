@@ -89,7 +89,16 @@ class TheApp extends HTMLElement {
 
     await this.loadStylesheet(TEMPLATE_NAME);
 
-    return APP_TEMPLATES[TEMPLATE_NAME](DATA);
+    const TEMPLATE = APP_TEMPLATES[TEMPLATE_NAME](DATA);
+
+    TEMPLATE.scripts.forEach((script) => {
+      let path = script.path || null;
+      this.loadScript(script.name, path);
+    });
+
+    TEMPLATE.styles.forEach((style) => this.loadStylesheet(style));
+
+    return TEMPLATE.markup;
   }
 
   trimFetchObject(obj) {
@@ -168,7 +177,7 @@ class TheApp extends HTMLElement {
   async connectedCallback() {
     await this.fetchDatabase();
 
-    await this.insertContent();
+    // await this.insertContent();
   }
 }
 

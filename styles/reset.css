@@ -46,6 +46,7 @@ h6 {
 
 p {
   text-wrap: pretty;
+  line-height: 1.55;
 }
 
 h1,
