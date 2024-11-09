@@ -165,11 +165,11 @@ class TheApp extends HTMLElement {
     return await this.prepareTemplate("header", {}); // empty object, since the template is static
   }
 
-  async insertContent() {
+  async render() {
     let markup = "";
 
     // markup += await this.prepareHeader();
-    markup += await this.prepareTemplate();
+    markup += await this.prepareTemplate("index", {});
 
     this.innerHTML = markup;
   }
@@ -177,7 +177,7 @@ class TheApp extends HTMLElement {
   async connectedCallback() {
     await this.fetchDatabase();
 
-    // await this.insertContent();
+    await this.render();
   }
 }
 
