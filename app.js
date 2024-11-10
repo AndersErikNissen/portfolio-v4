@@ -128,34 +128,38 @@ class TheApp extends HTMLElement {
       TRIMMED_OBJECT.template = obj.type.replace("portfolio_", "");
       TRIMMED_OBJECT.name = obj.title;
 
+      const KEYS_W_INT = Object.keys(TRIMMED_OBJECT).filter((key) =>
+        key.match(/\d/)
+      );
+
+      TRIMMED_OBJECT.stages = {};
+
       if (obj.type === "portfolio_project") {
         TRIMMED_OBJECT.path = "/projects/" + obj.slug;
 
-        const KEYS_W_INT = Object.keys(TRIMMED_OBJECT).filter((key) =>
-          key.match(/\d/)
-        );
-
-        TRIMMED_OBJECT.stages = {};
-
         KEYS_W_INT.forEach((key) => {
-          let keySplit = key.split("-");
-          let stageNr = keySplit[1];
-          let stageValueType = keySplit[0];
-          let contentNr = keySplit[3];
-
-          if (!TRIMMED_OBJECT.stages[stageNr]) {
-            TRIMMED_OBJECT.stages[stageNr] = {};
-          }
-
           if (TRIMMED_OBJECT[key]) {
-            if (contentNr) {
+            let keySplit = key.split("-");
+            let stageNr = keySplit[1];
+            let stageValueType = keySplit[0];
+
+            if (!TRIMMED_OBJECT.stages[stageNr]) {
+              TRIMMED_OBJECT.stages[stageNr] = {};
+            }
+
+            if (key.includes("gallery")) {
+              if (!TRIMMED_OBJECT.stages[stageNr][stageValueType]) {
+                TRIMMED_OBJECT.stages[stageNr][stageValueType] = [];
+              }
+
+              TRIMMED_OBJECT.stages[stageNr][stageValueType].push(
+                TRIMMED_OBJECT[key]
+              );
+            } else {
               if (!TRIMMED_OBJECT.stages[stageNr][stageValueType]) {
                 TRIMMED_OBJECT.stages[stageNr][stageValueType] = {};
               }
 
-              TRIMMED_OBJECT.stages[stageNr][stageValueType][contentNr] =
-                TRIMMED_OBJECT[key];
-            } else {
               TRIMMED_OBJECT.stages[stageNr][stageValueType] =
                 TRIMMED_OBJECT[key];
             }
@@ -164,6 +168,47 @@ class TheApp extends HTMLElement {
           delete TRIMMED_OBJECT[key];
         });
       }
+
+      if (obj.type === "portfolio_page") {
+        TRIMMED_OBJECT.path = "/pages/" + obj.slug;
+
+        KEYS_W_INT.forEach((key) => {
+          if (TRIMMED_OBJECT[key]) {
+            let keySplit = key.split("-");
+            let stageNr = keySplit[1];
+            let stageValueType = keySplit[0];
+
+            if (!TRIMMED_OBJECT.stages[stageNr]) {
+              TRIMMED_OBJECT.stages[stageNr] = {};
+            }
+
+            if (!TRIMMED_OBJECT.stages[stageNr][stageValueType]) {
+              TRIMMED_OBJECT.stages[stageNr][stageValueType] = {};
+            }
+
+            TRIMMED_OBJECT.stages[stageNr][stageValueType] =
+              TRIMMED_OBJECT[key];
+          }
+
+          delete TRIMMED_OBJECT[key];
+        });
+      }
+    }
+
+    if (obj.type === "portfolio_visual") {
+      const IMAGES = Object.keys(TRIMMED_OBJECT).filter((key) =>
+        key.includes("image")
+      );
+
+      TRIMMED_OBJECT.gallery = [];
+
+      IMAGES.forEach((key) => {
+        if (TRIMMED_OBJECT[key]) {
+          TRIMMED_OBJECT.gallery.push(TRIMMED_OBJECT[key]);
+        }
+
+        delete TRIMMED_OBJECT[key];
+      });
     }
 
     return TRIMMED_OBJECT;
@@ -191,6 +236,7 @@ class TheApp extends HTMLElement {
 
   async fetchDatabase() {
     sessionStorage.clear();
+
     const SESSION_DB = sessionStorage.getItem("aenders_dk_db") || false;
     if (SESSION_DB) {
       this.db = JSON.parse(SESSION_DB);
@@ -223,6 +269,7 @@ class TheApp extends HTMLElement {
 
   async connectedCallback() {
     await this.fetchDatabase();
+    console.log(this.db);
 
     await this.render();
   }
