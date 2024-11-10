@@ -132,11 +132,7 @@ APP_TEMPLATES.index = () => {
                 Mit navn Anders Erik Nissen, jeg er en front-end udvikler med 2
                 års erfaring inden for e-commerce. Målet med denne portfolio er
                 at give indblik i hvem jeg er, samt vise mine programmerings og
-                kreative projekter. Lidt mere om mig selv, som er gemt...
-                Mit navn Anders Erik Nissen, jeg er en front-end udvikler med 2
-                års erfaring inden for e-commerce. Målet med denne portfolio er
-                at give indblik i hvem jeg er, samt vise mine programmerings og
-                kreative projekter. Lidt mere om mig selv, som er gemt...
+                kreative projekter.
               </p>
             </over-flow>
           </div>

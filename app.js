@@ -124,13 +124,60 @@ class TheApp extends HTMLElement {
     delete TRIMMED_OBJECT._links;
     delete TRIMMED_OBJECT.template;
 
-    if (obj.type === "project") {
-      TRIMMED_OBJECT.template = obj.type;
-      TRIMMED_OBJECT.path = "/projects/" + obj.slug;
+    if (obj.type === "portfolio_project" || obj.type === "portfolio_page") {
+      TRIMMED_OBJECT.template = obj.type.replace("portfolio_", "");
       TRIMMED_OBJECT.name = obj.title;
+
+      if (obj.type === "portfolio_project") {
+        TRIMMED_OBJECT.path = "/projects/" + obj.slug;
+
+        const KEYS_W_INT = Object.keys(TRIMMED_OBJECT).filter((key) =>
+          key.match(/\d/)
+        );
+
+        TRIMMED_OBJECT.stages = {};
+
+        KEYS_W_INT.forEach((key) => {
+          let keySplit = key.split("-");
+          let stageNr = keySplit[1];
+          let stageValueType = keySplit[0];
+          let contentNr = keySplit[3];
+
+          if (!TRIMMED_OBJECT.stages[stageNr]) {
+            TRIMMED_OBJECT.stages[stageNr] = {};
+          }
+
+          if (TRIMMED_OBJECT[key]) {
+            if (contentNr) {
+              if (!TRIMMED_OBJECT.stages[stageNr][stageValueType]) {
+                TRIMMED_OBJECT.stages[stageNr][stageValueType] = {};
+              }
+
+              TRIMMED_OBJECT.stages[stageNr][stageValueType][contentNr] =
+                TRIMMED_OBJECT[key];
+            } else {
+              TRIMMED_OBJECT.stages[stageNr][stageValueType] =
+                TRIMMED_OBJECT[key];
+            }
+          }
+
+          delete TRIMMED_OBJECT[key];
+        });
+      }
     }
 
     return TRIMMED_OBJECT;
+  }
+
+  rebuildProjectObject(obj) {
+    TRIMMED_OBJECT.template = obj.type;
+    TRIMMED_OBJECT.path = "/projects/" + obj.slug;
+    TRIMMED_OBJECT.name = obj.title;
+    return obj;
+  }
+
+  rebuildVisualsObject(obj) {
+    return obj;
   }
 
   async fetchDataByType(type) {

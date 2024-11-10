@@ -35,6 +35,7 @@ class OverFlow extends HTMLElement {
     this.wrapper.classList.add("overflow-wrapper");
     CONTENT.classList.add("overflow-content");
     SLOT.setAttribute("name", "content");
+
     STYLE.innerHTML = `
       :host {
         display: block;
