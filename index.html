@@ -16,10 +16,39 @@
       rel="stylesheet"
     />
 
+    <script src="./db.js" defer></script>
     <script src="./app.js" defer></script>
   </head>
   <body>
-    <the-app></the-app>
+    <the-app>
+      <link href="./styles/page.css" rel="stylesheet" />
+      <script src="./components/stage.js" defer></script>
+      <script src="./components/overflow.js" defer></script>
+
+      <stage-manager class="template-page">
+        <div class="page-sxs">
+          <div class="page-main">
+            <!-- JS LOOP -->
+            <stage-item index="0">
+              <div class="page-stage">
+                <h2 class="page-title h1">${title}</h2>
+                <over-flow>
+                  <p slot="content" class="page-content">${content}</p>
+                </over-flow>
+              </div>
+            </stage-item>
+            <!-- JS LOOP - END -->
+          </div>
+          <div class="page-gallery">
+            <!-- JS LOOP -->
+            <stage-item index="0">
+              <div class="page-image">${picture}</div>
+            </stage-item>
+            <!-- JS LOOP - END -->
+          </div>
+        </div>
+      </stage-manager>
+    </the-app>
     <loading-screen></loading-screen>
   </body>
 </html>

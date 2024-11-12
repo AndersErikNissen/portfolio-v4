@@ -1,3 +1,9 @@
+.h1 {
+  font-size: var(--scale-60);
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
 .fs-small {
   font-size: var(--scale-12);
 }

@@ -25,6 +25,7 @@ body {
   --scale-24: 1.389rem;
   --scale-32: 1.852rem;
   --scale-40: 2.315rem;
+  --scale-60: 3.472rem;
   --scale-64: 3.704rem;
 
   --space-edge: var(--scale-20);
