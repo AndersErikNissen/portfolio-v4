@@ -67,18 +67,6 @@ the-app {
   height: 100%;
 }
 
-.anton-sc-regular {
-  font-family: "Anton SC", serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.amarante-regular {
-  font-family: "Amarante", serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
 .underlined-btn {
   position: relative;
   display: inline-block;

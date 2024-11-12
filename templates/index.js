@@ -128,7 +128,7 @@ APP_TEMPLATES.index = () => {
           </svg>
           <div class="index-content">
             <over-flow>
-              <p slot="content" class="rte">
+              <p slot="content">
                 Mit navn Anders Erik Nissen, jeg er en front-end udvikler med 2
                 års erfaring inden for e-commerce. Målet med denne portfolio er
                 at give indblik i hvem jeg er, samt vise mine programmerings og

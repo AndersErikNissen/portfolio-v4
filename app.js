@@ -91,7 +91,7 @@ class TheApp extends HTMLElement {
     let markup = "";
 
     // markup += await this.prepareHeader();
-    markup += await this.prepareTemplate("page", {});
+    markup += await this.prepareTemplate("index", {});
 
     this.innerHTML = markup;
   }

@@ -8,6 +8,11 @@ class OverFlow extends HTMLElement {
     return this.wrapper.scrollHeight > this.wrapper.clientHeight;
   }
 
+  get lines() {
+    let lineAttribute = this.getAttribute("lines");
+    return lineAttribute ? parseInt(lineAttribute) : 4;
+  }
+
   set progress(pct) {
     this.style.setProperty(
       "--scroll-progress",
@@ -40,10 +45,12 @@ class OverFlow extends HTMLElement {
       :host {
         display: block;
         position: relative;
+        font-size: 1vw;
       }
 
       .overflow-wrapper {
-        max-height: calc((var(--scale-20) * 1.55) * 4);
+        min-height: 100%;
+        max-height: calc((1.157rem * 1.55) * ${this.lines});
         overflow: auto;
         scrollbar-width: none;
         scroll-behavior: smooth;
@@ -51,6 +58,21 @@ class OverFlow extends HTMLElement {
 
       .overflow-wrapper::-webkit-scrollbar {
         display: none;
+      }
+
+      .overflow-content {
+        font-size: 1.157rem;
+        line-height: 1.55;
+      }
+
+      @media (max-width: 767px) {
+        .overflow-wrapper {
+          max-height: calc((18px * 1.55) * ${this.lines});
+        }
+          
+        .overflow-content {
+          font-size: 18px;
+        }
       }
 
       .overflow-scrollbar {

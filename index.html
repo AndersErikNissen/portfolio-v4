@@ -22,31 +22,72 @@
   <body>
     <the-app>
       <link href="./styles/page.css" rel="stylesheet" />
+      <link href="./styles/component-stagemanager.css" rel="stylesheet" />
       <script src="./components/stage.js" defer></script>
       <script src="./components/overflow.js" defer></script>
 
-      <stage-manager class="template-page">
-        <div class="page-sxs">
-          <div class="page-main">
+      <stage-manager class="template-page container">
+        <div class="page-sxs container">
+          <div class="page-main page-sxs-item">
             <!-- JS LOOP -->
-            <stage-item index="0">
-              <div class="page-stage">
-                <h2 class="page-title h1">${title}</h2>
-                <over-flow>
-                  <p slot="content" class="page-content">${content}</p>
-                </over-flow>
-              </div>
-            </stage-item>
+            <div class="page-main-stage" data-stage="0">
+              <h2 class="page-title h1">${title}</h2>
+              <over-flow class="page-content">
+                <p slot="content">
+                  ${content} Lorem ipsum dolor sit amet consectetur adipisicing
+                  elit. Magnam non accusamus molestias, qui distinctio ducimus
+                  nihil obcaecati possimus eaque tempora fugiat dolorum iusto
+                  nam velit harum, magni inventore similique necessitatibus.
+                  ${content} Lorem ipsum dolor sit amet consectetur adipisicing
+                  elit. Magnam non accusamus molestias, qui distinctio ducimus
+                  nihil obcaecati possimus eaque tempora fugiat dolorum iusto
+                  nam velit harum, magni inventore similique necessitatibus.
+                  ${content} Lorem ipsum dolor sit amet consectetur adipisicing
+                  elit. Magnam non accusamus molestias, qui distinctio ducimus
+                  nihil obcaecati possimus eaque tempora fugiat dolorum iusto
+                  nam velit harum, magni inventore similique necessitatibus.
+                </p>
+              </over-flow>
+            </div>
             <!-- JS LOOP - END -->
+
+            <div class="page-footer link-footer">
+              <a
+                class="underlined-btn"
+                href="https://www.linkedin.com/in/anders-erik-nissen/"
+                target="_blank"
+                >LinkedIn</a
+              >
+              <a
+                class="underlined-btn"
+                href="https://github.com/AndersErikNissen"
+                target="_blank"
+                >GitHub</a
+              >
+              <a
+                class="underlined-btn"
+                href="https://www.instagram.com/aendersledes/"
+                target="_blank"
+                >Instagram</a
+              >
+            </div>
           </div>
-          <div class="page-gallery">
+
+          <div class="page-gallery page-sxs-item">
             <!-- JS LOOP -->
-            <stage-item index="0">
+            <div class="page-image-wrapper active-stage" data-stage="0">
               <div class="page-image">${picture}</div>
-            </stage-item>
+            </div>
+            <div class="page-image-wrapper" data-stage="1">
+              <div class="page-image">${picture}</div>
+            </div>
+            <div class="page-image-wrapper" data-stage="2">
+              <div class="page-image">${picture}</div>
+            </div>
             <!-- JS LOOP - END -->
           </div>
         </div>
+        <stage-control></stage-control>
       </stage-manager>
     </the-app>
     <loading-screen></loading-screen>
