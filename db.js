@@ -23,7 +23,7 @@ class DataBase {
   ];
 
   get data() {
-    sessionStorage.clear(); // PLSFIX - DEV
+    // sessionStorage.clear(); // PLSFIX - DEV
 
     const STORAGE = sessionStorage.getItem("aenders_dk_db");
 

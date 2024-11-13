@@ -67,6 +67,30 @@ the-app {
   height: 100%;
 }
 
+.aspect-box {
+  position: relative;
+  overflow: hidden;
+}
+
+.aspect-box::before {
+  content: "";
+  display: block;
+  padding-top: var(--aspect-ratio, 100%);
+}
+
+.aspect-box > :first-child {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.aspect-box > img {
+  object-fit: cover;
+  object-position: center;
+}
+
 .underlined-btn {
   position: relative;
   display: inline-block;

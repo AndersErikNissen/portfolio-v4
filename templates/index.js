@@ -137,26 +137,7 @@ APP_TEMPLATES.index = () => {
             </over-flow>
           </div>
         </div>
-        <div class="index-footer link-footer">
-          <a
-            class="underlined-btn"
-            href="https://www.linkedin.com/in/anders-erik-nissen/"
-            target="_blank"
-            >LinkedIn</a
-          >
-          <a
-            class="underlined-btn"
-            href="https://github.com/AndersErikNissen"
-            target="_blank"
-            >GitHub</a
-          >
-          <a
-            class="underlined-btn"
-            href="https://www.instagram.com/aendersledes/"
-            target="_blank"
-            >Instagram</a
-          >
-        </div>
+        ${SNIPPETS.link_footer()}
       </section>
     `,
   };

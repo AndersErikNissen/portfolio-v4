@@ -17,10 +17,12 @@
     />
 
     <script src="./db.js" defer></script>
+    <script src="./templates/snippets.js" defer></script>
     <script src="./app.js" defer></script>
   </head>
   <body>
     <the-app>
+      <link href="./styles/component-overflow.css" rel="stylesheet" />
       <link href="./styles/page.css" rel="stylesheet" />
       <link href="./styles/component-stagemanager.css" rel="stylesheet" />
       <script src="./components/stage.js" defer></script>
@@ -32,28 +34,38 @@
             <!-- JS LOOP -->
             <div class="page-main-stage" data-stage="0">
               <h2 class="page-title h1">${title}</h2>
-              <div class="page-content">
-                <over-flow lines="10">
-                  <p>
-                    ${content} Lorem ipsum dolor sit amet consectetur
-                    adipisicing elit. Magnam non accusamus molestias, qui
-                    distinctio ducimus nihil obcaecati possimus eaque tempora
-                    fugiat dolorum iusto nam velit harum, magni inventore
-                    similique necessitatibus. ${content} Lorem ipsum dolor sit
-                    amet consectetur adipisicing elit. Magnam non accusamus
-                    molestias, qui distinctio ducimus nihil obcaecati possimus
-                    eaque tempora fugiat dolorum iusto nam velit harum, magni
-                    inventore similique necessitatibus. ${content} Lorem ipsum
-                    dolor sit amet consectetur adipisicing elit. Magnam non
-                    accusamus molestias, qui distinctio ducimus nihil obcaecati
-                    possimus eaque tempora fugiat dolorum iusto nam velit harum,
-                    magni inventore similique necessitatibus.
-                  </p>
-                </over-flow>
-              </div>
+              <over-flow class="page-content">
+                <p>
+                  ${content} Lorem ipsum dolor sit amet consectetur adipisicing
+                  elit. Magnam non accusamus molestias, qui distinctio ducimus
+                  nihil obcaecati possimus eaque tempora fugiat dolorum iusto
+                  nam velit harum, magni inventore similique necessitatibus.
+                  ${content} Lorem ipsum dolor sit amet consectetur adipisicing
+                  elit. Magnam non accusamus molestias, qui distinctio ducimus
+                  nihil obcaecati possimus eaque tempora fugiat dolorum iusto
+                  nam velit harum, magni inventore similique necessitatibus.
+                  ${content} Lorem ipsum dolor sit amet consectetur adipisicing
+                  elit. Magnam non accusamus molestias, qui distinctio ducimus
+                  nihil obcaecati possimus eaque tempora fugiat dolorum iusto
+                  nam velit harum, magni inventore similique necessitatibus.
+                  ${content} Lorem ipsum dolor sit amet consectetur adipisicing
+                  elit. Magnam non accusamus molestias, qui distinctio ducimus
+                  nihil obcaecati possimus eaque tempora fugiat dolorum iusto
+                  nam velit harum, magni inventore similique necessitatibus.
+                  ${content} Lorem ipsum dolor sit amet consectetur adipisicing
+                  elit. Magnam non accusamus molestias, qui distinctio ducimus
+                  nihil obcaecati possimus eaque tempora fugiat dolorum iusto
+                  nam velit harum, magni inventore similique necessitatibus.
+                  ${content} Lorem ipsum dolor sit amet consectetur adipisicing
+                  elit. Magnam non accusamus molestias, qui distinctio ducimus
+                  nihil obcaecati possimus eaque tempora fugiat dolorum iusto
+                  nam velit harum, magni inventore similique necessitatibus.
+                </p>
+              </over-flow>
             </div>
             <!-- JS LOOP - END -->
 
+            <!-- USE SNIPPETS.link_footer() -->
             <div class="page-footer link-footer">
               <a
                 class="underlined-btn"

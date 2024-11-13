@@ -1,0 +1,57 @@
+over-flow {
+  display: block;
+  position: relative;
+  font-size: 1vw;
+}
+
+.overflow-wrapper {
+  overflow: auto;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  min-height: 100%;
+  height: 100%;
+  max-height: calc((var(--scale-20) * 1.55) * var(--max-lines, 10));
+  font-size: var(--scale-20);
+  line-height: 1.55;
+}
+
+.overflow-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.overflow-scrollbar {
+  display: block;
+  position: absolute;
+  height: var(--scale-64);
+  max-height: 90%;
+  width: var(--scale-4);
+  right: 0;
+  top: 50%;
+  transform: translate(calc(100% + var(--scale-8)), -50%);
+  background-color: var(--color-grey-subtle);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.overflow-scrollbar::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: translateY(var(--scroll-progress));
+  background-color: var(--color-grey-intense);
+  border-radius: 99px;
+}
+
+@media (max-width: 767px) {
+  .overflow-wrapper {
+    max-height: calc((18px * 1.55) * var(--max-lines, 10));
+  }
+
+  .overflow-content {
+    font-size: 18px;
+  }
+}

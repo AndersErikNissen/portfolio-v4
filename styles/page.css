@@ -35,10 +35,14 @@
   gap: var(--scale-32);
 }
 
+.page-title {
+  flex: 0 0 auto;
+}
+
 @media (max-width: 767px) {
   .page-sxs {
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 50%);
   }
 
   .page-main {
@@ -46,11 +50,11 @@
   }
 
   .page-main-stage {
-    justify-content: flex-start;
     gap: 24px;
+    justify-content: flex-start;
   }
 
   .page-content {
-    flex: 1 1 100%;
+    flex: 0 1 auto;
   }
 }
