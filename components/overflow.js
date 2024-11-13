@@ -1,7 +1,7 @@
 class OverFlow extends HTMLElement {
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
+    // this.attachShadow({ mode: "open" });
   }
 
   get isOverflowing() {
@@ -32,17 +32,19 @@ class OverFlow extends HTMLElement {
   }
 
   render() {
+    const CURRENT_HTML = this.innerHTML;
+    this.innerHTML = "";
     const STYLE = document.createElement("style");
     this.wrapper = document.createElement("div");
     const CONTENT = document.createElement("div");
-    const SLOT = document.createElement("slot");
+    // const SLOT = document.createElement("slot");
 
     this.wrapper.classList.add("overflow-wrapper");
     CONTENT.classList.add("overflow-content");
-    SLOT.setAttribute("name", "content");
+    // SLOT.setAttribute("name", "content");
 
     STYLE.innerHTML = `
-      :host {
+      over-flow {
         display: block;
         position: relative;
         font-size: 1vw;
@@ -103,17 +105,40 @@ class OverFlow extends HTMLElement {
       }
     `;
 
-    SLOT.addEventListener("slotchange", (e) => {
-      if (this.isOverflowing) {
-        this.renderScrollbar();
-        this.scrollSetup();
-      }
-    });
+    // SLOT.addEventListener("slotchange", (e) => {
+    //   console.log(
+    //     "+",
+    //     this.wrapper.clientHeight,
+    //     this.wrapper.scrollHeight,
+    //     this.clientHeight
+    //   );
+    //   if (this.isOverflowing) {
+    //     this.renderScrollbar();
+    //     this.scrollSetup();
+    //   }
+    // });
 
-    CONTENT.appendChild(SLOT);
+    // CONTENT.appendChild(SLOT);
+    CONTENT.innerHTML = CURRENT_HTML;
     this.wrapper.appendChild(CONTENT);
 
-    this.shadowRoot.append(STYLE, this.wrapper);
+    this.wrapper.addEventListener("load", () => {
+      console.log(
+        "??",
+        this.wrapper.clientHeight,
+        this.wrapper.scrollHeight,
+        this.clientHeight
+      );
+    });
+
+    this.append(STYLE, this.wrapper);
+
+    console.log(
+      "!",
+      this.wrapper.clientHeight,
+      this.wrapper.scrollHeight,
+      this.clientHeight
+    );
   }
 
   renderScrollbar() {
@@ -123,8 +148,26 @@ class OverFlow extends HTMLElement {
     this.shadowRoot.appendChild(this.scrollbar);
   }
 
+  async log() {
+    return new Promise((resolve) => {
+      console.log(this.wrapper);
+      this.wrapper.addEventListener("load", () => {
+        console.log(
+          "?",
+          this.wrapper.clientHeight,
+          this.wrapper.scrollHeight,
+          this.clientHeight
+        );
+
+        resolve();
+      });
+    });
+  }
+
   async connectedCallback() {
     this.render();
+    await this.log();
+
     window.addEventListener("resize", this.render.bind(this));
   }
 }

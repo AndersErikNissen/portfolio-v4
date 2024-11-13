@@ -99,6 +99,8 @@ class TheApp extends HTMLElement {
   async connectedCallback() {
     await this.db.fetchData();
 
+    console.log(this.db.data);
+
     // await this.render();
   }
 }

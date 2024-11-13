@@ -1,9 +1,6 @@
 .page-sxs {
-  display: flex;
-}
-
-.page-sxs-item {
-  flex: 0 0 50%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .page-gallery {
@@ -38,17 +35,10 @@
   gap: var(--scale-32);
 }
 
-.page-content {
-  flex: 1 1 100%;
-}
-
 @media (max-width: 767px) {
   .page-sxs {
-    flex-direction: column-reverse;
-  }
-
-  .page-sxs-item {
-    flex: 0 0 50%;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2, 1fr);
   }
 
   .page-main {
@@ -58,5 +48,9 @@
   .page-main-stage {
     justify-content: flex-start;
     gap: 24px;
+  }
+
+  .page-content {
+    flex: 1 1 100%;
   }
 }
