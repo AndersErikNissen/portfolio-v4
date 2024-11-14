@@ -16,9 +16,9 @@ class TheApp extends HTMLElement {
     }
   }
 
-  loadScript(name, path = "templates") {
+  loadScript(path) {
     return new Promise((resolve) => {
-      const SRC = `./${path}/${name}.js`;
+      const SRC = `./${path}.js`;
 
       if (document.querySelector('script[src="' + SRC + '"]')) {
         resolve();
@@ -65,14 +65,13 @@ class TheApp extends HTMLElement {
     await this.loadStylesheet(TEMPLATE_NAME);
 
     if (!APP_TEMPLATES[TEMPLATE_NAME]) {
-      await this.loadScript(TEMPLATE_NAME);
+      await this.loadScript("templates/" + TEMPLATE_NAME);
     }
 
     const TEMPLATE = APP_TEMPLATES[TEMPLATE_NAME](DATA);
 
-    TEMPLATE.scripts.forEach((script) => {
-      let path = script.path || null;
-      this.loadScript(script.name, path);
+    TEMPLATE.scripts.forEach((path) => {
+      this.loadScript(path);
     });
 
     TEMPLATE.styles.forEach((style) => this.loadStylesheet(style));
@@ -82,7 +81,7 @@ class TheApp extends HTMLElement {
 
   async prepareHeader() {
     await this.loadStylesheet("component-clock");
-    await this.loadScript("clock", "components");
+    await this.loadScript("components/clock");
 
     return await this.prepareTemplate("header", {}); // empty object, since the template is static
   }
@@ -91,15 +90,15 @@ class TheApp extends HTMLElement {
     let markup = "";
 
     // markup += await this.prepareHeader();
-    markup += await this.prepareTemplate("index", {});
+    markup += await this.prepareTemplate("page", this.db.data[4]);
 
     this.innerHTML = markup;
   }
 
   async connectedCallback() {
     await this.db.fetchData();
-
-    // await this.render();
+    console.log("DB", this.db.data);
+    await this.render();
   }
 }
 

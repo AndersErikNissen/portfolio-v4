@@ -11,10 +11,76 @@ console.log(
 );
 
 APP_TEMPLATES.page = (data) => {
+  // Stages
+
+  let contentMarkup = "";
+  let galleryMarkup = "";
+
+  if (data.stages && data.stages.length > 0) {
+    const stageContentItem = (stage, index) => {
+      if (!stage.title && !stage.content) return;
+
+      let markup = `
+        <div 
+          class="page-main-stage ${index === 0 ? "active-stage" : ""}" 
+          data-stage="${index}"
+        >
+      `;
+
+      if (stage.title) {
+        markup += `<h2 class="page-title h1">${stage.title}</h2>`;
+      }
+
+      if (stage.content) {
+        markup += `
+          <over-flow class="page-content">
+            <p>${stage.content}</p>
+          </over-flow>
+        `;
+      }
+
+      markup += "</div>";
+
+      contentMarkup += markup;
+    };
+
+    const stageGalleryItem = (stage, index) => {
+      if (!stage.image) return;
+
+      let markup = `
+        <div 
+          class="page-image-wrapper ${index === 0 ? "active-stage" : ""}" 
+          data-stage="${index}"
+        >
+          ${SNIPPETS.img(stage.image).outerHTML}
+        </div>
+      `;
+
+      galleryMarkup += markup;
+    };
+
+    data.stages.forEach((stage, index) => {
+      stageContentItem(stage, index);
+      stageGalleryItem(stage, index);
+    });
+  }
+
   return {
-    scripts: [{ name: "overflow", path: "components" }],
-    styles: ["page"],
+    scripts: ["components/overflow", "components/stage"],
+    styles: ["page", "component-overflow", "component-stagemanager"],
     markup: `
+      <stage-manager class="template-page container">
+        <div class="page-sxs container">
+          <div class="page-main page-sxs-item">
+            ${contentMarkup}
+            ${SNIPPETS.link_footer().outerHTML}
+          </div>
+
+          <div class="page-gallery page-sxs-item">
+            ${galleryMarkup}
+          </div>
+        </div>
+      </stage-manager>
     `,
   };
 };

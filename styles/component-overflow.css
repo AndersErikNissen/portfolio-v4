@@ -2,6 +2,7 @@ over-flow {
   display: block;
   position: relative;
   font-size: 1vw;
+  padding-right: var(--scale-12);
 }
 
 .overflow-wrapper {
@@ -20,6 +21,7 @@ over-flow {
 }
 
 .overflow-scrollbar {
+  overflow: hidden;
   display: block;
   position: absolute;
   height: var(--scale-64);
@@ -27,10 +29,9 @@ over-flow {
   width: var(--scale-4);
   right: 0;
   top: 50%;
-  transform: translate(calc(100% + var(--scale-8)), -50%);
+  transform: translate(0%, -50%);
   background-color: var(--color-grey-subtle);
   border-radius: 99px;
-  overflow: hidden;
 }
 
 .overflow-scrollbar::before {

@@ -12,7 +12,7 @@ console.log(
 
 APP_TEMPLATES.header = (data) => {
   return {
-    scripts: [{ name: "clock", path: "components" }],
+    scripts: ["components/clock"],
     styles: ["component-clock"],
     markup: `
       <header id="Header">
