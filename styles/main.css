@@ -17,6 +17,7 @@ body {
 
 :root {
   --scale-1: 0.058rem;
+  --scale-2: 0.116rem;
   --scale-4: 0.231rem;
   --scale-8: 0.463rem;
   --scale-12: 0.694rem;
@@ -40,6 +41,7 @@ body {
 @media (max-width: 767px) {
   :root {
     --scale-1: 1px;
+    --scale-2: 2px;
     --scale-4: 4px;
     --scale-8: 8px;
     --scale-12: 12px;

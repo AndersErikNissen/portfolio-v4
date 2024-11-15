@@ -15,6 +15,21 @@ APP_TEMPLATES.page = (data) => {
 
   let contentMarkup = "";
   let galleryMarkup = "";
+  let controlMarkup = "";
+
+  if (data.stages && data.stages.length > 0) {
+    controlMarkup += '<stage-control class="page-control">';
+
+    data.stages.forEach((stage, index) => {
+      controlMarkup += `
+        <div 
+          ${index === 0 ? 'class="active-stage"' : ""} 
+          data-stage="${index}"
+        ></div>`;
+    });
+
+    controlMarkup += "</stage-control>";
+  }
 
   if (data.stages && data.stages.length > 0) {
     const stageContentItem = (stage, index) => {
@@ -80,6 +95,7 @@ APP_TEMPLATES.page = (data) => {
             ${galleryMarkup}
           </div>
         </div>
+        ${controlMarkup}
       </stage-manager>
     `,
   };

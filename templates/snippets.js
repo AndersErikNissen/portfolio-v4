@@ -1,6 +1,5 @@
 class Snippets {
   img(obj, sizes) {
-    console.warn(obj);
     const IMG = document.createElement("img");
     IMG.setAttribute("alt", obj.alt);
     IMG.setAttribute("src", obj.url);

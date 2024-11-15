@@ -1,3 +1,36 @@
 stage-manager {
   display: block;
 }
+
+stage-control {
+  display: flex;
+  justify-content: center;
+}
+
+stage-control > [data-stage] {
+  cursor: pointer;
+  width: var(--scale-32);
+  display: flex;
+  justify-content: center;
+  height: 2.083rem;
+}
+
+stage-control > [data-stage]::before {
+  content: "";
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  transition: width 300ms linear;
+  width: 0;
+  border: solid var(--scale-1) var(--color-black);
+}
+
+stage-control > .active-stage::before {
+  border: solid calc(var(--scale-1) * 2) var(--color-black);
+  width: 1.042rem;
+}
+
+@media (max-width: 767px) {
+  stage-control > [data-stage] {
+  }
+}
