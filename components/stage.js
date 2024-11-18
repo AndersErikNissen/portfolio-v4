@@ -3,7 +3,8 @@ class StageManager extends HTMLElement {
     super();
   }
 
-  _defaultStage = 0;
+  _listening = true;
+  _timing = 1000;
 
   get nodes() {
     return this.querySelectorAll("[data-stage]");
@@ -25,8 +26,10 @@ class StageManager extends HTMLElement {
     }
 
     if (!this.stages[index]) {
-      index = this.stage || Object.keys(this.stages)[this._defaultStage];
+      index = this.stage || this.stages[this._defaultStage];
     }
+
+    index = isNaN(parseInt(index)) ? 0 : parseInt(index);
 
     if (this.stage !== index) {
       this.updateNodes(index);
@@ -40,7 +43,7 @@ class StageManager extends HTMLElement {
   }
 
   set stages(nodes) {
-    let stages = {};
+    let stages = [];
 
     nodes.forEach((node) => {
       let index = node.dataset.stage;
@@ -53,6 +56,14 @@ class StageManager extends HTMLElement {
     });
 
     this._stages = stages;
+  }
+
+  next() {
+    this.stage = this.stage + 1 > this.stages.length - 1 ? 0 : this.stage + 1;
+  }
+
+  prev() {
+    this.stage = 0 > this.stage - 1 ? this.stages.length - 1 : this.stage - 1;
   }
 
   updateNodes(newIndex) {
@@ -85,9 +96,25 @@ class StageManager extends HTMLElement {
           this.stages = this.nodes;
         }
 
-        this.stage = newIndex;
+        this.stage = parseInt(newIndex);
       }
     }
+  }
+
+  handleWheel(e) {
+    if (this._listening === false) return;
+
+    this._listening = false;
+
+    if (e.deltaY > 0) {
+      this.next();
+    } else {
+      this.prev();
+    }
+
+    setTimeout(() => {
+      this._listening = true;
+    }, this._timing);
   }
 
   init() {
@@ -97,6 +124,8 @@ class StageManager extends HTMLElement {
     if (!this.hasAttribute("stage")) {
       this.setAttribute("stage", this.stage);
     }
+
+    this.addEventListener("wheel", this.handleWheel.bind(this));
   }
 
   connectedCallback() {
