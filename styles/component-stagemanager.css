@@ -5,32 +5,50 @@ stage-manager {
 stage-control {
   display: flex;
   justify-content: center;
+  align-items: center;
+  padding: 12px;
 }
 
 stage-control > [data-stage] {
   cursor: pointer;
-  width: var(--scale-32);
   display: flex;
   justify-content: center;
-  height: 2.083rem;
+  align-items: center;
+  height: 28px;
+  width: 20px;
 }
 
 stage-control > [data-stage]::before {
   content: "";
   display: block;
   height: 100%;
-  border-radius: 999px;
-  transition: width 300ms linear;
   width: 0;
-  border: solid var(--scale-1) var(--color-black);
+  border-radius: 999px;
+  transition: width 300ms linear, height 300ms linear;
+  border: solid 1px var(--color-black);
 }
 
 stage-control > .active-stage::before {
-  border: solid calc(var(--scale-1) * 2) var(--color-black);
-  width: 1.042rem;
+  border: solid 2px var(--color-black);
+  width: 14px;
 }
 
-@media (max-width: 767px) {
+@media (min-width: 768px) {
+  stage-control {
+    flex-direction: column;
+  }
+
   stage-control > [data-stage] {
+    width: 2.083rem;
+    height: var(--scale-32);
+  }
+
+  stage-control > [data-stage]::before {
+    width: 100%;
+    height: 0;
+  }
+
+  stage-control > .active-stage::before {
+    height: var(--scale-20);
   }
 }

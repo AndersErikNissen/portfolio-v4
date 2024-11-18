@@ -87,15 +87,18 @@ APP_TEMPLATES.page = (data) => {
       <stage-manager class="template-page container">
         <div class="page-sxs container">
           <div class="page-main page-sxs-item">
-            ${contentMarkup}
-            ${SNIPPETS.link_footer().outerHTML}
+            <div class="page-main-stages">
+              ${contentMarkup}
+            </div>
+            ${SNIPPETS.link_footer("page-footer").outerHTML}
           </div>
+          
+          ${controlMarkup}
 
           <div class="page-gallery page-sxs-item">
             ${galleryMarkup}
           </div>
         </div>
-        ${controlMarkup}
       </stage-manager>
     `,
   };

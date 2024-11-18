@@ -101,8 +101,28 @@ class StageManager extends HTMLElement {
     }
   }
 
+  get block() {
+    return this._block;
+  }
+
+  set block(v) {
+    let block = false;
+
+    // Is value an event?
+    if (v.target) {
+      if (v.target.tagName === "OVER-FLOW" || v.target.closest("over-flow")) {
+        block = true;
+      }
+    } else {
+      block = !!v;
+    }
+
+    this._block = block;
+  }
+
   handleWheel(e) {
-    if (this._listening === false) return;
+    this.block = e;
+    if (!this._listening || this.block) return;
 
     this._listening = false;
 
@@ -117,6 +137,35 @@ class StageManager extends HTMLElement {
     }, this._timing);
   }
 
+  handleTouchStart(e) {
+    if (!this._listening) return;
+    this.block = e;
+    if (this.block) return;
+
+    this._startY = e.changedTouches[0].clientY;
+  }
+
+  handleTouchMove(e) {
+    if (!this._listening) return;
+    e.preventDefault();
+  }
+
+  handleTouchEnd(e) {
+    if (this._listening && !this.block) {
+      this._listening = false;
+
+      let touchY = e.changedTouches[0].clientY;
+      if (this._startY < touchY) this.next();
+      if (this._startY > touchY) this.prev();
+
+      setTimeout(() => {
+        this._listening = true;
+      }, this._timing);
+    }
+
+    this.block = false;
+  }
+
   init() {
     this.stages = this.nodes;
     this.stage = this.stages;
@@ -124,14 +173,21 @@ class StageManager extends HTMLElement {
     if (!this.hasAttribute("stage")) {
       this.setAttribute("stage", this.stage);
     }
+  }
 
+  bindEvents() {
     this.addEventListener("wheel", this.handleWheel.bind(this));
+    this.addEventListener("touchstart", this.handleTouchStart.bind(this));
+    this.addEventListener("touchmove", this.handleTouchMove.bind(this));
+    this.addEventListener("touchend", this.handleTouchEnd.bind(this));
   }
 
   connectedCallback() {
     if (!this.stages) {
       this.init();
     }
+
+    this.bindEvents();
   }
 }
 
