@@ -5,6 +5,8 @@ class StageManager extends HTMLElement {
 
   _listening = true;
   _timing = 1000;
+  _defaultStage = 0;
+  _stage = 0;
 
   get nodes() {
     return this.querySelectorAll("[data-stage]");
@@ -238,7 +240,6 @@ class StageControl extends HTMLElement {
   connectedCallback() {
     this.nodes = this.nodes;
     this.manager = this.manager;
-    console.log(this.nodes);
     this.bindEvents();
   }
 }

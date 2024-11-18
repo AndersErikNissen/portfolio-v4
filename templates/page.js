@@ -43,7 +43,11 @@ APP_TEMPLATES.page = (data) => {
       `;
 
       if (stage.title) {
-        markup += `<h2 class="page-title h1">${stage.title}</h2>`;
+        markup += `
+          <h2 class="page-title h1">
+            <ani-txt string="${stage.title}"></ani-txt>
+          </h2>
+        `;
       }
 
       if (stage.content) {
@@ -82,7 +86,12 @@ APP_TEMPLATES.page = (data) => {
 
   return {
     scripts: ["components/overflow", "components/stage"],
-    styles: ["page", "component-overflow", "component-stagemanager"],
+    styles: [
+      "page",
+      "component-overflow",
+      "component-stage-manager",
+      "component-animate-text",
+    ],
     markup: `
       <stage-manager class="template-page container">
         <div class="page-sxs container">
