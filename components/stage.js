@@ -5,36 +5,27 @@ class StageManager extends HTMLElement {
 
   _listening = true;
   _timing = 1000;
-  _defaultStage = 0;
-  _stage = 0;
+  _onLoad = true;
+  _stageClass = "active-stage";
 
   get nodes() {
     return this.querySelectorAll("[data-stage]");
   }
 
   get stage() {
-    return this._stage;
+    return this._stage || parseInt(this.getAttribute("stage")) || 0;
   }
 
-  set stage(v) {
-    let index = v;
+  set stage(i) {
+    if (i === this.stage) return;
 
-    if (NodeList.prototype.isPrototypeOf(v) /* If v = NodeList */) {
-      let activeNode = Array.from(v).find((node) =>
-        node.classList.contains("active-stage")
-      );
-
-      index = activeNode.dataset.stage;
-    }
+    let index = i;
 
     if (!this.stages[index]) {
-      index = this.stage || this.stages[this._defaultStage];
+      index = 0;
     }
 
-    index = isNaN(parseInt(index)) ? 0 : parseInt(index);
-
-    if (this.stage !== index) {
-      this.updateNodes(index);
+    if (this._stage !== index) {
       this.setAttribute("stage", index);
       this._stage = index;
     }
@@ -48,7 +39,7 @@ class StageManager extends HTMLElement {
     let stages = [];
 
     nodes.forEach((node) => {
-      let index = node.dataset.stage;
+      let index = parseInt(node.dataset.stage);
 
       if (!stages[index]) {
         stages[index] = [];
@@ -68,63 +59,44 @@ class StageManager extends HTMLElement {
     this.stage = 0 > this.stage - 1 ? this.stages.length - 1 : this.stage - 1;
   }
 
-  updateNodes(newIndex) {
-    if (this.stage) {
-      this.stages[this.stage].forEach((node) =>
-        node.classList.remove("active-stage")
-      );
-    } else {
-      // Reset, so no .active-stage's are present
-      this.nodes.forEach((node) => {
-        if (node.classList.contains("active-stage")) {
-          node.classList.remove("active-stage");
-        }
-      });
-    }
-
-    this.stages[newIndex].forEach((node) => {
-      node.classList.add("active-stage");
+  activateNodes(nodes) {
+    nodes.forEach((node) => {
+      if (!node.classList.contains(this._stageClass)) {
+        node.classList.add(this._stageClass);
+      }
     });
   }
 
-  static get observedAttributes() {
-    return ["stage"];
-  }
-
-  attributeChangedCallback(attrName, oldIndex, newIndex) {
-    if (attrName === "stage") {
-      if (oldIndex !== newIndex) {
-        if (!this.stages) {
-          this.stages = this.nodes;
-        }
-
-        this.stage = parseInt(newIndex);
+  deactivateNodes(nodes) {
+    nodes.forEach((node) => {
+      if (node.classList.contains(this._stageClass)) {
+        node.classList.remove(this._stageClass);
       }
-    }
+    });
   }
 
-  get block() {
-    return this._block;
+  get stop() {
+    return this._stop;
   }
 
-  set block(v) {
-    let block = false;
+  set stop(v) {
+    let stop = false;
 
     // Is value an event?
     if (v.target) {
       if (v.target.tagName === "OVER-FLOW" || v.target.closest("over-flow")) {
-        block = true;
+        stop = true;
       }
     } else {
-      block = !!v;
+      stop = !!v;
     }
 
-    this._block = block;
+    this._stop = stop;
   }
 
   handleWheel(e) {
-    this.block = e;
-    if (!this._listening || this.block) return;
+    this.stop = e;
+    if (!this._listening || this.stop) return;
 
     this._listening = false;
 
@@ -141,8 +113,8 @@ class StageManager extends HTMLElement {
 
   handleTouchStart(e) {
     if (!this._listening) return;
-    this.block = e;
-    if (this.block) return;
+    this.stop = e;
+    if (this.stop) return;
 
     this._startY = e.changedTouches[0].clientY;
   }
@@ -153,7 +125,7 @@ class StageManager extends HTMLElement {
   }
 
   handleTouchEnd(e) {
-    if (this._listening && !this.block) {
+    if (this._listening && !this.stop) {
       this._listening = false;
 
       let touchY = e.changedTouches[0].clientY;
@@ -165,16 +137,7 @@ class StageManager extends HTMLElement {
       }, this._timing);
     }
 
-    this.block = false;
-  }
-
-  init() {
-    this.stages = this.nodes;
-    this.stage = this.stages;
-
-    if (!this.hasAttribute("stage")) {
-      this.setAttribute("stage", this.stage);
-    }
+    this.stop = false;
   }
 
   bindEvents() {
@@ -184,10 +147,30 @@ class StageManager extends HTMLElement {
     this.addEventListener("touchend", this.handleTouchEnd.bind(this));
   }
 
+  static get observedAttributes() {
+    return ["stage"];
+  }
+
+  attributeChangedCallback(attrName, oldIndex, newIndex) {
+    if (!oldIndex || oldIndex === newIndex) return;
+    if (attrName !== "stage") return;
+    this.stage = newIndex;
+
+    this.deactivateNodes(this.stages[parseInt(oldIndex)]);
+    this.activateNodes(this.stages[this.stage]);
+  }
+
   connectedCallback() {
-    if (!this.stages) {
-      this.init();
-    }
+    this.stages = this.nodes;
+    this.stage = this.stages;
+
+    // Clean up nodes for mismatching class usage
+    let inactiveNodes = this.stages
+      .slice(this.stage + 1, this.stages.length)
+      .flat();
+
+    this.activateNodes(this.stages[this.stage]);
+    this.deactivateNodes(inactiveNodes);
 
     this.bindEvents();
   }
