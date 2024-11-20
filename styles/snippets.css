@@ -1,0 +1,15 @@
+/* .heading() */
+.text-overflow {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.text-overflow-content {
+  display: block;
+  transform: translateY(105%);
+}
+
+.animate > .text-overflow > .text-overflow-content {
+  transition: transform 300ms var(--ani-delay, 0ms) ease-in-out;
+  transform: translateY(0%);
+}

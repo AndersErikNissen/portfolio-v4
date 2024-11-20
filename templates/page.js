@@ -43,16 +43,15 @@ APP_TEMPLATES.page = (data) => {
       `;
 
       if (stage.title) {
-        markup += `
-          <h2 class="page-title h1">
-            <ani-txt string="${stage.title}"></ani-txt>
-          </h2>
-        `;
+        markup += SNIPPETS.heading(stage.title, null, [
+          "h1",
+          "page-title",
+        ]).outerHTML;
       }
 
       if (stage.content) {
         markup += `
-          <over-flow class="page-content">
+          <over-flow data-animate class="page-content">
             <p>${stage.content}</p>
           </over-flow>
         `;
@@ -86,12 +85,7 @@ APP_TEMPLATES.page = (data) => {
 
   return {
     scripts: ["components/overflow", "components/stage"],
-    styles: [
-      "page",
-      "component-overflow",
-      "component-stage-manager",
-      "component-animate-text",
-    ],
+    styles: ["page", "component-overflow", "component-stage-manager"],
     markup: `
       <stage-manager class="template-page container">
         <div class="page-sxs container">

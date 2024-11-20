@@ -6,7 +6,8 @@ class StageManager extends HTMLElement {
   _listening = true;
   _timing = 1000;
   _onLoad = true;
-  _stageClass = "active-stage";
+  _activeStageClass = "active-stage";
+  _animationClass = "animate";
 
   get nodes() {
     return this.querySelectorAll("[data-stage]");
@@ -25,9 +26,18 @@ class StageManager extends HTMLElement {
       index = 0;
     }
 
-    if (this._stage !== index) {
-      this.setAttribute("stage", index);
+    if (this.stage !== index) {
+      this.deactivateNodes(this.stages[this.stage]);
+      this.inanimateNodes(this.animationStages[this.stage]);
+
+      if (parseInt(this.getAttribute("stage")) !== index) {
+        this.setAttribute("stage", index);
+      }
+
       this._stage = index;
+
+      this.activateNodes(this.stages[this.stage]);
+      this.animateNodes(this.animationStages[this.stage]);
     }
   }
 
@@ -51,6 +61,26 @@ class StageManager extends HTMLElement {
     this._stages = stages;
   }
 
+  get animationStages() {
+    return this._animationStages;
+  }
+
+  set animationStages(array) {
+    let stages = [];
+
+    array.forEach((nodeArray) => {
+      let nodes = [];
+
+      nodeArray.forEach((node) => {
+        nodes.push(Array.from(node.querySelectorAll("[data-animate]")));
+      });
+
+      stages.push(nodes.flat());
+    });
+
+    this._animationStages = stages;
+  }
+
   next() {
     this.stage = this.stage + 1 > this.stages.length - 1 ? 0 : this.stage + 1;
   }
@@ -61,16 +91,32 @@ class StageManager extends HTMLElement {
 
   activateNodes(nodes) {
     nodes.forEach((node) => {
-      if (!node.classList.contains(this._stageClass)) {
-        node.classList.add(this._stageClass);
+      if (!node.classList.contains(this._activeStageClass)) {
+        node.classList.add(this._activeStageClass);
       }
     });
   }
 
   deactivateNodes(nodes) {
     nodes.forEach((node) => {
-      if (node.classList.contains(this._stageClass)) {
-        node.classList.remove(this._stageClass);
+      if (node.classList.contains(this._activeStageClass)) {
+        node.classList.remove(this._activeStageClass);
+      }
+    });
+  }
+
+  animateNodes(nodes) {
+    nodes.forEach((node) => {
+      if (!node.classList.contains(this._animationClass)) {
+        node.classList.add(this._animationClass);
+      }
+    });
+  }
+
+  inanimateNodes(nodes) {
+    nodes.forEach((node) => {
+      if (node.classList.contains(this._animationClass)) {
+        node.classList.remove(this._animationClass);
       }
     });
   }
@@ -152,25 +198,29 @@ class StageManager extends HTMLElement {
   }
 
   attributeChangedCallback(attrName, oldIndex, newIndex) {
-    if (!oldIndex || oldIndex === newIndex) return;
     if (attrName !== "stage") return;
-    this.stage = newIndex;
-
-    this.deactivateNodes(this.stages[parseInt(oldIndex)]);
-    this.activateNodes(this.stages[this.stage]);
+    this.stage = parseInt(newIndex);
   }
 
   connectedCallback() {
     this.stages = this.nodes;
-    this.stage = this.stages;
+    this.animationStages = this.stages;
 
     // Clean up nodes for mismatching class usage
     let inactiveNodes = this.stages
       .slice(this.stage + 1, this.stages.length)
       .flat();
 
-    this.activateNodes(this.stages[this.stage]);
     this.deactivateNodes(inactiveNodes);
+    this.activateNodes(this.stages[this.stage]);
+
+    if (!this.hasAttribute("stage")) {
+      this.setAttribute("stage", this.stage);
+    }
+
+    setTimeout(() => {
+      this.animateNodes(this.animationStages[this.stage]);
+    }, 100);
 
     this.bindEvents();
   }

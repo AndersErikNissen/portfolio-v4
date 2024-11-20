@@ -5,6 +5,15 @@ over-flow {
   padding-right: var(--scale-12);
 }
 
+over-flow[data-animate] {
+  opacity: 0;
+}
+
+over-flow[data-animate].animate {
+  transition: opacity 300ms ease-in-out;
+  opacity: 1;
+}
+
 .overflow-wrapper {
   overflow: auto;
   scrollbar-width: none;

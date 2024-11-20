@@ -79,6 +79,41 @@ class Snippets {
 
     return WRAPPER;
   }
+
+  heading(str, tagType = "h1", clss, animate = true) {
+    const DELAY = 15;
+
+    let heading = document.createElement(tagType);
+
+    if (animate) heading.setAttribute("data-animate", "");
+
+    if (clss) {
+      if (Array.isArray(clss)) {
+        heading.classList.add(...clss);
+      } else {
+        heading.classList.add(clss);
+      }
+    }
+
+    let characters = str.split("");
+
+    characters.forEach((character, index) => {
+      let wrapper = document.createElement("span");
+      let span = document.createElement("span");
+
+      wrapper.classList.add("text-overflow");
+      wrapper.style.setProperty("--ani-delay", index * DELAY + "ms");
+      span.classList.add("text-overflow-content");
+
+      span.textContent =
+        character === " " ? String.fromCharCode(160) : character;
+
+      wrapper.appendChild(span);
+      heading.appendChild(wrapper);
+    });
+
+    return heading;
+  }
 }
 
 const SNIPPETS = new Snippets();
