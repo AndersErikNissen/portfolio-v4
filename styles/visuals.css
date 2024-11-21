@@ -1,0 +1,15 @@
+a-gallery {
+  margin-left: 50%;
+  display: flex;
+  width: 200px;
+  background-color: lightsalmon;
+}
+
+.gallery-item {
+  flex: 0 0 50%;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+}

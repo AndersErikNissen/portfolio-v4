@@ -7,11 +7,13 @@ over-flow {
 
 over-flow[data-animate] {
   opacity: 0;
+  transform: translateY(25%);
 }
 
 over-flow[data-animate].animate {
-  transition: opacity 300ms ease-in-out;
+  transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
   opacity: 1;
+  transform: translateY(0%);
 }
 
 .overflow-wrapper {
