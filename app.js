@@ -2,6 +2,95 @@
 
 const APP_TEMPLATES = {};
 
+class UserInteraction extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  _listening = true;
+  _timing = 1000;
+
+  get stopInteraction() {
+    return this._stopInteraction;
+  }
+
+  set stopInteraction(v) {
+    let stopInteraction = false;
+
+    // Is value an event?
+    if (v.target) {
+      if (v.target.tagName === "OVER-FLOW" || v.target.closest("over-flow")) {
+        stopInteraction = true;
+      }
+    } else {
+      stopInteraction = !!v;
+    }
+
+    this._stopInteraction = stopInteraction;
+  }
+
+  prev() {
+    // Overwrite me
+  }
+
+  next() {
+    // Overwrite me
+  }
+
+  handleWheel(e) {
+    this.stopInteraction = e;
+    if (!this._listening || this.stopInteraction) return;
+
+    this._listening = false;
+
+    if (e.deltaY > 0) {
+      this.next();
+    } else {
+      this.prev();
+    }
+
+    setTimeout(() => {
+      this._listening = true;
+    }, this._timing);
+  }
+
+  handleTouchStart(e) {
+    if (!this._listening) return;
+    this.stopInteraction = e;
+    if (this.stopInteraction) return;
+
+    this._startY = e.changedTouches[0].clientY;
+  }
+
+  handleTouchMove(e) {
+    if (!this._listening) return;
+    e.preventDefault();
+  }
+
+  handleTouchEnd(e) {
+    if (this._listening && !this.stopInteraction) {
+      this._listening = false;
+
+      let touchY = e.changedTouches[0].clientY;
+      if (this._startY < touchY) this.next();
+      if (this._startY > touchY) this.prev();
+
+      setTimeout(() => {
+        this._listening = true;
+      }, this._timing);
+    }
+
+    this.stopInteraction = false;
+  }
+
+  bindEvents() {
+    this.addEventListener("wheel", this.handleWheel.bind(this));
+    this.addEventListener("touchstart", this.handleTouchStart.bind(this));
+    this.addEventListener("touchmove", this.handleTouchMove.bind(this));
+    this.addEventListener("touchend", this.handleTouchEnd.bind(this));
+  }
+}
+
 class TheApp extends HTMLElement {
   constructor() {
     super();
@@ -57,8 +146,8 @@ class TheApp extends HTMLElement {
   async prepareTemplate(name, data) {
     const DATA =
       data ||
-      this.db.find((data) => data.path === location.pathname) ||
-      this.db.find((data) => data.default_template === true);
+      this.db.dataBase.find((data) => data.path === location.pathname) ||
+      this.db.dataBase.find((data) => data.default_template === true);
 
     let TEMPLATE_NAME = name || DATA.name;
 
@@ -90,14 +179,15 @@ class TheApp extends HTMLElement {
     let markup = "";
 
     // markup += await this.prepareHeader();
-    markup += await this.prepareTemplate("page", this.db.data[4]);
+    markup += await this.prepareTemplate("visuals", this.db.dataBase[2]);
 
     this.innerHTML = markup;
   }
 
   async connectedCallback() {
     await this.db.fetchData();
-    //await this.render();
+    console.log("DB", this.db);
+    await this.render();
   }
 }
 

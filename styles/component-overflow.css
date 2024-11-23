@@ -2,7 +2,7 @@ over-flow {
   display: block;
   position: relative;
   font-size: 1vw;
-  padding-right: var(--scale-12);
+  padding-right: var(--scale-16);
 }
 
 over-flow[data-animate] {

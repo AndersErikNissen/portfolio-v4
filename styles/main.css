@@ -139,3 +139,17 @@ the-app {
     padding: var(--scale-16) 0;
   }
 }
+
+/* ICONS */
+
+.icon-circle-plus:not(:hover) circle {
+  opacity: 0;
+}
+
+.icon-circle-plus:hover #Plus {
+  color: var(--color-white);
+}
+
+.icon-circle-plus > * {
+  transition: opacity 300ms ease-in-out, color 300ms ease-in-out;
+}

@@ -1,10 +1,4 @@
-class StageManager extends HTMLElement {
-  constructor() {
-    super();
-  }
-
-  _listening = true;
-  _timing = 1000;
+class StageManager extends UserInteraction {
   _onLoad = true;
   _activeStageClass = "active-stage";
   _animationClass = "animate";
@@ -119,78 +113,6 @@ class StageManager extends HTMLElement {
         node.classList.remove(this._animationClass);
       }
     });
-  }
-
-  get stop() {
-    return this._stop;
-  }
-
-  set stop(v) {
-    let stop = false;
-
-    // Is value an event?
-    if (v.target) {
-      if (v.target.tagName === "OVER-FLOW" || v.target.closest("over-flow")) {
-        stop = true;
-      }
-    } else {
-      stop = !!v;
-    }
-
-    this._stop = stop;
-  }
-
-  handleWheel(e) {
-    this.stop = e;
-    if (!this._listening || this.stop) return;
-
-    this._listening = false;
-
-    if (e.deltaY > 0) {
-      this.next();
-    } else {
-      this.prev();
-    }
-
-    setTimeout(() => {
-      this._listening = true;
-    }, this._timing);
-  }
-
-  handleTouchStart(e) {
-    if (!this._listening) return;
-    this.stop = e;
-    if (this.stop) return;
-
-    this._startY = e.changedTouches[0].clientY;
-  }
-
-  handleTouchMove(e) {
-    if (!this._listening) return;
-    e.preventDefault();
-  }
-
-  handleTouchEnd(e) {
-    if (this._listening && !this.stop) {
-      this._listening = false;
-
-      let touchY = e.changedTouches[0].clientY;
-      if (this._startY < touchY) this.next();
-      if (this._startY > touchY) this.prev();
-
-      setTimeout(() => {
-        this._listening = true;
-      }, this._timing);
-    }
-
-    this.stop = false;
-  }
-
-  bindEvents() {
-    this.addEventListener("wheel", this.handleWheel.bind(this));
-    this.addEventListener("touchstart", this.handleTouchStart.bind(this));
-    this.addEventListener("touchmove", this.handleTouchMove.bind(this));
-    this.addEventListener("touchend", this.handleTouchEnd.bind(this));
   }
 
   static get observedAttributes() {

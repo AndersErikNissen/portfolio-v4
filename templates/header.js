@@ -7,7 +7,7 @@
 
 console.log(
   "%cTemplate Header: LOADED",
-  "background-color: grey; color: white; padding: 2px 4px;"
+  "background-color: grey; color: white; padding: 4px 8px 3px; border-radius: 2px;"
 );
 
 APP_TEMPLATES.header = (data) => {

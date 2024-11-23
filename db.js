@@ -9,11 +9,15 @@ class DataBase {
       name: "Projekter",
       path: "/projects",
       template: "projects",
+      slug: "projects",
+      items: [],
     },
     {
       name: "Visuelle projekter",
       path: "/visuals",
       template: "visuals",
+      slug: "visuals",
+      items: [],
     },
     {
       name: "404",
@@ -76,6 +80,15 @@ class DataBase {
           return this.upgradeVisual(TRIMMED);
       }
     });
+
+    let dataParent = this.dataBase.find(
+      (obj) => obj.slug === type.replace("portfolio_", "")
+    );
+
+    if (dataParent) {
+      dataParent.items = ARRAY;
+    }
+
     this.dataBase = this.dataBase.concat(ARRAY);
   }
 

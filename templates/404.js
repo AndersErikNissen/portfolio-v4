@@ -7,7 +7,7 @@
 
 console.log(
   "%cTemplate 404: LOADED",
-  "background-color: red; color: white; padding: 2px 4px;"
+  "background-color: red; color: white; padding: 4px 8px 3px; border-radius: 2px;"
 );
 
 APP_TEMPLATES["404"] = () => {

@@ -7,7 +7,7 @@
 
 console.log(
   "%cTemplate Index: LOADED",
-  "background-color: white; color: black; padding: 2px 4px;"
+  "background-color: white; color: black; padding: 4px 8px 3px; border-radius: 2px;"
 );
 
 APP_TEMPLATES.index = () => {

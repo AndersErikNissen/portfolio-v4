@@ -1,18 +1,7 @@
-class AGallery extends HTMLElement {
+class GalleryOpener extends HTMLElement {
   constructor() {
     super();
   }
-
-  get items() {
-    return this._items || this.querySelectorAll("a-gallery > *");
-  }
-  set items(elements) {
-    this._items = elements;
-  }
-
-  connectedCallback() {
-    console.warn("AGallery");
-  }
 }
 
-customElements.define("a-gallery", AGallery);
+customElements.define("gallery-opener", GalleryOpener);

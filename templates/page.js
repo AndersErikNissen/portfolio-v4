@@ -7,7 +7,7 @@
 
 console.log(
   "%cTemplate Page: LOADED",
-  "background-color: lightgreen; color: black; padding: 2px 4px;"
+  "background-color: lightgreen; color: black; padding: 4px 8px 3px; border-radius: 2px;"
 );
 
 APP_TEMPLATES.page = (data) => {
@@ -84,7 +84,7 @@ APP_TEMPLATES.page = (data) => {
   }
 
   return {
-    scripts: ["components/overflow", "components/stage"],
+    scripts: ["components/overflow", "components/stage-manager"],
     styles: ["page", "component-overflow", "component-stage-manager"],
     markup: `
       <stage-manager class="template-page container">
