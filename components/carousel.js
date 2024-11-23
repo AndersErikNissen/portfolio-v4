@@ -1,6 +1,7 @@
 class ACarousel extends UserInteraction {
   _start;
-  timing = 3000;
+  timing = 1000;
+  direction = 1;
 
   get start() {
     return this._start;
@@ -24,19 +25,19 @@ class ACarousel extends UserInteraction {
     return slidesInView;
   }
 
-  get totalTransform() {
-    return this._totalTransform;
+  get maxSlideTransform() {
+    return this._maxSlideTransform;
   }
 
-  set totalTransform(slidesInView) {
+  set maxSlideTransform(slidesInView) {
     let slideWidth =
       (this.getBoundingClientRect().width - this.gap) / slidesInView;
 
-    this._totalTransform = slideWidth + this.gap;
+    this._maxSlideTransform = slideWidth + this.gap;
   }
 
   get perFrame() {
-    return this.totalTransform / this.timing;
+    return this.maxSlideTransform / this.timing;
   }
 
   get elements() {
@@ -56,14 +57,28 @@ class ACarousel extends UserInteraction {
 
   prev() {
     console.log("prev");
+
+    this.direction = 1;
+    requestAnimationFrame(this.animate.bind(this));
   }
 
   next() {
     console.log("next");
+
+    this.direction = -1;
+    requestAnimationFrame(this.animate.bind(this));
   }
 
   preAnimation() {
     console.warn("ANIMATION - START");
+  }
+
+  postAnimation(shift) {
+    console.warn("ANIMATION - COMPLETE");
+
+    this.start = undefined;
+
+    this.elements.forEach((obj) => (obj.transform += shift));
   }
 
   animate(timestamp) {
@@ -73,30 +88,31 @@ class ACarousel extends UserInteraction {
     }
 
     let delta = timestamp - this.start;
-    let shift = Math.min(this.totalTransform, delta * this.perFrame);
+    let shift = Math.min(this.maxSlideTransform, delta * this.perFrame);
 
     this.elements.forEach((obj) => {
-      // Shift will change based on the condition of the element !!!
-      obj.element.style.transform = `translate3d(${shift}px, 0, 0)`;
-      obj.transform = shift;
+      this.transform(obj, shift);
     });
 
-    if (shift < this.totalTransform) {
+    if (shift < this.maxSlideTransform) {
       requestAnimationFrame(this.animate.bind(this));
     } else {
-      this.postAnimation();
+      this.postAnimation(shift);
     }
   }
 
-  postAnimation() {
-    console.warn("ANIMATION - COMPLETE");
+  transform(obj, shift) {
+    // somehow, find a way to save negativ direction???
+    obj.element.style.transform = `translate3d(${
+      (obj.transform + shift) * this.direction
+    }px, 0, 0)`;
   }
 
   connectedCallback() {
     console.warn("ACarousel", this.elements);
     this.elements = this.elements;
-    this.totalTransform = this.slidesInView;
-    requestAnimationFrame(this.animate.bind(this));
+    this.maxSlideTransform = this.slidesInView;
+
     this.bindEvents();
   }
 }
