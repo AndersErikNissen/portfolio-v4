@@ -20,7 +20,7 @@
   z-index: 2;
 }
 
-.active-item .visuals-item-image-wrapper {
+.active .visuals-item-image-wrapper {
   flex: 0 0 70%;
 }
 

@@ -32,7 +32,7 @@ APP_TEMPLATES.visuals = (data) => {
 
       itemsMarkup += `
         <div 
-          class="visuals-item carousel-item ${index === 0 ? "active-item" : ""}"
+          class="visuals-item carousel-item ${index === 0 ? "active" : ""}"
           data-stage="${index}"
         >
           <div class="visuals-item-image-wrapper">
