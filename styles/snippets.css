@@ -9,7 +9,8 @@
   transform: translateY(105%);
 }
 
-.animate > .text-overflow > .text-overflow-content {
+.animate > .text-overflow > .text-overflow-content,
+.active .text-overflow-content {
   transition: transform 300ms var(--ani-delay, 0ms) ease-in-out;
   transform: translateY(0%);
 }

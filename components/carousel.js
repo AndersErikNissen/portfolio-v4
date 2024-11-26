@@ -110,8 +110,7 @@ class ACarousel extends UserInteraction {
         // 0 > 1: [2,3] = 0
         transformX = 0;
       } else {
-        console.log("!goingNext", skipIndexes);
-        // 0 > last: [2,3] = x4 * -1 ?????? Seems to be right
+        // 0 > last: [2,3] = length(4) * -1
         transformX = this.maxElementTransform * this.elements.length * -1;
       }
     }
@@ -128,13 +127,14 @@ class ACarousel extends UserInteraction {
     if (transformX !== undefined) {
       this.presetElements(skipIndexes, transformX);
     }
+
+    this.elements[this.prevIndex].element.classList.remove("active");
   }
 
   postAnimation(shift) {
     this.start = undefined;
     this.elements.forEach((obj, index) => {
       obj.transform += shift;
-      if (index === this.prevIndex) obj.element.classList.remove("active");
       if (index === this.index) obj.element.classList.add("active");
     });
   }
@@ -177,3 +177,40 @@ class ACarousel extends UserInteraction {
 }
 
 customElements.define("a-carousel", ACarousel);
+
+class CarouselControl extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  get carousel() {
+    return this._carousel;
+  }
+
+  set carousel(element) {
+    this._carousel = element;
+  }
+
+  get mode() {
+    return this._mode;
+  }
+
+  set mode(v) {
+    this._mode = v;
+  }
+
+  callback() {
+    this.carousel[this.mode]();
+  }
+
+  connectedCallback() {
+    this.carousel =
+      this.getAttribute("carousel") ||
+      this.closest("a-carousel") ||
+      document.querySelector("a-carousel");
+    this.mode = this.getAttribute("mode");
+    this.addEventListener("click", this.callback.bind(this));
+  }
+}
+
+customElements.define("carousel-control", CarouselControl);
