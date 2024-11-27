@@ -1,5 +1,6 @@
 .visuals-carousel {
   display: flex;
+  overflow: hidden;
   gap: var(--space-edge);
 }
 
@@ -96,7 +97,6 @@
 
 @media (max-width: 767px) {
   .visuals-item {
-    position: relative;
     flex: 0 0 100%;
   }
 
@@ -106,9 +106,28 @@
   }
 
   .visuals-item-gallery-opener {
-    width: 36px;
+    width: 38px;
     height: auto;
-    padding-bottom: 8px;
+    padding-bottom: 6px;
     margin-left: 8px;
+  }
+
+  .visuals-controls {
+    bottom: unset;
+    top: calc((100% - (var(--space-edge) * 2)) * 0.7);
+    left: calc(var(--space-edge) * 2);
+    width: auto;
+    transform: translateY(-100%);
+  }
+
+  .visuals-controls > carousel-control {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+  }
+
+  .visuals-controls svg {
+    width: 16px;
+    height: 16px;
   }
 }
