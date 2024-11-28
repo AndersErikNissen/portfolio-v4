@@ -91,7 +91,7 @@ class ACarousel extends UserInteraction {
 
   presetElements(indexes, transform) {
     this.elements.forEach((obj, index) => {
-      if (!indexes.includes(index)) this.transform(obj, transform, true);
+      if (indexes.includes(index)) this.transform(obj, transform, true);
     });
   }
 
@@ -99,78 +99,25 @@ class ACarousel extends UserInteraction {
     this.prevIndex = this.index;
     this.index = this.index;
 
-    let skipIndexes = this.elements.map((obj, index) => index);
-
-    let transformIndexes = skipIndexes;
-    let testTransformX = 0;
-
-    // limit > later = move all by +length(?) (but in view)
-    if (this.prevIndex === this.limitIndex && this.index > this.prevIndex) {
-      // get indexes to transform instead???? Like now
-      transformIndexes.splice(this.limitIndex, this.lastIndex);
-
-      testTransformX = this.maxElementTransform * this.elementsInView;
-
-      console.log("limit > later", transformIndexes, testTransformX);
-    }
-
-    /**
-     * Pre:
-     * limit > later = move all by +length(?) (but in view)
-     * 0 > last = move all by -length (but in view)
-     *
-     *
-     * Post:
-     * last > 0 = reset all
-     * later > limit = set all to -length
-     *
-     */
-
-    // 0 > last = move all by -length (but in view)
-    if (this.prevIndex === 0 && this.index === this.lastIndex) {
-    }
-
-    let goingNext = true,
+    let transformIndexes = this.elements.map((obj, index) => index),
       transformX;
 
-    if (this.prevIndex > this.index) goingNext = false;
-
-    if (this.prevIndex === 0) {
-      if (this.index === this.lastIndex) goingNext = false;
-
-      skipIndexes.splice(this.elementsInView, this.lastIndex);
-
-      if (goingNext) {
-        // 0 > 1: [2,3] = 0
-        console.log("0 > 1: [2,3] = 0");
-        transformX = 0;
-      } else {
-        // 0 > last: [2,3] = length(4) * -1
-        console.log("0 > last: [2,3] = length(4) * -1");
-        transformX = this.maxElementTransform * this.elements.length * -1;
+    // limit to later (or limit to 0) = move all by +length (all but in view)
+    if (this.prevIndex === this.limitIndex) {
+      if (this.index > this.prevIndex || this.index === 0) {
+        transformIndexes.splice(this.limitIndex, this.lastIndex);
+        transformX = this.maxElementTransform * this.elementsInView;
       }
     }
 
-    if (this.prevIndex === this.limitIndex && this.index === 0) {
-      // Mobile: going from last to 0
-      if (this.limitIndex === this.lastIndex && this.index === 0) {
-        goingNext = true;
-      }
-
-      skipIndexes.splice(0, this.elementsInView);
-      // limit(2) > last: [0,1] = x2
-      console.log("limit(2) > last: [0,1] = x2", this.index, this.prevIndex);
-      transformX = this.maxElementTransform * this.elementsInView;
-
-      // limit(2) > 1: [0, 1] = x2 * -1
-      if (!goingNext) {
-        transformX *= -1;
-        console.log("limit(2) > 1: [0, 1] = x2 * -1");
-      }
+    // 0 to last = move all by -length (all but in view)
+    if (this.prevIndex === 0 && this.index === this.lastIndex) {
+      transformIndexes.splice(0, this.elementsInView);
+      transformX = this.elements.length * this.maxElementTransform * -1;
     }
 
     if (transformX !== undefined) {
-      this.presetElements(skipIndexes, transformX);
+      this.presetElements(transformIndexes, transformX);
     }
 
     this.elements[this.prevIndex].element.classList.remove("active");
@@ -178,10 +125,36 @@ class ACarousel extends UserInteraction {
 
   postAnimation(shift) {
     this.start = undefined;
+
     this.elements.forEach((obj, index) => {
       obj.transform += shift;
       if (index === this.index) obj.element.classList.add("active");
     });
+
+    let transformIndexes = this.elements.map((obj, index) => index),
+      transformX;
+
+    // last to 0 = reset all
+    if (this.prevIndex === this.lastIndex && this.index === 0) {
+      transformX = 0;
+    }
+
+    // later to limit = set all to -length (- in view)
+    let fromFirstToLimit =
+        this.prevIndex === 0 && this.index === this.limitIndex,
+      fromLaterToLimit =
+        this.prevIndex > this.index && this.index === this.limitIndex;
+
+    if (fromFirstToLimit || fromLaterToLimit) {
+      transformX =
+        (this.elements.length - this.elementsInView) *
+        this.maxElementTransform *
+        -1;
+    }
+
+    if (transformX !== undefined) {
+      this.presetElements(transformIndexes, transformX);
+    }
   }
 
   animate(timestamp) {
@@ -215,7 +188,6 @@ class ACarousel extends UserInteraction {
 
   connectedCallback() {
     this.core();
-    console.warn("ACarousel");
 
     this.bindEvents();
   }
