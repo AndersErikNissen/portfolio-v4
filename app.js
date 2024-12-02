@@ -115,11 +115,9 @@ class TheApp extends HTMLElement {
 
       const SCRIPT = document.createElement("script");
       SCRIPT.src = SRC;
-      SCRIPT.addEventListener("load", () => {
-        resolve();
-      });
 
       document.body.appendChild(SCRIPT);
+      SCRIPT.onload = () => resolve();
     });
   }
 
@@ -135,11 +133,8 @@ class TheApp extends HTMLElement {
       LINK.rel = "stylesheet";
       LINK.href = HREF;
 
-      LINK.addEventListener("load", () => {
-        resolve();
-      });
-
       document.head.appendChild(LINK);
+      LINK.onload = () => resolve();
     });
   }
 

@@ -1,7 +1,6 @@
 over-flow {
   display: block;
   position: relative;
-  font-size: 1vw;
   padding-right: var(--scale-16);
 }
 

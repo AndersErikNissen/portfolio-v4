@@ -13,6 +13,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  scroll-behavior: smooth;
 }
 
 :root {
@@ -140,16 +141,74 @@ the-app {
   }
 }
 
+/* CONTROLLER */
+
+.controller {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+}
+
+.controller > .control-item {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 28px;
+  width: 20px;
+}
+
+.controller > .control-item::before {
+  content: "";
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  transition: width 300ms linear, height 300ms linear;
+  border: solid 1px var(--color-black);
+}
+
+.controller > .active-stage::before,
+.controller > .active-item::before {
+  border: solid 2px var(--color-black);
+  width: 14px;
+}
+
+@media (min-width: 768px) {
+  .controller {
+    flex-direction: column;
+  }
+
+  .controller > .control-item {
+    width: 2.083rem;
+    height: var(--scale-32);
+  }
+
+  .controller > .control-item::before {
+    width: 100%;
+    height: 0;
+  }
+
+  .controller > .active-stage::before,
+  .controller > .active-item::before {
+    height: var(--scale-20);
+  }
+}
+
 /* ICONS */
 
-.icon-circle-plus:not(:hover) circle {
+.icon-circle-plus:not(:hover) circle,
+.icon-circle-close:not(:hover) circle {
   opacity: 0;
 }
 
-.icon-circle-plus:hover #Plus {
+.icon-circle-plus:hover .plus,
+.icon-circle-close:hover .close {
   color: var(--color-white);
 }
 
-.icon-circle-plus > * {
+.icon-circle-plus > *,
+.icon-circle-close > * {
   transition: opacity 300ms ease-in-out, color 300ms ease-in-out;
 }

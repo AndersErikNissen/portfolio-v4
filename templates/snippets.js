@@ -24,7 +24,6 @@ class Snippets {
         srcset += `${obj.sizes[name]} ${obj.sizes[name + "-width"]}w`;
       });
 
-      console.warn(srcset);
       IMG.setAttribute("sizes", sizes);
       IMG.setAttribute("srcset", srcset);
     }
@@ -135,7 +134,7 @@ class Snippets {
       path.setAttribute("fill", "currentColor");
       path.setAttribute("d", d);
       if (name) {
-        path.id = name;
+        path.classList.add(name);
       }
       svg.appendChild(path);
     };
@@ -158,7 +157,18 @@ class Snippets {
       case "circle-plus":
         size = 52;
         addCircle(26, 26, 25);
-        addPath("M25 27V35H27V27H35V25L27 25V17H25V25L17 25V27H25Z", "Plus");
+        addPath("M25 27V35H27V27H35V25L27 25V17H25V25L17 25V27H25Z", "plus");
+        addPath(
+          "M26 1.5C12.469 1.5 1.5 12.469 1.5 26C1.5 39.531 12.469 50.5 26 50.5C39.531 50.5 50.5 39.531 50.5 26C50.5 12.469 39.531 1.5 26 1.5ZM0.5 26C0.5 11.9167 11.9167 0.5 26 0.5C40.0833 0.5 51.5 11.9167 51.5 26C51.5 40.0833 40.0833 51.5 26 51.5C11.9167 51.5 0.5 40.0833 0.5 26Z"
+        );
+        break;
+      case "circle-close":
+        size = 52;
+        addCircle(26, 26, 25);
+        addPath(
+          "M24.5856 26L18.9287 31.6569L20.3429 33.0711L25.9998 27.4142L31.6566 33.0711L33.0708 31.6569L27.414 26L33.0708 20.3432L31.6566 18.929L25.9998 24.5858L20.3429 18.929L18.9287 20.3432L24.5856 26Z",
+          "close"
+        );
         addPath(
           "M26 1.5C12.469 1.5 1.5 12.469 1.5 26C1.5 39.531 12.469 50.5 26 50.5C39.531 50.5 50.5 39.531 50.5 26C50.5 12.469 39.531 1.5 26 1.5ZM0.5 26C0.5 11.9167 11.9167 0.5 26 0.5C40.0833 0.5 51.5 11.9167 51.5 26C51.5 40.0833 40.0833 51.5 26 51.5C11.9167 51.5 0.5 40.0833 0.5 26Z"
         );

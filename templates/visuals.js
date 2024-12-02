@@ -17,18 +17,19 @@ APP_TEMPLATES.visuals = (data) => {
 
   if (data.items.length > 0) {
     data.items.forEach((item, index) => {
-      let galleryOpener = document.createElement("gallery-opener");
-      let galleryData = document.createElement("script");
-      galleryData.innerHTML = JSON.stringify(item.gallery);
-      galleryOpener.append(SNIPPETS.icon("circle-plus"), galleryData);
-      galleryOpener.classList.add("visuals-item-gallery-opener");
+      let galleryOpener;
 
-      let heading = SNIPPETS.heading(
-        item.title,
-        "h2",
-        ["visuals-item-title", "h1"],
-        [galleryOpener]
-      );
+      if (item.gallery.length > 0) {
+        galleryOpener = document.createElement("gallery-opener");
+        let galleryData = document.createElement("script");
+        galleryData.innerHTML = JSON.stringify(item.gallery);
+        galleryOpener.append(SNIPPETS.icon("circle-plus"), galleryData);
+        galleryOpener.classList.add("visuals-item-gallery-opener");
+      }
+
+      let headingParameters = [item.title, "h2", ["visuals-item-title", "h1"]];
+      if (galleryOpener) headingParameters.push(galleryOpener);
+      let heading = SNIPPETS.heading(...headingParameters);
 
       itemsMarkup += `
         <div 

@@ -18,13 +18,14 @@ APP_TEMPLATES.page = (data) => {
   let controlMarkup = "";
 
   if (data.stages && data.stages.length > 0) {
-    controlMarkup += '<stage-control class="page-control">';
+    controlMarkup += '<stage-control class="page-control controller">';
 
     data.stages.forEach((stage, index) => {
       controlMarkup += `
         <div 
           ${index === 0 ? 'class="active-stage"' : ""} 
           data-stage="${index}"
+          class="control-item"
         ></div>`;
     });
 
@@ -67,7 +68,9 @@ APP_TEMPLATES.page = (data) => {
 
       let markup = `
         <div 
-          class="page-image-wrapper ${index === 0 ? "active-stage" : ""}" 
+          class="page-image-wrapper aspect-box ${
+            index === 0 ? "active-stage" : ""
+          }" 
           data-stage="${index}"
         >
           ${SNIPPETS.img(stage.image).outerHTML}
