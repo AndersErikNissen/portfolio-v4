@@ -1,34 +1,167 @@
 #Header {
+  position: fixed;
+  top: 0;
+  left: 0;
   padding: var(--scale-20) var(--space-edge);
-}
-
-#Menu-btn svg {
-  width: var(--scale-24);
-  height: auto;
+  z-index: 99;
+  width: 100%;
 }
 
 .header-main {
   display: flex;
+  align-items: center;
 }
 
-#Logo {
-  flex: 0 0 auto;
+#Menu-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.347rem;
+}
+
+#Menu-btn > svg {
+  width: var(--scale-24);
   height: auto;
-  width: 5.787rem;
+}
+
+.menu-btn-label {
+  font-size: 0.752rem;
+  font-weight: 400;
 }
 
 .header-left,
 .header-right {
+  display: flex;
+  align-items: center;
   flex: 1 1 100%;
 }
 
 .header-right {
-  display: flex;
   justify-content: flex-end;
+  gap: var(--scale-32);
+}
+
+.header-middle {
+  flex: 0 0 auto;
+}
+
+.header-middle > svg {
+  width: 5.787rem;
+  height: auto;
+}
+
+.header-btns {
+  display: flex;
+}
+
+.header-btn {
+  height: var(--scale-40);
+  min-width: var(--scale-40);
+  background-color: var(--color-white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 99rem;
+}
+
+.header-btn > svg {
+  width: 40%;
+  height: auto;
+}
+
+.header-btn-call {
+  margin-right: -5%;
+}
+
+@media (min-width: 768px) {
+  .header-btn-call {
+    min-width: 6.366rem;
+  }
+
+  .header-btn-call > svg {
+    display: none;
+  }
+
+  .header-btn {
+    transition: background-color 300ms ease-in-out, color 300ms ease-in-out;
+  }
+
+  .header-btn:hover {
+    color: var(--color-white);
+    background-color: var(--color-black);
+  }
+
+  #Menu-btn > svg {
+    overflow: hidden;
+  }
+
+  #Menu-btn > svg > path {
+    display: block;
+  }
+
+  #Menu-btn:hover > svg > .top {
+    animation: menuBtnTop 300ms ease-in-out forwards;
+  }
+
+  #Menu-btn:hover > svg > .bottom {
+    animation: menuBtnBottom 300ms ease-in-out forwards;
+  }
+
+  .header-btn:hover svg {
+    animation: headerBtn 300ms ease-in-out forwards;
+  }
+
+  .header-btn:hover .text-overflow-content {
+    animation: headerBtnText 300ms var(--ani-delay) ease-in-out forwards;
+  }
+
+  @keyframes menuBtnTop {
+    from {
+      transform: translateX(101%);
+    }
+    to {
+      transform: translateX(0%);
+    }
+  }
+
+  @keyframes menuBtnBottom {
+    from {
+      transform: translateX(-101%);
+    }
+    to {
+      transform: translateX(0%);
+    }
+  }
+
+  @keyframes headerBtn {
+    from {
+      transform: scale(0);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes headerBtnText {
+    from {
+      transform: translateY(105%);
+    }
+    to {
+      transform: translateY(0%);
+    }
+  }
 }
 
 @media (max-width: 767px) {
-  #Logo {
-    width: 100px;
+  .header-middle svg {
+    width: 80px;
+  }
+
+  .header-btn-label {
+    display: none;
+  }
+
+  .header-btn {
+    height: 32px;
+    min-width: 32px;
   }
 }

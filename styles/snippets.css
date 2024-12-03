@@ -6,6 +6,9 @@
 
 .text-overflow-content {
   display: block;
+}
+
+[data-animate] .text-overflow-content {
   transform: translateY(105%);
 }
 

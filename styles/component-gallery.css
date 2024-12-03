@@ -26,7 +26,6 @@ the-gallery[open="true"] {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  border-radius: var(--scale-20);
   scrollbar-width: none;
   scroll-behavior: smooth;
 }
@@ -39,7 +38,14 @@ the-gallery[open="true"] {
   position: fixed;
   top: calc(var(--space-edge) * 2);
   right: calc(var(--space-edge) * 2);
+  width: var(--scale-40);
+  height: var(--scale-40);
   z-index: 1;
+}
+
+.gallery-closer > svg {
+  width: 100%;
+  height: auto;
 }
 
 gallery-opener,
@@ -92,5 +98,25 @@ gallery-closer {
 @media (max-width: 767px) {
   .gallery-image-title {
     max-width: unset;
+  }
+
+  .gallery-closer {
+    width: 32px;
+    height: 32px;
+  }
+
+  .gallery-controller {
+    position: fixed;
+    top: unset;
+    right: 50%;
+    bottom: calc(var(--space-edge) * 2);
+    transform: translateX(50%);
+  }
+
+  .gallery-image-title {
+    position: relative;
+    z-index: 1;
+    flex: 0 1 100%;
+    padding: var(--space-edge);
   }
 }

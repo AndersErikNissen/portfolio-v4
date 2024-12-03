@@ -81,8 +81,8 @@ class TheGallery extends HTMLElement {
   set observer(callback) {
     const OPTIONS = {
       root: this.wrapper,
-      rootMargin: "1px",
-      threshold: 1.0,
+      rootMargin: "0px",
+      threshold: [0.09, 0.99], // 0/1.0 was too precise
     };
 
     this._observer = new IntersectionObserver(callback.bind(this), OPTIONS);
@@ -107,7 +107,39 @@ class TheGallery extends HTMLElement {
       top: this.wrapper.clientHeight * i,
       behavior: "smooth",
     });
-    this.index = i;
+  }
+
+  observerCallback(entries, observer) {
+    entries.forEach((entry) => {
+      if (entries.length > 2) return;
+
+      console.log("this.test", this.test);
+
+      let itemIndex = this.gallery.indexOf(entry.target);
+
+      if (entry.intersectionRatio > 0.9) {
+        console.log(">0.9", entry.target);
+
+        let title = entry.target.querySelector(".gallery-image-title");
+
+        this.index = itemIndex;
+        if (
+          title &&
+          title.hasAttribute("data-animate") &&
+          !title.classList.contains("active")
+        ) {
+          title.classList.add("active");
+        }
+      }
+
+      if (entry.intersectionRatio < 0.1) {
+        console.log(">0.1", itemIndex, this.index);
+
+        if (itemIndex === this.index) {
+          this.index = itemIndex - 1;
+        }
+      }
+    });
   }
 
   async renderImage(obj) {
@@ -169,30 +201,6 @@ class TheGallery extends HTMLElement {
     window.addEventListener("keyup", (e) => {
       if (e.key === "Escape" && this.open) {
         this.open = false;
-      }
-    });
-  }
-
-  observerCallback(entries, observer) {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        let title = entry.target.querySelector(".gallery-image-title");
-
-        console.log("!", entry);
-
-        /**
-         * FIND UD AF HVORDAN VI GÅR EN -INDEX NÅR VI GÅR VÆK FRA ET ITEM
-         */
-
-        this.index = this.gallery.indexOf(entry.target);
-
-        if (
-          title &&
-          title.hasAttribute("data-animate") &&
-          !title.classList.contains("active")
-        ) {
-          title.classList.add("active");
-        }
       }
     });
   }

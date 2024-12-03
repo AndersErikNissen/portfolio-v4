@@ -2,6 +2,7 @@
   display: flex;
   overflow: hidden;
   gap: var(--space-edge);
+  border-radius: var(--scale-20);
 }
 
 .visuals-item {
@@ -22,7 +23,7 @@
 }
 
 .active .visuals-item-image-wrapper {
-  flex: 0 0 70%;
+  flex: 0 0 60%;
 }
 
 .visuals-item-image-wrapper > img {
@@ -38,7 +39,7 @@
 
 .visuals-item-main {
   position: absolute;
-  height: 30%;
+  height: 40%;
   right: 0;
   bottom: 0;
   left: 0;
@@ -84,15 +85,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: var(--scale-64);
-  height: var(--scale-64);
+  width: var(--scale-40);
+  height: var(--scale-40);
   background-color: var(--color-white);
-  border-radius: var(--scale-20);
+  border-radius: 99rem;
 }
 
 .visuals-controls svg {
-  width: 1.62rem;
-  height: 1.62rem;
+  width: 40%;
+  height: 40%;
 }
 
 @media (max-width: 767px) {
@@ -114,20 +115,15 @@
 
   .visuals-controls {
     bottom: unset;
-    top: calc((100% - (var(--space-edge) * 2)) * 0.7);
+    top: calc((100% - (var(--space-edge) * 2)) * 0.6);
     left: calc(var(--space-edge) * 2);
     width: auto;
     transform: translateY(-100%);
   }
 
   .visuals-controls > carousel-control {
-    width: 42px;
-    height: 42px;
-    border-radius: 10px;
-  }
-
-  .visuals-controls svg {
-    width: 16px;
-    height: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 99px;
   }
 }

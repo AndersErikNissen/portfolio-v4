@@ -198,9 +198,11 @@ the-app {
 
 /* ICONS */
 
-.icon-circle-plus:not(:hover) circle,
-.icon-circle-close:not(:hover) circle {
+.icon-circle-plus:not(:hover) circle {
   opacity: 0;
+}
+.icon-circle-close:not(:hover) circle {
+  fill: var(--color-white);
 }
 
 .icon-circle-plus:hover .plus,
@@ -210,5 +212,6 @@ the-app {
 
 .icon-circle-plus > *,
 .icon-circle-close > * {
-  transition: opacity 300ms ease-in-out, color 300ms ease-in-out;
+  transition: opacity 300ms ease-in-out, color 300ms ease-in-out,
+    fill 300ms ease-in-out;
 }

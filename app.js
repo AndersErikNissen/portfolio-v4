@@ -163,17 +163,10 @@ class TheApp extends HTMLElement {
     return TEMPLATE.markup;
   }
 
-  async prepareHeader() {
-    await this.loadStylesheet("component-clock");
-    await this.loadScript("components/clock");
-
-    return await this.prepareTemplate("header", {}); // empty object, since the template is static
-  }
-
   async render() {
     let markup = "";
 
-    // markup += await this.prepareHeader();
+    markup += await this.prepareTemplate("header", {}); // empty object, since the template is static;
     markup += await this.prepareTemplate("visuals", this.db.dataBase[2]);
 
     this.innerHTML = markup;
