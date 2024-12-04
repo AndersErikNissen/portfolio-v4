@@ -23,9 +23,8 @@ APP_TEMPLATES.page = (data) => {
     data.stages.forEach((stage, index) => {
       controlMarkup += `
         <div 
-          ${index === 0 ? 'class="active-stage"' : ""} 
           data-stage="${index}"
-          class="control-item"
+          class="control-item ${index === 0 ? "active-stage" : ""} "
         ></div>`;
     });
 

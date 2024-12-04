@@ -110,7 +110,7 @@ class TheApp extends HTMLElement {
       const SRC = `./${path}.js`;
 
       if (document.querySelector('script[src="' + SRC + '"]')) {
-        resolve();
+        return resolve();
       }
 
       const SCRIPT = document.createElement("script");
@@ -124,9 +124,8 @@ class TheApp extends HTMLElement {
   loadStylesheet(name) {
     return new Promise((resolve) => {
       const HREF = `./styles/${name}.css`;
-
       if (document.querySelector('link[href="' + HREF + '"]')) {
-        resolve();
+        return resolve();
       }
 
       const LINK = document.createElement("link");
@@ -158,6 +157,8 @@ class TheApp extends HTMLElement {
       this.loadScript(path);
     });
 
+    this.setAttribute("template", TEMPLATE_NAME);
+
     TEMPLATE.styles.forEach((style) => this.loadStylesheet(style));
 
     return TEMPLATE.markup;
@@ -167,7 +168,8 @@ class TheApp extends HTMLElement {
     let markup = "";
 
     markup += await this.prepareTemplate("header", {}); // empty object, since the template is static;
-    markup += await this.prepareTemplate("visuals", this.db.dataBase[2]);
+    // markup += await this.prepareTemplate("visuals", this.db.dataBase[2]);
+    markup += await this.prepareTemplate("projects", this.db.dataBase[1]);
 
     this.innerHTML = markup;
   }

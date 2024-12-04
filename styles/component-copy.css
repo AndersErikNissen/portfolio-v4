@@ -1,0 +1,48 @@
+copy-clipboard {
+  display: block;
+}
+
+copy-toaster {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: var(--scale-40);
+  border-radius: 99rem;
+  padding: 0 var(--scale-20);
+  background-color: var(--color-black);
+  font-size: var(--scale-12);
+  color: var(--color-white);
+  position: fixed;
+  bottom: var(--space-edge);
+  left: 50%;
+  z-index: 10;
+}
+
+copy-toaster:not([displaying="true"]) {
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-50%) translateY(40%);
+}
+
+copy-toaster[displaying="true"] {
+  animation: copyToaster 4000ms ease-in-out forwards;
+}
+
+@keyframes copyToaster {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(40%);
+  }
+
+  20%,
+  80% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0%);
+    pointer-events: all;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(40%);
+  }
+}

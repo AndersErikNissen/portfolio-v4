@@ -12,8 +12,8 @@ console.log(
 
 APP_TEMPLATES.header = () => {
   return {
-    scripts: ["components/clock"],
-    styles: ["header", "component-clock"],
+    scripts: ["components/clock", "components/copy"],
+    styles: ["header", "component-clock", "component-copy"],
     markup: `
       <header id="Header">
         <div class="header-main">
@@ -33,7 +33,7 @@ APP_TEMPLATES.header = () => {
             <digital-clock></digital-clock>
 
             <div class="header-btns">
-              <button class="header-btn header-btn-call">
+              <copy-clipboard content-type="phone" class="header-btn header-btn-call h-scale-icon">
                 ${
                   SNIPPETS.heading(
                     "Giv et kald",
@@ -44,14 +44,15 @@ APP_TEMPLATES.header = () => {
                   ).outerHTML
                 }
                 ${SNIPPETS.icon("phone").outerHTML}
-              </button>
-              <button class="header-btn">
+              </copy-clipboard>
+              <copy-clipboard class="header-btn h-scale-icon">
                 ${SNIPPETS.icon("mail").outerHTML}
-              </button>
+              </copy-clipboard>
             </div>
           </div>
         </div>
       </header>
+      <copy-toaster></copy-toaster>
     `,
   };
 };

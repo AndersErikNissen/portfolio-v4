@@ -70,7 +70,7 @@ class Snippets {
     LINKS.forEach((link) => {
       let a = document.createElement("a");
       a.href = link.url;
-      a.classList.add("underlined-btn");
+      a.classList.add("underlined-btn", "external-link");
       a.setAttribute("target", "_blank");
       a.textContent = link.label;
       WRAPPER.appendChild(a);
@@ -234,6 +234,14 @@ class Snippets {
         );
         width = 18;
         height = 8;
+        break;
+
+      case "star":
+        addPath(
+          "M0.279272 5.91253C0.0644616 5.80977 0.0644615 5.50396 0.279272 5.4012L2.39071 4.3911C3.2663 3.97222 3.97219 3.26633 4.39107 2.39073L5.40117 0.279302C5.50393 0.0644923 5.80974 0.0644919 5.9125 0.279302L6.92261 2.39075C7.34149 3.26633 8.04738 3.97222 8.92296 4.39109L11.0344 5.4012C11.2492 5.50396 11.2492 5.80977 11.0344 5.91253L8.92297 6.92264C8.04738 7.34152 7.34149 8.0474 6.92261 8.92299L5.9125 11.0344C5.80974 11.2492 5.50393 11.2492 5.40117 11.0344L4.39107 8.923C3.97219 8.04741 3.2663 7.34151 2.39071 6.92264L0.279272 5.91253Z"
+        );
+        width = 12;
+        height = 12;
         break;
     }
 

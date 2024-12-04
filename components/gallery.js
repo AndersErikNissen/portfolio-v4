@@ -34,7 +34,7 @@ class TheGallery extends HTMLElement {
   set wrapper(node) {
     let closer = document.createElement("gallery-closer");
     closer.appendChild(SNIPPETS.icon("circle-close"));
-    closer.classList.add("gallery-closer");
+    closer.classList.add("gallery-closer", "h-scale-icon");
 
     node.classList.add("gallery-wrapper");
     node.appendChild(closer);
@@ -113,13 +113,9 @@ class TheGallery extends HTMLElement {
     entries.forEach((entry) => {
       if (entries.length > 2) return;
 
-      console.log("this.test", this.test);
-
       let itemIndex = this.gallery.indexOf(entry.target);
 
       if (entry.intersectionRatio > 0.9) {
-        console.log(">0.9", entry.target);
-
         let title = entry.target.querySelector(".gallery-image-title");
 
         this.index = itemIndex;
@@ -133,8 +129,6 @@ class TheGallery extends HTMLElement {
       }
 
       if (entry.intersectionRatio < 0.1) {
-        console.log(">0.1", itemIndex, this.index);
-
         if (itemIndex === this.index) {
           this.index = itemIndex - 1;
         }
@@ -182,11 +176,13 @@ class TheGallery extends HTMLElement {
 
     this.gallery = await Promise.all(RENDERING_IMAGES);
 
-    this.controller = this.gallery;
+    if (this.gallery.length > 1) {
+      this.controller = this.gallery;
 
-    this.observer = this.observerCallback;
+      this.observer = this.observerCallback;
 
-    this.gallery.forEach((item) => this.observer.observe(item));
+      this.gallery.forEach((item) => this.observer.observe(item));
+    }
 
     this.loading = false;
   }

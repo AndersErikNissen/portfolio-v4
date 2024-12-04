@@ -1,0 +1,57 @@
+.projects-item {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.projects-item:not(.active-stage) {
+  opacity: 0;
+  pointer-events: 0;
+}
+
+.projects-control {
+  position: fixed;
+  top: 50%;
+  left: var(--space-edge);
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.projects-item-main {
+  --max-lines: 4;
+  position: relative;
+  z-index: 1;
+  padding: 0 33%;
+  text-align: center;
+}
+
+.projects-item-background,
+.projects-item-background > img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.projects-item-background > img {
+  object-position: center;
+  object-fit: cover;
+}
+
+.projects-item-year-wrapper {
+  position: relative;
+}
+
+.projects-item-year-star {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateX(calc(-100% - var(--scale-8))) translateY(-50%);
+}
