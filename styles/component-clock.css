@@ -14,3 +14,9 @@ digital-clock span {
   font-family: "KumbhSans", sans-serif;
   font-weight: 200;
 }
+
+@media (max-width: 767px) {
+  digital-clock {
+    display: none;
+  }
+}

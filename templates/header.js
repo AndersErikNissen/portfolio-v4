@@ -25,9 +25,9 @@ APP_TEMPLATES.header = () => {
             </button>
           </div>
           
-          <div class="header-middle">
+          <a href="./" class="header-middle">
             ${SNIPPETS.icon("logo").outerHTML}
-          </div>
+          </a>
 
           <div class="header-right">
             <digital-clock></digital-clock>

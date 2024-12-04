@@ -13,7 +13,7 @@ console.log(
 APP_TEMPLATES["404"] = () => {
   return {
     scripts: [],
-    styles: [],
+    styles: ["404"],
     markup: `
       <section class="template-404 container">
         <div class="main-404">

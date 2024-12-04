@@ -1,8 +1,29 @@
+the-app[template="404"] {
+  color: var(--color-white);
+  position: relative;
+}
+
+the-app[template="404"]::before {
+  content: "";
+  display: block;
+  background-image: linear-gradient(var(--color-black) 10%, #525252 100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 120%;
+  transform: translateY(-20vh);
+  animation: bg404 50000ms linear infinite;
+}
+
+@keyframes bg404 {
+  50% {
+    transform: translateY(0);
+  }
+}
+
 .template-404 {
   position: relative;
-  border-radius: var(--scale-40);
-  color: var(--color-white);
-  background-color: var(--color-black);
   display: flex;
   justify-content: center;
   align-items: center;

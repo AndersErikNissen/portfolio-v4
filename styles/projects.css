@@ -1,3 +1,11 @@
+the-app:not([template="projects"]) {
+  padding: var(--space-edge);
+}
+
+.template-projects {
+  color: var(--color-white);
+}
+
 .projects-item {
   position: absolute;
   top: 0;
@@ -7,11 +15,20 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transition-property: transform, filter, opacity;
+  transition-duration: 300ms;
+  transition-timing-function: ease-in;
+  transform-origin: center;
+  transform: scale(1);
+  filter: blur(0);
+  z-index: 1;
 }
 
 .projects-item:not(.active-stage) {
-  opacity: 0;
   pointer-events: 0;
+  transform: scale(2);
+  filter: blur(1rem);
+  z-index: 0;
 }
 
 .projects-control {
@@ -26,8 +43,12 @@
   --max-lines: 4;
   position: relative;
   z-index: 1;
-  padding: 0 33%;
   text-align: center;
+  max-width: 33%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--scale-12);
 }
 
 .projects-item-background,
@@ -45,7 +66,14 @@
 }
 
 .projects-item-year-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.projects-item-year {
+  display: block;
   position: relative;
+  line-height: 1;
 }
 
 .projects-item-year-star {
@@ -54,4 +82,36 @@
   top: 50%;
   left: 0;
   transform: translateX(calc(-100% - var(--scale-8))) translateY(-50%);
+  transition: transform 300ms ease-in-out, opacity 300ms ease-in-out;
+}
+
+.projects-item-year-star:not(.animate) {
+  transform: scale(0);
+  opacity: 0;
+}
+
+.projects-item-subtitle {
+  display: block;
+  position: absolute;
+  bottom: var(--space-edge);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 767px) {
+  .projects-item-main {
+    max-width: unset;
+    padding: 0 var(--space-edge);
+  }
+
+  .projects-item-subtitle {
+    display: none;
+  }
+
+  .projects-control {
+    top: unset;
+    bottom: var(--space-edge);
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }

@@ -73,6 +73,8 @@ class ACarousel extends UserInteraction {
   }
 
   core() {
+    this.timing = 1000;
+    this.listening = true;
     this.elements = this.elements;
     this.lastIndex = this.elements.length - 1;
     this.maxElementTransform = this.elementsInView;

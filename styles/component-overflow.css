@@ -41,7 +41,7 @@ over-flow[data-animate].animate,
   right: 0;
   top: 50%;
   transform: translate(0%, -50%);
-  background-color: var(--color-grey-subtle);
+  background-color: var(--color-grey-faded);
   border-radius: 99px;
 }
 
@@ -54,7 +54,7 @@ over-flow[data-animate].animate,
   width: 100%;
   height: 100%;
   transform: translateY(var(--scroll-progress));
-  background-color: var(--color-grey-intense);
+  background-color: var(--color-black-faded);
   border-radius: 99px;
 }
 

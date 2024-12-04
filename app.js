@@ -7,8 +7,29 @@ class UserInteraction extends HTMLElement {
     super();
   }
 
-  _listening = true;
-  _timing = 1000;
+  get cooldown() {
+    return this._cooldown || this.timing || 0;
+  }
+
+  set cooldown(ms) {
+    this._cooldown = ms;
+  }
+
+  get timing() {
+    return this._timing;
+  }
+
+  set timing(ms) {
+    this._timing = ms;
+  }
+
+  get listening() {
+    return JSON.parse(this.getAttribute("listening"));
+  }
+
+  set listening(v) {
+    this.setAttribute("listening", JSON.stringify(v));
+  }
 
   get stopInteraction() {
     return this._stopInteraction;
@@ -39,9 +60,9 @@ class UserInteraction extends HTMLElement {
 
   handleWheel(e) {
     this.stopInteraction = e;
-    if (!this._listening || this.stopInteraction) return;
+    if (!this.listening || this.stopInteraction) return;
 
-    this._listening = false;
+    this.listening = false;
 
     if (e.deltaY > 0) {
       this.next();
@@ -50,34 +71,34 @@ class UserInteraction extends HTMLElement {
     }
 
     setTimeout(() => {
-      this._listening = true;
-    }, this._timing);
+      this.listening = true;
+    }, this.cooldown);
   }
 
   handleTouchStart(e) {
-    if (!this._listening) return;
+    if (!this.listening) return;
     this.stopInteraction = e;
     if (this.stopInteraction) return;
 
-    this._startY = e.changedTouches[0].clientY;
+    this.startY = e.changedTouches[0].clientY;
   }
 
   handleTouchMove(e) {
-    if (!this._listening) return;
+    if (!this.listening) return;
     e.preventDefault();
   }
 
   handleTouchEnd(e) {
-    if (this._listening && !this.stopInteraction) {
-      this._listening = false;
+    if (this.listening && !this.stopInteraction) {
+      this.listening = false;
 
       let touchY = e.changedTouches[0].clientY;
-      if (this._startY < touchY) this.next();
-      if (this._startY > touchY) this.prev();
+      if (this.startY < touchY) this.next();
+      if (this.startY > touchY) this.prev();
 
       setTimeout(() => {
-        this._listening = true;
-      }, this._timing);
+        this.listening = true;
+      }, this.cooldown);
     }
 
     this.stopInteraction = false;
@@ -168,8 +189,9 @@ class TheApp extends HTMLElement {
     let markup = "";
 
     markup += await this.prepareTemplate("header", {}); // empty object, since the template is static;
+    // markup += await this.prepareTemplate("");
     // markup += await this.prepareTemplate("visuals", this.db.dataBase[2]);
-    markup += await this.prepareTemplate("projects", this.db.dataBase[1]);
+    markup += await this.prepareTemplate("project", this.db.dataBase[7]);
 
     this.innerHTML = markup;
   }

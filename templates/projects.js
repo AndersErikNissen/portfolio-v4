@@ -17,7 +17,8 @@ APP_TEMPLATES.projects = (data) => {
   let controlMarkup = "";
 
   if (data.items && data.items.length > 0) {
-    controlMarkup += '<stage-control class="projects-control controller">';
+    controlMarkup +=
+      '<stage-control manager="stage-projects" class="projects-control controller">';
 
     data.items.forEach((item, index) => {
       controlMarkup += `
@@ -61,7 +62,8 @@ APP_TEMPLATES.projects = (data) => {
           "projects-item-year",
         ]);
 
-        yearWrapper.append(star, year);
+        year.appendChild(star);
+        yearWrapper.appendChild(year);
       }
 
       let content = document.createElement("over-flow");
@@ -99,13 +101,13 @@ APP_TEMPLATES.projects = (data) => {
     scripts: ["components/overflow", "components/stage-manager"],
     styles: ["projects", "component-overflow", "component-stage-manager"],
     markup: `
-      <stage-manager class="template-projects template">
+      <stage-projects class="template-projects template">
         <div class="projects-items container">
           ${itemsMarkup}
         </div>
 
         ${controlMarkup}
-      </stage-manager>
+      </stage-projects>
     `,
   };
 };

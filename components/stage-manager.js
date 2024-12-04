@@ -124,7 +124,9 @@ class StageManager extends UserInteraction {
     this.stage = parseInt(newIndex);
   }
 
-  connectedCallback() {
+  init() {
+    this.timing = 1000;
+    this.listening = true;
     this.stages = this.nodes;
     this.animationStages = this.stages;
 
@@ -145,6 +147,10 @@ class StageManager extends UserInteraction {
     }, 100);
 
     this.bindEvents();
+  }
+
+  connectedCallback() {
+    this.init();
   }
 }
 
@@ -192,11 +198,43 @@ class StageControl extends HTMLElement {
     );
   }
 
-  connectedCallback() {
+  init() {
     this.nodes = this.nodes;
     this.manager = this.manager;
     this.bindEvents();
   }
+
+  connectedCallback() {
+    this.init();
+  }
 }
 
 customElements.define("stage-control", StageControl);
+
+class StageProjects extends StageManager {
+  get animationDelay() {
+    return this._animationDelay || 0;
+  }
+
+  set animationDelay(ms) {
+    this._animationDelay = ms;
+  }
+
+  animateNodes(nodes) {
+    setTimeout(() => {
+      nodes.forEach((node) => {
+        if (!node.classList.contains(this._animationClass)) {
+          node.classList.add(this._animationClass);
+        }
+      });
+    }, this.animationDelay);
+  }
+
+  connectedCallback() {
+    this.init();
+    this.cooldown = 1000;
+    this.animationDelay = 400;
+  }
+}
+
+customElements.define("stage-projects", StageProjects);

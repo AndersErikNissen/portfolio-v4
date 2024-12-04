@@ -4,10 +4,14 @@
   width: 100%;
 }
 
-[template="projects"] #Header {
+[template="projects"] #Header,
+[template="404"] #Header {
   position: fixed;
   top: var(--space-edge);
   left: 0;
+  z-index: 10;
+  padding: 0 var(--space-edge) var(--space-edge);
+  color: var(--color-white);
 }
 
 .header-main {
@@ -45,6 +49,7 @@
 
 .header-middle {
   flex: 0 0 auto;
+  display: block;
 }
 
 .header-middle > svg {
@@ -64,6 +69,7 @@
   justify-content: center;
   align-items: center;
   border-radius: 99rem;
+  color: var(--color-black);
 }
 
 .header-btn > svg {
@@ -154,5 +160,9 @@
   .header-btn {
     height: 32px;
     min-width: 32px;
+  }
+
+  .menu-btn-label {
+    display: none;
   }
 }
