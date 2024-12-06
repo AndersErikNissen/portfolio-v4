@@ -191,6 +191,7 @@ class TheApp extends HTMLElement {
     markup += await this.prepareTemplate("header", {}); // empty object, since the template is static;
     // markup += await this.prepareTemplate("");
     // markup += await this.prepareTemplate("visuals", this.db.dataBase[2]);
+    // markup += await this.prepareTemplate("projects", this.db.dataBase[1]);
     markup += await this.prepareTemplate("project", this.db.dataBase[7]);
 
     this.innerHTML = markup;

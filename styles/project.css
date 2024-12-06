@@ -1,0 +1,25 @@
+.project-sxs {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+}
+
+
+
+
+<the-app template="project">
+  <stage-manager class="template-project template" listening="true" stage="0">
+    <div class="project-sxs container">
+      <div class="project-gallery">
+        <div class="project-gallery-item active-stage" data-stage="0"><img alt=""></div>
+      </div>
+
+      <stage-control class="project-control controller"></stage-control>
+
+      <div class="project-main">
+        <div data-stage="[0,1]" class="project-main-item active-stage"></div>
+        <div data-stage="[2]" class="project-main-item"></div>
+        <div data-stage="[3]" class="project-main-item"></div>
+      </div>
+    </div>
+  </stage-manager>
+</the-app>

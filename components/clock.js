@@ -81,8 +81,13 @@ class ComponentDigitalClock extends HTMLElement {
 
   initiateMovement() {
     this.movement();
+
     const secondsToNextFullMinute = (60 - new Date().getSeconds()) * 1000;
-    setTimeout(this.movement.bind(this), secondsToNextFullMinute);
+    setTimeout(() => {
+      this.movement();
+    }, secondsToNextFullMinute);
+
+    setInterval(this.movement.bind(this), 1000);
   }
 
   connectedCallback() {

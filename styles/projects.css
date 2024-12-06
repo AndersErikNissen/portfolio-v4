@@ -1,5 +1,5 @@
-the-app:not([template="projects"]) {
-  padding: var(--space-edge);
+the-app[template="projects"] {
+  padding: 0;
 }
 
 .template-projects {
@@ -65,18 +65,13 @@ the-app:not([template="projects"]) {
   object-fit: cover;
 }
 
-.projects-item-year-wrapper {
-  display: flex;
-  justify-content: center;
-}
-
 .projects-item-year {
   display: block;
   position: relative;
   line-height: 1;
 }
 
-.projects-item-year-star {
+.projects-item-star {
   display: block;
   position: absolute;
   top: 50%;
@@ -85,7 +80,7 @@ the-app:not([template="projects"]) {
   transition: transform 300ms ease-in-out, opacity 300ms ease-in-out;
 }
 
-.projects-item-year-star:not(.animate) {
+.projects-item-star:not(.animate) {
   transform: scale(0);
   opacity: 0;
 }

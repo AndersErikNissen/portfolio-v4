@@ -43,13 +43,16 @@ class StageManager extends UserInteraction {
     let stages = [];
 
     nodes.forEach((node) => {
-      let index = parseInt(node.dataset.stage);
+      let parsed = JSON.parse(node.dataset.stage);
+      let indexes = Array.isArray(parsed) ? parsed : [parsed];
 
-      if (!stages[index]) {
-        stages[index] = [];
-      }
+      indexes.forEach((i) => {
+        if (!stages[i]) {
+          stages[i] = [];
+        }
 
-      stages[index].push(node);
+        stages[i].push(node);
+      });
     });
 
     this._stages = stages;
@@ -238,3 +241,24 @@ class StageProjects extends StageManager {
 }
 
 customElements.define("stage-projects", StageProjects);
+
+class StageProject extends StageManager {
+  connectedCallback() {
+    this.init();
+    // this.cooldown = 1000;
+
+    /**
+     * On stage change:
+     * - add .previous-stage to current items
+     * -- remove after a delay? (this.cooldown?)
+     * -- or
+     * -- save the previous items, so they can be removed on next index change
+     *
+     * option 2, seems better and easier to use?
+     *
+     * everything else is the same...
+     */
+  }
+}
+
+customElements.define("stage-project", StageProject);

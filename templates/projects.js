@@ -35,7 +35,6 @@ APP_TEMPLATES.projects = (data) => {
     data.items.forEach((item, index) => {
       let year = "",
         subtitle = "",
-        yearWrapper = "",
         title = document.createElement("a");
 
       title.href = item.href;
@@ -49,12 +48,9 @@ APP_TEMPLATES.projects = (data) => {
       bg.appendChild(img);
 
       if (item.year.length > 0) {
-        yearWrapper = document.createElement("div");
-        yearWrapper.classList.add("projects-item-year-wrapper");
-
         let star = SNIPPETS.icon("star");
         star.setAttribute("data-animate", "");
-        star.classList.add("projects-item-year-star");
+        star.classList.add("projects-item-star");
 
         year = SNIPPETS.heading(item.year, "p", [
           "fs-medium",
@@ -63,7 +59,6 @@ APP_TEMPLATES.projects = (data) => {
         ]);
 
         year.appendChild(star);
-        yearWrapper.appendChild(year);
       }
 
       let content = document.createElement("over-flow");
@@ -86,7 +81,7 @@ APP_TEMPLATES.projects = (data) => {
           ${bg.outerHTML}
 
           <div class="projects-item-main">
-            ${yearWrapper.outerHTML}
+            ${year.outerHTML}
             ${title.outerHTML}
             ${content.outerHTML}
           </div>
