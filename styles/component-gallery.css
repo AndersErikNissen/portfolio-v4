@@ -38,14 +38,15 @@ the-gallery[open="true"] {
   position: fixed;
   top: calc(var(--space-edge) * 2);
   right: calc(var(--space-edge) * 2);
-  width: var(--scale-40);
-  height: var(--scale-40);
   z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--scale-8);
 }
 
 .gallery-closer > svg {
-  width: 100%;
-  height: auto;
+  width: var(--scale-40);
+  height: var(--scale-40);
 }
 
 gallery-opener,
@@ -100,7 +101,7 @@ gallery-closer {
     max-width: unset;
   }
 
-  .gallery-closer {
+  .gallery-closer > svg {
     width: 32px;
     height: 32px;
   }

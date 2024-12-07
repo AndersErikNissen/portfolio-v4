@@ -94,6 +94,8 @@ class Snippets {
       }
     }
 
+    let words = str.split(" ");
+
     let characters = str.split("");
     let parts = characters.concat(extraElements);
 

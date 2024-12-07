@@ -42,7 +42,7 @@ APP_TEMPLATES.projects = (data) => {
         SNIPPETS.heading(item.title, "h3", ["projects-item-title", "h1"])
       );
 
-      let img = SNIPPETS.img(item.image);
+      let img = SNIPPETS.img(item.image, "100vw");
       let bg = document.createElement("div");
       bg.classList.add("projects-item-background");
       bg.appendChild(img);

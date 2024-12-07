@@ -33,11 +33,15 @@ class TheGallery extends HTMLElement {
 
   set wrapper(node) {
     let closer = document.createElement("gallery-closer");
-    let label = document.createElement("span");
-    label.textContent = "Luk";
-    label.classList.add("gallery-closer-label");
+    let label = SNIPPETS.heading(
+      "Luk",
+      "span",
+      ["gallery-closer-label"],
+      [],
+      false
+    );
+    closer.classList.add("gallery-closer", "h-bounce-text", "h-scale-icon");
     closer.append(label, SNIPPETS.icon("circle-close"));
-    closer.classList.add("gallery-closer", "h-scale-icon");
 
     node.classList.add("gallery-wrapper");
     node.appendChild(closer);

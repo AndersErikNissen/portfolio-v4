@@ -43,7 +43,7 @@ APP_TEMPLATES.page = (data) => {
       `;
 
       if (stage.title) {
-        markup += SNIPPETS.heading(stage.title, null, [
+        markup += SNIPPETS.heading(stage.title, "h2", [
           "h1",
           "page-title",
         ]).outerHTML;
@@ -72,7 +72,12 @@ APP_TEMPLATES.page = (data) => {
           }" 
           data-stage="${index}"
         >
-          ${SNIPPETS.img(stage.image).outerHTML}
+          ${
+            SNIPPETS.img(
+              stage.image,
+              "(max-width: 767px) calc(100vw - 24px), 50vw"
+            ).outerHTML
+          }
         </div>
       `;
 

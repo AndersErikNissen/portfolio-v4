@@ -21,6 +21,14 @@ class OverFlow extends HTMLElement {
     this.scrollProgress = pct;
   }
 
+  get scrollable() {
+    return JSON.parse(this.getAttribute("scrollable"));
+  }
+
+  set scrollable(v) {
+    this.setAttribute("scrollable", JSON.stringify(v));
+  }
+
   scrollSetup() {
     const HEIGHT = this.wrapper.scrollHeight;
     this.pctBase = (this.wrapper.clientHeight / HEIGHT) * 100;
@@ -54,6 +62,9 @@ class OverFlow extends HTMLElement {
       if (this.isOverflowing) {
         this.renderScrollbar();
         this.scrollSetup();
+        this.scrollable = true;
+      } else {
+        this.scrollable = false;
       }
     }, 500);
   }

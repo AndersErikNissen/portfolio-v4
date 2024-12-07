@@ -40,7 +40,12 @@ APP_TEMPLATES.visuals = (data) => {
           data-stage="${index}"
         >
           <div class="visuals-item-image-wrapper">
-            ${SNIPPETS.img(item.gallery[0]).outerHTML}
+            ${
+              SNIPPETS.img(
+                item.gallery[0],
+                "(max-width: 767px) calc(100vw - 24px), 50vw"
+              ).outerHTML
+            }
           </div>
           <div class="visuals-item-main">
             ${heading.outerHTML}

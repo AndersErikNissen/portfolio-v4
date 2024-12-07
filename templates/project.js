@@ -17,9 +17,14 @@ APP_TEMPLATES.project = (data) => {
 
   let galleryMarkup = "";
   let mainMarkup = "";
+  let projectColor = "";
+
+  if (data.color && data.color.length > 0) {
+    projectColor = `style="--color-project:${data.color};"`;
+  }
 
   const createGalleryItem = (obj) => {
-    let img = SNIPPETS.img(obj);
+    let img = SNIPPETS.img(obj, "(max-width: 767px) calc(100vw - 24px), 50vw");
     let wrapper = document.createElement("div");
     wrapper.classList.add("project-gallery-item");
     wrapper.appendChild(img);
@@ -28,27 +33,32 @@ APP_TEMPLATES.project = (data) => {
   };
 
   const createYear = () => {
+    let wrapper = document.createElement("div");
+    wrapper.classList.add("project-year-wrapper");
     let star = SNIPPETS.icon("star");
     star.setAttribute("data-animate", "");
     star.classList.add("project-star");
 
-    let year = SNIPPETS.heading(data.year, "p", [
-      "fs-medium",
-      "anton-sc-regular",
-      "project-year",
-    ]);
-
-    return year.appendChild(star);
+    let year = SNIPPETS.heading(
+      data.year,
+      "p",
+      ["fs-medium", "anton-sc-regular", "project-year"],
+      [],
+      false
+    );
+    wrapper.append(star, year);
+    return wrapper;
   };
 
   const createTitle = () => {
-    let titleElements = ["url", "github"].filter((value) => {
+    let titleElements = ["url", "github"].map((value) => {
       if (data[value].length > 0) {
         let a = document.createElement("a");
-        a.classList.add("project-title-icon");
+        a.classList.add("project-title-icon", "h-scale-icon");
         a.href = data[value];
+        a.setAttribute("target", "_blank");
         a.appendChild(SNIPPETS.icon(value));
-
+        console.log(SNIPPETS.icon(value));
         return a;
       }
     });
@@ -57,7 +67,8 @@ APP_TEMPLATES.project = (data) => {
       data.title,
       "h1",
       ["project-title", "h1"],
-      titleElements
+      titleElements,
+      false
     );
   };
 
@@ -71,13 +82,15 @@ APP_TEMPLATES.project = (data) => {
 
     wrapper.appendChild(createTitle());
 
-    if (data.subtitle.length > 0) {
+    if (data.subtitle && data.subtitle.length > 0) {
       wrapper.appendChild(
-        SNIPPETS.heading(stage.subtitle, "p", [
-          "fs-medium",
-          "fw-200",
-          "project-subtitle",
-        ])
+        SNIPPETS.heading(
+          data.subtitle,
+          "p",
+          ["fs-medium", "fw-200", "project-subtitle"],
+          [],
+          false
+        )
       );
     }
 
@@ -89,14 +102,15 @@ APP_TEMPLATES.project = (data) => {
     wrapper.setAttribute("data-stage", JSON.stringify(indexes));
     wrapper.classList.add("project-main-item");
 
-    if (stage.title.length > 0) {
-      let title = document.createElement("h3");
-      title.classList.add("h4", "project-main-item-title");
-      title.textContent = stage.title;
+    if (stage.title) {
+      let title = SNIPPETS.heading(stage.title, "h3", [
+        "h3",
+        "project-main-item-title",
+      ]);
       wrapper.appendChild(title);
     }
 
-    if (stage.content.length > 0) {
+    if (stage.content) {
       let content = document.createElement("over-flow");
       content.classList.add("project-main-item-content");
       content.innerHTML = stage.content;
@@ -129,31 +143,61 @@ APP_TEMPLATES.project = (data) => {
     mainMarkup += mainItem(stage, indexes).outerHTML;
   });
 
-  let controlMarkup = '<stage-control class="project-control controller">';
-  for (let i = 0; stageCounter > i; i++) {
-    controlMarkup += `
-      <div 
-        data-stage="${i}"
-        class="control-item ${i === 0 ? "active-stage" : ""} "
-      ></div>
-    `;
-  }
-  controlMarkup += "</stage-control>";
+  const controller = () => {
+    let controller = document.createElement("stage-control");
+    controller.classList.add("project-control", "controller");
+
+    for (let i = 0; stageCounter > i; i++) {
+      let item = document.createElement("div");
+      item.setAttribute("data-stage", i);
+      item.classList.add("control-item");
+      if (i === 0) item.classList.add("active-stage");
+      controller.appendChild(item);
+    }
+
+    return controller;
+  };
+
+  const galleryOpener = () => {
+    let opener = document.createElement("gallery-opener"),
+      images = data.stages.map((stage) => stage.gallery).flat(),
+      openerData = document.createElement("script");
+
+    openerData.innerHTML = JSON.stringify(images);
+    opener.append(SNIPPETS.icon("circle-plus"), openerData);
+    opener.classList.add("project-gallery-opener", "h-scale-icon");
+
+    return opener;
+  };
 
   return {
-    scripts: ["components/stage-manager", "components/overflow"],
-    styles: ["project", "component-stage-manager", "component-overflow"],
+    scripts: [
+      "components/stage-manager",
+      "components/overflow",
+      "components/gallery",
+    ],
+    styles: [
+      "project",
+      "component-stage-manager",
+      "component-overflow",
+      "component-gallery",
+    ],
     markup: `
-      <stage-manager class="template-project template">
+      <stage-manager class="template-project template" ${projectColor}>
         <div class="project-sxs container">
           <div class="project-gallery">
             ${galleryMarkup}
+            ${galleryOpener().outerHTML}
           </div>
 
-          ${controlMarkup}
+          ${controller().outerHTML}
 
-          <div class="project-main">
-            ${mainMarkup}
+          <div class="project-content">
+            ${mainMeta().outerHTML}
+
+            <div class="project-main">
+              ${mainMarkup}
+            </div>
           </div>
         </div>
       </stage-manager>

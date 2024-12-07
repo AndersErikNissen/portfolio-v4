@@ -1,6 +1,5 @@
 class StageManager extends UserInteraction {
   _onLoad = true;
-  _activeStageClass = "active-stage";
   _animationClass = "animate";
 
   get nodes() {
@@ -11,8 +10,24 @@ class StageManager extends UserInteraction {
     return this._stage || parseInt(this.getAttribute("stage")) || 0;
   }
 
+  get previousStage() {
+    return this._previousStage || 0;
+  }
+
+  get previousStageClass() {
+    return "previous-stage";
+  }
+
+  get activeStageClass() {
+    return "active-stage";
+  }
+
   set stage(i) {
     if (i === this.stage) return;
+
+    if (!this.hasAttribute("allow-animation")) {
+      this.setAttribute("allow-animation", "");
+    }
 
     let index = i;
 
@@ -21,14 +36,26 @@ class StageManager extends UserInteraction {
     }
 
     if (this.stage !== index) {
+      this.history = index;
+
       this.deactivateNodes(this.stages[this.stage]);
       this.inanimateNodes(this.animationStages[this.stage]);
+
+      if (this.previousStage >= 0) {
+        this.deactivateNodes(
+          this.stages[this.previousStage],
+          this.previousStageClass
+        );
+      }
+
+      this.activateNodes(this.stages[this.stage], this.previousStageClass);
+
+      this._previousStage = this.stage;
+      this._stage = index;
 
       if (parseInt(this.getAttribute("stage")) !== index) {
         this.setAttribute("stage", index);
       }
-
-      this._stage = index;
 
       this.activateNodes(this.stages[this.stage]);
       this.animateNodes(this.animationStages[this.stage]);
@@ -86,18 +113,18 @@ class StageManager extends UserInteraction {
     this.stage = 0 > this.stage - 1 ? this.stages.length - 1 : this.stage - 1;
   }
 
-  activateNodes(nodes) {
+  activateNodes(nodes, cls = this.activeStageClass) {
     nodes.forEach((node) => {
-      if (!node.classList.contains(this._activeStageClass)) {
-        node.classList.add(this._activeStageClass);
+      if (!node.classList.contains(cls)) {
+        node.classList.add(cls);
       }
     });
   }
 
-  deactivateNodes(nodes) {
+  deactivateNodes(nodes, cls = this.activeStageClass) {
     nodes.forEach((node) => {
-      if (node.classList.contains(this._activeStageClass)) {
-        node.classList.remove(this._activeStageClass);
+      if (node.classList.contains(cls)) {
+        node.classList.remove(cls);
       }
     });
   }
@@ -192,7 +219,7 @@ class StageControl extends HTMLElement {
   }
 
   clickEvent(event) {
-    this.manager.stage = event.target.dataset.stage;
+    this.manager.stage = parseInt(event.target.dataset.stage);
   }
 
   bindEvents() {
@@ -241,24 +268,3 @@ class StageProjects extends StageManager {
 }
 
 customElements.define("stage-projects", StageProjects);
-
-class StageProject extends StageManager {
-  connectedCallback() {
-    this.init();
-    // this.cooldown = 1000;
-
-    /**
-     * On stage change:
-     * - add .previous-stage to current items
-     * -- remove after a delay? (this.cooldown?)
-     * -- or
-     * -- save the previous items, so they can be removed on next index change
-     *
-     * option 2, seems better and easier to use?
-     *
-     * everything else is the same...
-     */
-  }
-}
-
-customElements.define("stage-project", StageProject);

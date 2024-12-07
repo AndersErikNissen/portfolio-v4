@@ -3,23 +3,220 @@
   grid-template-columns: 1fr auto 1fr;
 }
 
+.project-gallery {
+  position: relative;
+  border-radius: var(--scale-20);
+  overflow: hidden;
+}
 
+.project-gallery-item,
+.project-gallery-item > img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 
+.project-gallery-item > img {
+  border-radius: var(--scale-20);
+  object-fit: cover;
+  object-position: center;
+}
 
-<the-app template="project">
-  <stage-manager class="template-project template" listening="true" stage="0">
-    <div class="project-sxs container">
-      <div class="project-gallery">
-        <div class="project-gallery-item active-stage" data-stage="0"><img alt=""></div>
-      </div>
+.project-gallery-item.previous-stage {
+  z-index: 1;
+}
 
-      <stage-control class="project-control controller"></stage-control>
+[allow-animation] .project-gallery-item.previous-stage {
+  animation: pgiPrevious 300ms ease-in-out;
+}
 
-      <div class="project-main">
-        <div data-stage="[0,1]" class="project-main-item active-stage"></div>
-        <div data-stage="[2]" class="project-main-item"></div>
-        <div data-stage="[3]" class="project-main-item"></div>
-      </div>
-    </div>
-  </stage-manager>
-</the-app>
+.project-gallery-item.active-stage {
+  transform: translateX(0);
+  z-index: 2;
+}
+
+[allow-animation] .project-gallery-item.active-stage {
+  animation: pgiActive 300ms ease-in-out;
+}
+
+@keyframes pgiPrevious {
+  from {
+    transform: translateX(0%);
+    z-index: 1;
+  }
+
+  to {
+    transform: translateX(-25%);
+    z-index: 1;
+  }
+}
+
+@keyframes pgiActive {
+  from {
+    transform: translateX(101%);
+    z-index: 2;
+  }
+
+  to {
+    transform: translateX(0%);
+    z-index: 2;
+  }
+}
+
+.project-content {
+  display: grid;
+  grid-template-rows: calc(50% - (var(--scale-32) / 2));
+  gap: var(--scale-32);
+  padding: 0 8%;
+}
+
+.project-meta {
+  align-self: self-end;
+}
+
+.project-year-wrapper {
+  display: flex;
+  gap: var(--scale-4);
+  align-items: center;
+  margin-bottom: var(--scale-8);
+  color: var(--color-project, currentColor);
+}
+
+.project-star {
+  width: 0.637rem;
+  height: auto;
+  transform: scale(0) translateY(-5%);
+  transition: transform 300ms ease-in-out, opacity 300ms ease-in-out;
+  opacity: 0;
+
+  /* PLSFIX */
+  transform: scale(1) translateY(-5%);
+  opacity: 1;
+}
+
+.projects-item-star.animate {
+  transition: transform 300ms ease-in-out, opacity 300ms ease-in-out;
+  transform: scale(1) translateY(-5%);
+  opacity: 1;
+}
+
+.project-year {
+  line-height: 1;
+}
+
+.project-title {
+  color: var(--color-project, currentColor);
+}
+
+.project-title-icon {
+  width: 3.1rem;
+  height: auto;
+  padding-bottom: 0.55rem;
+  margin-left: var(--scale-8);
+}
+
+.project-title-icon > svg {
+  width: 100%;
+  height: auto;
+}
+
+.project-main-item-title {
+  margin-bottom: var(--scale-4);
+}
+
+.project-main {
+  position: relative;
+  width: 100%;
+}
+
+.project-main-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.project-main-item-content {
+  position: relative;
+  overflow: hidden;
+}
+
+.project-main-item-content::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -1%;
+  left: -1%;
+  width: 102%;
+  height: 102%;
+  background-color: var(--color-white);
+  z-index: 1;
+}
+
+.project-main-item.active-stage {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.active-stage > .project-main-item-content::before {
+  transform: translateY(-103%);
+  transition: transform 300ms ease-in-out;
+}
+
+.project-gallery-opener {
+  cursor: pointer;
+  position: absolute;
+  bottom: var(--space-edge);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+}
+
+.project-gallery-opener > svg {
+  width: var(--scale-40);
+  height: var(--scale-40);
+}
+
+@media (max-width: 767px) {
+  .project-sxs {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto 1fr;
+  }
+
+  .project-gallery {
+    grid-area: 1 / 1 / 2 / 2;
+  }
+
+  .project-control {
+    grid-area: 2 / 1 / 3 / 2;
+  }
+
+  .project-content {
+    grid-area: 3 / 1 / 4 / 2;
+  }
+
+  .project-content {
+    grid-template-rows: auto 1fr;
+    gap: 16px;
+    padding: 0;
+  }
+
+  .project-main-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-main-item-title {
+    flex: 0 0 auto;
+  }
+
+  .project-main-item-content {
+    flex: 0 1 100%;
+  }
+}

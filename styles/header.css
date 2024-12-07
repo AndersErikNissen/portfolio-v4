@@ -116,10 +116,6 @@
     animation: menuBtnBottom 300ms ease-in-out forwards;
   }
 
-  .header-btn:hover .text-overflow-content {
-    animation: headerBtnText 300ms var(--ani-delay) ease-in-out forwards;
-  }
-
   @keyframes menuBtnTop {
     from {
       transform: translateX(101%);
@@ -135,15 +131,6 @@
     }
     to {
       transform: translateX(0%);
-    }
-  }
-
-  @keyframes headerBtnText {
-    from {
-      transform: translateY(105%);
-    }
-    to {
-      transform: translateY(0%);
     }
   }
 }

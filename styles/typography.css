@@ -19,6 +19,13 @@
   line-height: 1.2;
 }
 
+.h3 {
+  font-weight: 700;
+  font-style: normal;
+  font-size: var(--scale-32);
+  line-height: 1.2;
+}
+
 .fs-small {
   font-size: var(--scale-12);
 }

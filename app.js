@@ -40,8 +40,13 @@ class UserInteraction extends HTMLElement {
 
     // Is value an event?
     if (v.target) {
-      if (v.target.tagName === "OVER-FLOW" || v.target.closest("over-flow")) {
-        stopInteraction = true;
+      const SCROLLABLE_ELEMENT =
+        v.target.tagName === "OVER-FLOW" || v.target.closest("over-flow");
+
+      if (SCROLLABLE_ELEMENT) {
+        stopInteraction = JSON.parse(
+          SCROLLABLE_ELEMENT.getAttribute("scrollable")
+        );
       }
     } else {
       stopInteraction = !!v;
@@ -191,8 +196,12 @@ class TheApp extends HTMLElement {
     markup += await this.prepareTemplate("header", {}); // empty object, since the template is static;
     // markup += await this.prepareTemplate("");
     // markup += await this.prepareTemplate("visuals", this.db.dataBase[2]);
+
     // markup += await this.prepareTemplate("projects", this.db.dataBase[1]);
-    markup += await this.prepareTemplate("project", this.db.dataBase[7]);
+
+    markup += await this.prepareTemplate("project", this.db.dataBase[5]);
+
+    // markup += await this.prepareTemplate("page", this.db.dataBase[4]);
 
     this.innerHTML = markup;
   }

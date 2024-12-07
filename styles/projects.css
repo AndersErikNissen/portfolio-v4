@@ -76,13 +76,16 @@ the-app[template="projects"] {
   position: absolute;
   top: 50%;
   left: 0;
-  transform: translateX(calc(-100% - var(--scale-8))) translateY(-50%);
-  transition: transform 300ms ease-in-out, opacity 300ms ease-in-out;
+  width: 0.637rem;
+  height: auto;
+  transform: scale(0) translateX(calc(-100% - var(--scale-4))) translateY(-50%);
+  opacity: 0;
 }
 
-.projects-item-star:not(.animate) {
-  transform: scale(0);
-  opacity: 0;
+.projects-item-star.animate {
+  transition: transform 300ms ease-in-out, opacity 300ms ease-in-out;
+  transform: scale(1) translateX(calc(-100% - var(--scale-4))) translateY(-50%);
+  opacity: 1;
 }
 
 .projects-item-subtitle {
@@ -108,5 +111,9 @@ the-app[template="projects"] {
     bottom: var(--space-edge);
     left: 50%;
     transform: translateX(-50%);
+  }
+
+  .projects-item-star {
+    width: 11px;
   }
 }

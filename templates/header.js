@@ -33,7 +33,7 @@ APP_TEMPLATES.header = () => {
             <digital-clock></digital-clock>
 
             <div class="header-btns">
-              <copy-clipboard content-type="phone" class="header-btn header-btn-call h-scale-icon">
+              <copy-clipboard content-type="phone" class="header-btn h-bounce-text header-btn-call h-scale-icon">
                 ${
                   SNIPPETS.heading(
                     "Giv et kald",
