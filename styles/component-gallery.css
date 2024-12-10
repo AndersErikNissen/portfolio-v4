@@ -101,6 +101,10 @@ gallery-closer {
     max-width: unset;
   }
 
+  .gallery-closer {
+    gap: 8px;
+  }
+
   .gallery-closer > svg {
     width: 32px;
     height: 32px;

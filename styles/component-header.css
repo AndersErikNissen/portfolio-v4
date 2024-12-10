@@ -1,11 +1,12 @@
-#Header {
+the-header {
+  display: block;
   flex: 0 0 auto;
-  padding: 0 0 var(--space-edge);
+  padding: var(--space-edge);
   width: 100%;
 }
 
-[template="projects"] #Header,
-[template="404"] #Header {
+[data-template="projects"] the-header,
+[data-template="404"] the-header {
   position: fixed;
   top: var(--space-edge);
   left: 0;
@@ -55,6 +56,32 @@
 .header-middle > svg {
   width: 5.787rem;
   height: auto;
+}
+
+[data-menu-active="true"] .header-right {
+  flex: 0 0 0%;
+  transition: flex 300ms ease-in-out;
+}
+
+body:not([data-menu-active="true"]) .menu-active--true,
+[data-menu-active="true"] .menu-active--false,
+[data-menu-active="true"] .header-right > * {
+  display: none;
+}
+
+#Menu-btn .top,
+#Menu-btn .bottom {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 300ms ease-in-out;
+}
+
+[data-menu-active="true"] #Menu-btn .top {
+  transform: translateY(400%) rotate(45deg);
+}
+
+[data-menu-active="true"] #Menu-btn .bottom {
+  transform: translateY(-400%) rotate(-45deg);
 }
 
 .header-btns {

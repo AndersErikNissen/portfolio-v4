@@ -183,7 +183,7 @@ class TheApp extends HTMLElement {
       this.loadScript(path);
     });
 
-    this.setAttribute("template", TEMPLATE_NAME);
+    document.body.setAttribute("data-template", TEMPLATE_NAME);
 
     TEMPLATE.styles.forEach((style) => this.loadStylesheet(style));
 
@@ -193,13 +193,12 @@ class TheApp extends HTMLElement {
   async render() {
     let markup = "";
 
-    markup += await this.prepareTemplate("header", {}); // empty object, since the template is static;
     // markup += await this.prepareTemplate("");
     // markup += await this.prepareTemplate("visuals", this.db.dataBase[2]);
 
-    // markup += await this.prepareTemplate("projects", this.db.dataBase[1]);
+    markup += await this.prepareTemplate("projects", this.db.dataBase[1]);
 
-    markup += await this.prepareTemplate("project", this.db.dataBase[5]);
+    // markup += await this.prepareTemplate("project", this.db.dataBase[5]);
 
     // markup += await this.prepareTemplate("page", this.db.dataBase[4]);
 
@@ -209,7 +208,7 @@ class TheApp extends HTMLElement {
   async connectedCallback() {
     await this.db.fetchData();
     console.log("DB", this.db);
-    await this.render();
+    // await this.render();
   }
 }
 

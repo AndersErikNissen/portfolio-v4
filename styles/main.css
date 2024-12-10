@@ -21,6 +21,10 @@
   --color-grey-faded: rgba(12, 12, 12, 0.1);
   --color-grey-subtle: #e4e4e4;
   --color-white: #fcfcfc;
+  --color-bg: var(--color-white);
+
+  --cb-slow-start: cubic-bezier(0.75, 0.14, 0.65, 0.95);
+  --cb-over-shot: cubic-bezier(0.69, 0.22, 0.35, 1.34);
 }
 
 @media (max-width: 767px) {
@@ -57,7 +61,7 @@ body {
   flex-direction: column;
   overflow: hidden;
   scroll-behavior: smooth;
-  background-color: var(--color-white);
+  background-color: var(--color-bg);
 }
 
 the-app {
@@ -66,7 +70,7 @@ the-app {
   flex-grow: 1;
   width: 100%;
   height: 100%;
-  padding: var(--space-edge);
+  padding: 0 var(--space-edge) var(--space-edge);
 }
 
 .template {
@@ -156,7 +160,13 @@ the-app {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 12px;
+  padding: 16px;
+}
+
+@media (max-width: 767px) {
+  .controller {
+    padding: 12px;
+  }
 }
 
 .controller > .control-item {
@@ -231,8 +241,7 @@ the-app {
 }
 
 .h-bounce-text:hover .text-overflow-content {
-  animation: hBounceText 300ms var(--ani-delay)
-    cubic-bezier(0.69, 0.22, 0.35, 1.34) forwards;
+  animation: hBounceText 300ms var(--ani-delay) var(--cb-over-shot) forwards;
 }
 
 @keyframes hBounceText {

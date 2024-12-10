@@ -81,8 +81,10 @@ class Snippets {
 
   heading(str, tagType = "h1", cssClass, extraElements = [], animate = true) {
     const DELAY = 15;
+    let counter = 0;
 
     let heading = document.createElement(tagType);
+    heading.classList.add("text-overflow-wrapper");
 
     if (animate) heading.setAttribute("data-animate", "");
 
@@ -94,28 +96,48 @@ class Snippets {
       }
     }
 
-    let words = str.split(" ");
+    const itemWrapper = (v) => {
+      let item = v;
 
-    let characters = str.split("");
-    let parts = characters.concat(extraElements);
-
-    parts.forEach((part, index) => {
-      let wrapper = document.createElement("span");
-      wrapper.classList.add("text-overflow");
-      wrapper.style.setProperty("--ani-delay", index * DELAY + "ms");
-
-      let content =
-        typeof part === "string" ? document.createElement("span") : part;
-      content.classList.add("text-overflow-content");
-
-      if (typeof part === "string") {
-        content.innerHTML = part === " " ? String.fromCharCode(160) : part;
+      if (typeof v === "string") {
+        let strWrapper = document.createElement("span");
+        strWrapper.classList.add("text-overflow-content");
+        strWrapper.innerHTML = v;
+        item = strWrapper;
       }
 
-      wrapper.appendChild(content);
+      let wrapper = document.createElement("span");
+      wrapper.classList.add("text-overflow");
+      wrapper.style.setProperty("--ani-delay", counter * DELAY + "ms");
+      wrapper.appendChild(item);
 
-      heading.appendChild(wrapper);
+      counter++;
+      return wrapper;
+    };
+
+    let word;
+    str.split("").forEach((char, index, array) => {
+      if (char === " ") {
+        heading.appendChild(word);
+        heading.append(itemWrapper(String.fromCharCode(160)));
+
+        word = undefined;
+        return;
+      }
+
+      if (!word) {
+        word = document.createElement("span");
+        word.classList.add("text-overflow-word");
+      }
+
+      word.appendChild(itemWrapper(char));
+
+      if (index === array.length - 1) {
+        heading.appendChild(word);
+      }
     });
+
+    extraElements.forEach((ele) => heading.appendChild(itemWrapper(ele)));
 
     return heading;
   }
@@ -190,15 +212,9 @@ class Snippets {
         break;
 
       case "menu":
-        size = 30;
-        addPath(
-          "M2.5 19.5C2.5 19.2239 2.72386 19 3 19H27.5C27.7761 19 28 19.2239 28 19.5C28 19.7761 27.7761 20 27.5 20H3C2.72386 20 2.5 19.7761 2.5 19.5Z",
-          "top"
-        );
-        addPath(
-          "M2.5 10.5C2.5 10.2239 2.72386 10 3 10H27.5C27.7761 10 28 10.2239 28 10.5C28 10.7761 27.7761 11 27.5 11H3C2.72386 11 2.5 10.7761 2.5 10.5Z",
-          "bottom"
-        );
+        size = 33;
+        addPath("M29 13H4V12H29V13Z", "top");
+        addPath("M29 21H4V20H29V21Z", "bottom");
         break;
 
       case "circle-plus":

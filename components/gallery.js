@@ -36,7 +36,7 @@ class TheGallery extends HTMLElement {
     let label = SNIPPETS.heading(
       "Luk",
       "span",
-      ["gallery-closer-label"],
+      ["gallery-closer-label", "fs-medium"],
       [],
       false
     );
@@ -158,7 +158,7 @@ class TheGallery extends HTMLElement {
 
       if (obj.alt.length > 0) {
         let title = SNIPPETS.heading(obj.alt, "p", [
-          "h1",
+          "h2",
           "gallery-image-title",
         ]);
         wrapper.appendChild(title);
