@@ -27,13 +27,14 @@ the-header {
 }
 
 #Menu-btn > svg {
-  width: var(--scale-24);
+  width: 1.736rem;
   height: auto;
 }
 
 .menu-btn-label {
   font-size: 0.752rem;
   font-weight: 400;
+  transform: translateY(7%);
 }
 
 .header-left,
@@ -165,6 +166,10 @@ body:not([data-menu-active="true"]) .menu-active--true,
 @media (max-width: 767px) {
   .header-middle svg {
     width: 80px;
+  }
+
+  #Menu-btn > svg {
+    width: 24px;
   }
 
   .header-btn-label {

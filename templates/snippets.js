@@ -281,6 +281,15 @@ class Snippets {
         );
         size = 50;
         break;
+
+      case "arrow":
+        size = 40;
+
+        addPath(
+          "M32.0168 4.67642H6.32978V0H40V33.6702H35.3236V7.98315L3.30673 40L0 36.6933L32.0168 4.67642Z"
+        );
+
+        break;
     }
 
     if (!width) width = size;
