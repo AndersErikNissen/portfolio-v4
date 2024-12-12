@@ -142,7 +142,7 @@ class Snippets {
     return heading;
   }
 
-  icon(type) {
+  icon(type, cls) {
     let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttributeNS(
       "http://www.w3.org/2000/xmlns/",
@@ -299,6 +299,9 @@ class Snippets {
     svg.setAttribute("height", height);
     svg.setAttribute("viewBox", "0 0 " + width + " " + height);
     svg.classList.add("icon-" + type);
+    if (cls) {
+      svg.classList.add(cls);
+    }
     return svg;
   }
 }

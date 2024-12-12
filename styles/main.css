@@ -252,3 +252,22 @@ the-app {
     transform: translateY(0%);
   }
 }
+
+.blur-stage-animation {
+  transition-property: transform, filter, opacity;
+  transition-duration: 300ms;
+  transition-timing-function: ease-in;
+  transform-origin: center;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+.blur-stage-animation:not(.active-stage) {
+  pointer-events: 0;
+  transform: scale(2);
+  filter: blur(1rem);
+}
+
+[data-active-menu="true"] the-app {
+  display: none;
+}

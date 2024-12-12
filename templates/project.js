@@ -171,17 +171,8 @@ APP_TEMPLATES.project = (data) => {
   };
 
   return {
-    scripts: [
-      "components/stage-manager",
-      "components/overflow",
-      "components/gallery",
-    ],
-    styles: [
-      "project",
-      "component-stage-manager",
-      "component-overflow",
-      "component-gallery",
-    ],
+    scripts: ["components/overflow", "components/gallery"],
+    styles: ["project", "component-overflow", "component-gallery"],
     markup: `
       <stage-manager class="template-project template" ${projectColor}>
         <div class="project-sxs container">

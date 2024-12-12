@@ -91,8 +91,8 @@ APP_TEMPLATES.page = (data) => {
   }
 
   return {
-    scripts: ["components/overflow", "components/stage-manager"],
-    styles: ["page", "component-overflow", "component-stage-manager"],
+    scripts: ["components/overflow"],
+    styles: ["page", "component-overflow"],
     markup: `
       <stage-manager class="template-page container">
         <div class="page-sxs container">

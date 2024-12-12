@@ -75,7 +75,10 @@ APP_TEMPLATES.projects = (data) => {
 
       itemsMarkup += `
         <div 
-          class="projects-item ${index === 0 ? "active-stage" : ""}" 
+          class="
+            projects-item blur-stage-animation 
+            ${index === 0 ? "active-stage" : ""}
+          " 
           data-stage="${index}"
         >
           ${bg.outerHTML}
@@ -93,8 +96,8 @@ APP_TEMPLATES.projects = (data) => {
   }
 
   return {
-    scripts: ["components/overflow", "components/stage-manager"],
-    styles: ["projects", "component-overflow", "component-stage-manager"],
+    scripts: ["components/overflow"],
+    styles: ["projects", "component-overflow"],
     markup: `
       <stage-projects class="template-projects template">
         <div class="projects-items container">
