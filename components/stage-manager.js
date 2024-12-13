@@ -267,4 +267,4 @@ class StageProjects extends StageManager {
   }
 }
 
-customElements.define("stage-projects", StageProjects);
+customElements.define("stage-delayed", StageProjects);

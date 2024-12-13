@@ -543,7 +543,7 @@ class StageControl extends HTMLElement {
 
 customElements.define("stage-control", StageControl);
 
-class StageProjects extends StageManager {
+class StageDelayed extends StageManager {
   get animationDelay() {
     return this._animationDelay || 0;
   }
@@ -569,7 +569,53 @@ class StageProjects extends StageManager {
   }
 }
 
-customElements.define("stage-projects", StageProjects);
+customElements.define("stage-delayed", StageDelayed);
+
+class StageMenu extends StageDelayed {
+  bindEvents() {
+    // Clear to stop event triggers
+  }
+
+  randomize(v) {
+    let interval;
+    let randomNumber;
+
+    const getRandomNumber = () => {
+      return Math.floor(Math.random() * (this.stages.length - 1));
+    };
+
+    if (v) {
+      randomNumber = getRandomNumber();
+
+      this.stage = randomNumber;
+
+      interval = setInterval(() => {
+        let newRandomNumber = getRandomNumber();
+
+        while (newRandomNumber === randomNumber) {
+          newRandomNumber = getRandomNumber();
+        }
+
+        randomNumber = newRandomNumber;
+
+        this.stage = randomNumber;
+      }, 10000);
+    } else {
+      if (interval) {
+        clearInterval(interval);
+        interval = undefined;
+      }
+    }
+  }
+
+  connectedCallback() {
+    this.init();
+    this.cooldown = 1000;
+    this.animationDelay = 400;
+  }
+}
+
+customElements.define("stage-menu", StageMenu);
 
 class TheMenu extends HTMLElement {
   constructor() {
@@ -604,7 +650,7 @@ class TheMenu extends HTMLElement {
 
     combined.forEach((obj) => {
       let link = document.createElement("a-link");
-      link.classList.add("menu-link");
+      link.classList.add("menu-link", "h-bounce-text");
       link.setAttribute("slug", obj.path);
 
       let iconWrapper = document.createElement("div");
@@ -618,7 +664,7 @@ class TheMenu extends HTMLElement {
         SNIPPETS.heading(
           obj.title,
           "span",
-          ["menu-link-label", "anton-sc-regular", "h-bounce-text"],
+          ["menu-link-label", "anton-sc-regular"],
           [],
           false
         ),
@@ -628,6 +674,15 @@ class TheMenu extends HTMLElement {
     });
 
     this._links = elements;
+  }
+
+  get active() {
+    return JSON.parse(document.body.getAttribute("data-menu-active"));
+  }
+
+  set active(v) {
+    document.body.setAttribute("data-active-menu", JSON.stringify(v));
+    this.stageManager.randomize(v);
   }
 
   renderImages() {
@@ -640,15 +695,23 @@ class TheMenu extends HTMLElement {
       imgWrapper.setAttribute("data-stage", index);
       imgWrapper.classList.add("menu-image", "blur-stage-animation");
 
-      imgWrapper.appendChild(SNIPPETS.img(obj.image, "100vw"));
-
       let link = document.createElement("a-link");
-      link.setAttribute("slug", obj.slug);
+      link.setAttribute("slug", obj.path);
       link.classList.add("menu-image-link");
 
-      let linkLabel = document.createElement("span");
-      linkLabel.classList.add("menu-image-link-label");
-      linkLabel.textContent = obj.type === "page" ? "Se side" : "Se projekt";
+      let linkIcon = SNIPPETS.icon("url", "h-scale-icon");
+      linkIcon.setAttribute("data-animate", "");
+
+      link.append(
+        SNIPPETS.heading(
+          obj.type === "page" ? "Se side" : "Se projekt",
+          "span",
+          ["menu-image-link-label", "fs-medium"]
+        ),
+        linkIcon
+      );
+
+      imgWrapper.append(SNIPPETS.img(obj.image, "100vw"), link);
 
       return imgWrapper;
     });
@@ -659,8 +722,8 @@ class TheMenu extends HTMLElement {
   }
 
   render() {
-    let main = document.createElement("stage-manager");
-    main.classList.add("menu-main");
+    this.stageManager = document.createElement("stage-menu");
+    this.stageManager.classList.add("menu-main");
 
     let linkWrapper = document.createElement("div");
     linkWrapper.classList.add("menu-links");
@@ -670,8 +733,8 @@ class TheMenu extends HTMLElement {
     footer.classList.add("menu-footer");
     footer.appendChild(SNIPPETS.link_footer());
 
-    main.append(linkWrapper, ...this.renderImages());
-    this.replaceChildren(main, footer);
+    this.stageManager.append(linkWrapper, ...this.renderImages());
+    this.replaceChildren(this.stageManager, footer);
   }
 
   init(data) {
@@ -685,6 +748,8 @@ class TheMenu extends HTMLElement {
 }
 
 customElements.define("the-menu", TheMenu);
+
+class MenuButton extends HTMLElement {}
 
 class TheHeader extends HTMLElement {
   constructor() {

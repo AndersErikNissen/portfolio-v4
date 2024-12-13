@@ -18,7 +18,7 @@ APP_TEMPLATES.projects = (data) => {
 
   if (data.items && data.items.length > 0) {
     controlMarkup +=
-      '<stage-control manager="stage-projects" class="projects-control controller">';
+      '<stage-control manager="stage-delayed" class="projects-control controller">';
 
     data.items.forEach((item, index) => {
       controlMarkup += `
@@ -99,13 +99,13 @@ APP_TEMPLATES.projects = (data) => {
     scripts: ["components/overflow"],
     styles: ["projects", "component-overflow"],
     markup: `
-      <stage-projects class="template-projects template">
+      <stage-delayed class="template-projects template">
         <div class="projects-items container">
           ${itemsMarkup}
         </div>
 
         ${controlMarkup}
-      </stage-projects>
+      </stage-delayed>
     `,
   };
 };

@@ -1,9 +1,17 @@
+stage-menu {
+  display: block;
+}
+
 the-menu {
   flex: 1 1 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+body:not([data-active-menu="true"]) the-menu {
+  display: none;
 }
 
 .menu-main {
@@ -20,6 +28,7 @@ the-menu {
   position: relative;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: var(--scale-32);
   z-index: 1;
 }
@@ -95,4 +104,35 @@ the-menu {
 
 .menu-image img {
   object-fit: cover;
+}
+
+.menu-footer {
+  padding: var(--space-edge);
+  flex: 0 0 auto;
+}
+
+.menu-image-link {
+  cursor: pointer;
+  position: absolute;
+  bottom: var(--space-edge);
+  right: var(--space-edge);
+  display: flex;
+  align-items: center;
+  gap: var(--scale-8);
+}
+
+.menu-image-link svg {
+  transform: scale(0);
+  width: var(--scale-40);
+  height: var(--scale-40);
+}
+
+.menu-image-link svg.animate {
+  transform: scale(1);
+  transition: transform 300ms ease-in-out;
+}
+
+.menu-footer .link-footer {
+  padding: 0;
+  min-height: var(--scale-40);
 }
