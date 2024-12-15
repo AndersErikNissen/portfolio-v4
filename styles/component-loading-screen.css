@@ -1,0 +1,64 @@
+loading-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 9999;
+  background-color: var(--color-bg);
+}
+
+loading-screen[fade] {
+  transition: opacity 300ms ease-in-out;
+  opacity: 0;
+}
+
+.loading-screen-main {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: var(--scale-4);
+}
+
+loading-screen[finished] .loading-screen-main {
+  animation: finishedLoadingScreen 3000ms ease-in-out infinite;
+}
+
+@keyframes finishedLoadingScreen {
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.loading-screen-logo {
+  display: block;
+  color: var(--color-grey-subtle);
+  width: 16.204rem;
+  height: auto;
+}
+
+.loading-screen-logo rect {
+  fill: var(--color-black);
+  transform: translateX(var(--progress, -100%));
+}
+
+.loading-screen-footer-label {
+  position: absolute;
+  bottom: var(--space-edge);
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transform: translateY(20%);
+  display: flex;
+  justify-content: center;
+}
+
+.loading-screen-footer-label.active-footer-label {
+  opacity: 1;
+  transform: translateY(0%);
+  transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
+}
