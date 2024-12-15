@@ -12,7 +12,7 @@ loading-screen {
 }
 
 loading-screen[fade] {
-  transition: opacity 300ms ease-in-out;
+  transition: opacity 500ms linear;
   opacity: 0;
 }
 

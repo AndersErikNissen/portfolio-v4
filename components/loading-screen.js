@@ -3,12 +3,16 @@ class LoadingScreen extends HTMLElement {
     super();
   }
 
-  remove() {
-    this.setAttribute("fade");
+  removeItself() {
+    this.setAttribute("fade", "");
 
     setTimeout(() => {
       this.remove();
-    }, 310);
+    }, 510);
+  }
+
+  get app() {
+    return document.querySelector("the-app");
   }
 
   get counter() {
@@ -31,18 +35,21 @@ class LoadingScreen extends HTMLElement {
   }
 
   progressInterval() {
-    let interval;
+    return new Promise((resolve) => {
+      let interval;
 
-    this.progress = 1;
+      this.progress = 1;
 
-    interval = setInterval(() => {
-      if (this.progress === 100) {
-        clearInterval(interval);
-        this.setAttribute("finished", "");
-      } else {
-        this.progress = 1;
-      }
-    }, 50);
+      interval = setInterval(() => {
+        if (this.progress === 100) {
+          clearInterval(interval);
+          this.setAttribute("finished", "");
+          resolve();
+        } else {
+          this.progress = 1;
+        }
+      }, 50);
+    });
   }
 
   swapLabels() {
@@ -61,11 +68,14 @@ class LoadingScreen extends HTMLElement {
     }, 2000);
   }
 
-  connectedCallback() {
+  async connectedCallback() {
     this.counter = this.querySelector("[data-loading-counter]");
 
-    this.progressInterval();
     this.swapLabels();
+
+    Promise.all([this.app.init(), this.progressInterval()]).then((v) => {
+      this.removeItself();
+    });
   }
 }
 

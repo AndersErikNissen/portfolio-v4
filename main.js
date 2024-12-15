@@ -863,6 +863,10 @@ class TheApp extends HTMLElement {
     this._menu = ele;
   }
 
+  get location() {
+    return location.href;
+  }
+
   set location(url) {
     if (location.href !== url.href) {
       location.replace(url.href);
@@ -943,13 +947,16 @@ class TheApp extends HTMLElement {
     this.innerHTML = markup;
   }
 
-  async connectedCallback() {
+  async init() {
     this.menu = document.querySelector("the-menu");
     await this.db.fetchData();
 
     this.menu.init(this.db.dataBase);
 
     console.log("DB", this.db);
+  }
+
+  async connectedCallback() {
     // await this.render();
   }
 }
