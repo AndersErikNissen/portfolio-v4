@@ -906,6 +906,13 @@ class TheApp extends HTMLElement {
   }
 
   async prepareTemplate(name, data) {
+    /**
+     * Use path instead of name
+     * If no path match, use 404
+     *
+     * Use data.name to find template
+     */
+
     const DATA =
       data ||
       this.db.dataBase.find((data) => data.path === location.pathname) ||
@@ -932,7 +939,8 @@ class TheApp extends HTMLElement {
     return TEMPLATE.markup;
   }
 
-  async render() {
+  async render(path) {
+    console.log("render()", "path:", path);
     let markup = "";
 
     // markup += await this.prepareTemplate("");
@@ -945,19 +953,26 @@ class TheApp extends HTMLElement {
     // markup += await this.prepareTemplate("page", this.db.dataBase[4]);
 
     this.innerHTML = markup;
+
+    /**
+     * Gem content som default (CSS)
+     * Find en god måde at tilføje en load class, så tingene animeres
+     * * Stages skal måske håndters anderledes
+     */
   }
 
   async init() {
-    this.menu = document.querySelector("the-menu");
     await this.db.fetchData();
 
+    this.menu = document.querySelector("the-menu");
     this.menu.init(this.db.dataBase);
 
-    console.log("DB", this.db);
-  }
+    /**
+     * Find den bedste måde at teste /path i DEV-miljøet - måske det skal tages LIVE på et tidspunkt?
+     */
+    this.render(this.location);
 
-  async connectedCallback() {
-    // await this.render();
+    console.log("DB", this.db);
   }
 }
 
