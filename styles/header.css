@@ -3,6 +3,16 @@ the-header {
   flex: 0 0 auto;
   padding: var(--space-edge);
   width: 100%;
+  transform: translateY(-100%);
+}
+
+the-header[hide="true"],
+the-header[hide="false"] {
+  transition: transform 500ms var(--cb-slow-start);
+}
+
+the-header[hide="false"] {
+  transform: translateY(0%);
 }
 
 [data-template="projects"] the-header,

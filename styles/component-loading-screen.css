@@ -41,8 +41,9 @@ loading-screen[finished] .loading-screen-main {
   height: auto;
 }
 
-.loading-screen-logo rect {
+.loading-screen-logo .loading-screen-icon-mask {
   fill: var(--color-black);
+  transform-box: fill-box;
   transform: translateX(var(--progress, -100%));
 }
 
@@ -61,4 +62,15 @@ loading-screen[finished] .loading-screen-main {
   opacity: 1;
   transform: translateY(0%);
   transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
+}
+
+@media (max-width: 767px) {
+  .loading-screen-main {
+    width: 80%;
+    gap: 6px;
+  }
+
+  .loading-screen-logo {
+    width: 100%;
+  }
 }

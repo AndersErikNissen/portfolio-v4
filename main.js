@@ -69,9 +69,7 @@ class DataBase {
   }
 
   async fetchDataByType(type) {
-    const RESPONSE = await fetch(
-      "https://api.aenders.dk/wp-json/wp/v2/" + type + "?acf_format=standard"
-    );
+    const RESPONSE = await fetch("https://api.aenders.dk/wp-json/wp/v2/" + type + "?acf_format=standard");
     const JSON = await RESPONSE.json();
     const ARRAY = JSON.map((obj) => {
       const TRIMMED = this.trimObject(obj);
@@ -86,9 +84,7 @@ class DataBase {
       }
     });
 
-    let dataParent = this.dataBase.find(
-      (obj) => obj.name === type.replace("portfolio_", "")
-    );
+    let dataParent = this.dataBase.find((obj) => obj.name === type.replace("portfolio_", ""));
 
     if (dataParent) {
       dataParent.items = ARRAY;
@@ -141,9 +137,7 @@ class DataBase {
   upgradePage(obj) {
     obj.stages = [];
 
-    this.uniqueNumbers(obj).forEach((unique) =>
-      obj.stages.push(this.createStage(unique, obj))
-    );
+    this.uniqueNumbers(obj).forEach((unique) => obj.stages.push(this.createStage(unique, obj)));
 
     return obj;
   }
@@ -151,9 +145,7 @@ class DataBase {
   upgradeProject(obj) {
     obj.stages = [];
 
-    this.uniqueNumbers(obj).forEach((unique) =>
-      obj.stages.push(this.createStage(unique, obj))
-    );
+    this.uniqueNumbers(obj).forEach((unique) => obj.stages.push(this.createStage(unique, obj)));
 
     return obj;
   }
@@ -213,13 +205,10 @@ class UserInteraction extends HTMLElement {
 
     // Is value an event?
     if (v.target) {
-      const SCROLLABLE_ELEMENT =
-        v.target.tagName === "OVER-FLOW" || v.target.closest("over-flow");
+      const SCROLLABLE_ELEMENT = v.target.tagName === "OVER-FLOW" || v.target.closest("over-flow");
 
       if (SCROLLABLE_ELEMENT) {
-        stopInteraction = JSON.parse(
-          SCROLLABLE_ELEMENT.getAttribute("scrollable")
-        );
+        stopInteraction = JSON.parse(SCROLLABLE_ELEMENT.getAttribute("scrollable"));
       }
     } else {
       stopInteraction = !!v;
@@ -344,10 +333,7 @@ class StageManager extends UserInteraction {
       this.inanimateNodes(this.animationStages[this.stage]);
 
       if (this.previousStage >= 0) {
-        this.deactivateNodes(
-          this.stages[this.previousStage],
-          this.previousStageClass
-        );
+        this.deactivateNodes(this.stages[this.previousStage], this.previousStageClass);
       }
 
       this.activateNodes(this.stages[this.stage], this.previousStageClass);
@@ -463,9 +449,7 @@ class StageManager extends UserInteraction {
     this.animationStages = this.stages;
 
     // Clean up nodes for mismatching class usage
-    let inactiveNodes = this.stages
-      .slice(this.stage + 1, this.stages.length)
-      .flat();
+    let inactiveNodes = this.stages.slice(this.stage + 1, this.stages.length).flat();
 
     this.deactivateNodes(inactiveNodes);
     this.activateNodes(this.stages[this.stage]);
@@ -509,10 +493,7 @@ class StageControl extends HTMLElement {
     }
 
     return (
-      this._manager ||
-      specifiedManager ||
-      this.closest("stage-manager") ||
-      document.querySelector("stage-manager")
+      this._manager || specifiedManager || this.closest("stage-manager") || document.querySelector("stage-manager")
     );
   }
 
@@ -525,9 +506,7 @@ class StageControl extends HTMLElement {
   }
 
   bindEvents() {
-    this.nodes.forEach((node) =>
-      node.addEventListener("click", this.clickEvent.bind(this))
-    );
+    this.nodes.forEach((node) => node.addEventListener("click", this.clickEvent.bind(this)));
   }
 
   init() {
@@ -655,21 +634,9 @@ class TheMenu extends HTMLElement {
 
       let iconWrapper = document.createElement("div");
       iconWrapper.classList.add("menu-link-icon-wrapper");
-      iconWrapper.append(
-        SNIPPETS.icon("arrow", "menu-link-icon-1"),
-        SNIPPETS.icon("arrow", "menu-link-icon-2")
-      );
+      iconWrapper.append(SNIPPETS.icon("arrow", "menu-link-icon-1"), SNIPPETS.icon("arrow", "menu-link-icon-2"));
 
-      link.append(
-        SNIPPETS.heading(
-          obj.title,
-          "span",
-          ["menu-link-label", "anton-sc-regular"],
-          [],
-          false
-        ),
-        iconWrapper
-      );
+      link.append(SNIPPETS.heading(obj.title, "span", ["menu-link-label", "anton-sc-regular"], [], false), iconWrapper);
       elements.push(link);
     });
 
@@ -686,9 +653,7 @@ class TheMenu extends HTMLElement {
   }
 
   renderImages() {
-    let imageObjects = this.data.filter(
-      (item) => item.type === "visual" || item.type === "project"
-    );
+    let imageObjects = this.data.filter((item) => item.type === "visual" || item.type === "project");
 
     imageObjects = imageObjects.map((obj, index) => {
       let imgWrapper = document.createElement("div");
@@ -703,11 +668,10 @@ class TheMenu extends HTMLElement {
       linkIcon.setAttribute("data-animate", "");
 
       link.append(
-        SNIPPETS.heading(
-          obj.type === "page" ? "Se side" : "Se projekt",
-          "span",
-          ["menu-image-link-label", "fs-medium"]
-        ),
+        SNIPPETS.heading(obj.type === "page" ? "Se side" : "Se projekt", "span", [
+          "menu-image-link-label",
+          "fs-medium",
+        ]),
         linkIcon
       );
 
@@ -765,20 +729,8 @@ class TheHeader extends HTMLElement {
     this.menuBtn = document.createElement("button");
     this.menuBtn.id = "Menu-btn";
     this.menuBtn.classList.add("h-bounce-text");
-    let labelIdle = SNIPPETS.heading(
-      "Menu",
-      "span",
-      ["menu-btn-label", "menu-active--false"],
-      [],
-      false
-    );
-    let labelActive = SNIPPETS.heading(
-      "Luk",
-      "span",
-      ["menu-btn-label", "menu-active--true"],
-      [],
-      false
-    );
+    let labelIdle = SNIPPETS.heading("Menu", "span", ["menu-btn-label", "menu-active--false"], [], false);
+    let labelActive = SNIPPETS.heading("Luk", "span", ["menu-btn-label", "menu-active--true"], [], false);
     this.menuBtn.append(SNIPPETS.icon("menu"), labelIdle, labelActive);
 
     wrapper.appendChild(this.menuBtn);
@@ -803,20 +755,9 @@ class TheHeader extends HTMLElement {
 
     let phoneBtn = document.createElement("copy-clipboard");
     phoneBtn.setAttribute("content-type", "phone");
-    phoneBtn.classList.add(
-      "header-btn",
-      "h-bounce-text",
-      "header-btn-call",
-      "h-scale-icon"
-    );
+    phoneBtn.classList.add("header-btn", "h-bounce-text", "header-btn-call", "h-scale-icon");
     phoneBtn.append(
-      SNIPPETS.heading(
-        "Giv et kald",
-        "span",
-        ["header-btn-label", "fs-small"],
-        [],
-        false
-      ),
+      SNIPPETS.heading("Giv et kald", "span", ["header-btn-label", "fs-small"], [], false),
       SNIPPETS.icon("phone")
     );
 
@@ -851,8 +792,7 @@ class TheApp extends HTMLElement {
   constructor() {
     super();
 
-    /* Data base */
-    this.db = new DataBase(); // Found in "./db.js"
+    this.data = new DataBase();
   }
 
   get menu() {
@@ -863,14 +803,20 @@ class TheApp extends HTMLElement {
     this._menu = ele;
   }
 
-  get location() {
-    return location.href;
+  set location(data) {
+    if (location.pathname !== data.path) {
+      history.replaceState({}, "", data.path);
+      document.title = data.title + " - AENDERS.DK";
+    }
   }
 
-  set location(url) {
-    if (location.href !== url.href) {
-      location.replace(url.href);
-    }
+  get hide() {
+    return JSON.parse(this.getAttribute("hide"));
+  }
+
+  set hide(v) {
+    this.setAttribute("hide", JSON.stringify(v));
+    this.header.setAttribute("hide", JSON.stringify(v));
   }
 
   loadScript(path) {
@@ -905,75 +851,66 @@ class TheApp extends HTMLElement {
     });
   }
 
-  async prepareTemplate(name, data) {
-    /**
-     * Use path instead of name
-     * If no path match, use 404
-     *
-     * Use data.name to find template
-     */
+  async renderTemplate(path) {
+    const DATA = this.db.find((data) => data.path === path) || this.db.find((data) => data.default_template === true);
 
-    const DATA =
-      data ||
-      this.db.dataBase.find((data) => data.path === location.pathname) ||
-      this.db.dataBase.find((data) => data.default_template === true);
+    const NAME = DATA.name;
 
-    let TEMPLATE_NAME = name || DATA.name;
-
-    await this.loadStylesheet(TEMPLATE_NAME);
-
-    if (!APP_TEMPLATES[TEMPLATE_NAME]) {
-      await this.loadScript("templates/" + TEMPLATE_NAME);
+    if (!APP_TEMPLATES[NAME]) {
+      await this.loadScript("templates/" + NAME);
     }
 
-    const TEMPLATE = APP_TEMPLATES[TEMPLATE_NAME](DATA);
+    const TEMPLATE = APP_TEMPLATES[NAME](DATA);
 
-    TEMPLATE.scripts.forEach((path) => {
-      this.loadScript(path);
-    });
+    const STYLES = TEMPLATE.styles.map((path) => this.loadStylesheet(path));
+    const SCRIPTS = TEMPLATE.scripts.map((path) => this.loadScript(path));
 
-    document.body.setAttribute("data-template", TEMPLATE_NAME);
+    document.body.setAttribute("data-template", NAME);
+    this.setAttribute("template", NAME);
+    this.location = DATA;
 
-    TEMPLATE.styles.forEach((style) => this.loadStylesheet(style));
+    this.innerHTML = TEMPLATE.markup;
 
-    return TEMPLATE.markup;
+    Promise.all([...STYLES, ...SCRIPTS]);
   }
 
-  async render(path) {
-    console.log("render()", "path:", path);
-    let markup = "";
+  async transitionToTemplate(path) {
+    // #1 Fade out current content (header + app)
+    // (Header moves up)
+    this.hide = true;
 
-    // markup += await this.prepareTemplate("");
-    // markup += await this.prepareTemplate("visuals", this.db.dataBase[2]);
+    // #2 Render new template
+    await this.renderTemplate(path);
 
-    markup += await this.prepareTemplate("projects", this.db.dataBase[1]);
-
-    // markup += await this.prepareTemplate("project", this.db.dataBase[5]);
-
-    // markup += await this.prepareTemplate("page", this.db.dataBase[4]);
-
-    this.innerHTML = markup;
-
-    /**
-     * Gem content som default (CSS)
-     * Find en god måde at tilføje en load class, så tingene animeres
-     * * Stages skal måske håndters anderledes
-     */
+    // #3 Show new template elements
+    this.hide = false;
   }
 
   async init() {
-    await this.db.fetchData();
+    await this.data.fetchData();
+    this.db = this.data.dataBase;
+    console.log("DB", this.data);
 
     this.menu = document.querySelector("the-menu");
-    this.menu.init(this.db.dataBase);
+    this.menu.init(this.db);
+    this.header = document.querySelector("the-header");
 
-    /**
-     * Find den bedste måde at teste /path i DEV-miljøet - måske det skal tages LIVE på et tidspunkt?
-     */
-    this.render(this.location);
-
-    console.log("DB", this.db);
+    this.renderTemplate(location.pathname);
   }
 }
 
 customElements.define("the-app", TheApp);
+
+/**
+ * [hide] kan fungere, men den skal ikke bruges on load, men på transition
+ * enten have en separat attr til load
+ * eller
+ * brug værdien fra [hide] til bestemme hvordan elementerne skal reagere
+ * eller hav en load class og hav en hide class
+ * Det vigtigste er at indhold er gemt fra load, og vises på forskellige måder - imens at alt bliver faded inden en ny template indsættes
+ *
+ *
+ * To do
+ * <a-link>
+ * <menu-btn>
+ */

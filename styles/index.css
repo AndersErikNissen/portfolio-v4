@@ -2,18 +2,23 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .index-inner {
+  flex: 1 1 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 .index-content {
   max-width: 32.407rem;
   padding-top: var(--scale-40);
   text-align: center;
+  opacity: 0;
+  transform: translateY(40%);
 }
 
 #Index-icon {
@@ -37,4 +42,21 @@
   .index-content {
     max-width: 100%;
   }
+}
+
+#Index-icon path {
+  transform: translateY(110%);
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+the-app[hide="false"] #Index-icon path {
+  transform: translateY(0%);
+  transition: transform 1000ms var(--ani-delay, 0ms) var(--cb-slow-start);
+}
+
+the-app[hide="false"] .index-content {
+  opacity: 1;
+  transform: translateY(0%);
+  transition: opacity 1000ms var(--cb-slow-start), transform 1000ms var(--cb-slow-start);
 }

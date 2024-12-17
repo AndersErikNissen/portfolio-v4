@@ -8,6 +8,7 @@ class LoadingScreen extends HTMLElement {
 
     setTimeout(() => {
       this.remove();
+      this.app.hide = false;
     }, 510);
   }
 
@@ -53,9 +54,7 @@ class LoadingScreen extends HTMLElement {
   }
 
   swapLabels() {
-    let labels = Array.from(
-      this.querySelectorAll(".loading-screen-footer-label")
-    );
+    let labels = Array.from(this.querySelectorAll(".loading-screen-footer-label"));
 
     let index = 0;
 

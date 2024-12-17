@@ -1,7 +1,6 @@
 class OverFlow extends HTMLElement {
   constructor() {
     super();
-    // this.attachShadow({ mode: "open" });
   }
 
   get isOverflowing() {
@@ -14,10 +13,7 @@ class OverFlow extends HTMLElement {
   }
 
   set progress(pct) {
-    this.style.setProperty(
-      "--scroll-progress",
-      Math.min(this.pctBase + pct, 100) + "%"
-    );
+    this.style.setProperty("--scroll-progress", Math.min(this.pctBase + pct, 100) + "%");
     this.scrollProgress = pct;
   }
 
