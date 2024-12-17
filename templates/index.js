@@ -85,12 +85,12 @@ APP_TEMPLATES.index = () => {
                 Mit navn Anders Erik Nissen, jeg er en front-end udvikler med 2
                 års erfaring inden for e-commerce. Målet med denne portfolio er
                 at give indblik i hvem jeg er, samt vise mine programmerings og
-                kreative projekter.
+                kreative egenskaber.
               </p>
             </over-flow>
           </div>
         </div>
-        ${SNIPPETS.link_footer().outerHTML}
+        ${SNIPPETS.link_footer("index-link-footer").outerHTML}
       </section>
     `,
   };

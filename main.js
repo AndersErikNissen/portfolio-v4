@@ -810,13 +810,21 @@ class TheApp extends HTMLElement {
     }
   }
 
-  get hide() {
-    return JSON.parse(this.getAttribute("hide"));
+  get show() {
+    return JSON.parse(this.getAttribute("show"));
   }
 
-  set hide(v) {
-    this.setAttribute("hide", JSON.stringify(v));
-    this.header.setAttribute("hide", JSON.stringify(v));
+  set show(v) {
+    this.setAttribute("show", JSON.stringify(v));
+    this.header.setAttribute("show", JSON.stringify(v));
+  }
+
+  get transition() {
+    return JSON.parse(this.getAttribute("transition"));
+  }
+
+  set transition(v) {
+    this.setAttribute("transition", JSON.stringify(v));
   }
 
   loadScript(path) {
@@ -877,13 +885,18 @@ class TheApp extends HTMLElement {
   async transitionToTemplate(path) {
     // #1 Fade out current content (header + app)
     // (Header moves up)
-    this.hide = true;
-
+    this.show = true;
+    this.transition = true;
+    
+    setTimeout(() => {
+      this.transition = false;
+    }, 510)
+    
     // #2 Render new template
     await this.renderTemplate(path);
-
+    
     // #3 Show new template elements
-    this.hide = false;
+    this.show = true;
   }
 
   async init() {
@@ -900,17 +913,3 @@ class TheApp extends HTMLElement {
 }
 
 customElements.define("the-app", TheApp);
-
-/**
- * [hide] kan fungere, men den skal ikke bruges on load, men på transition
- * enten have en separat attr til load
- * eller
- * brug værdien fra [hide] til bestemme hvordan elementerne skal reagere
- * eller hav en load class og hav en hide class
- * Det vigtigste er at indhold er gemt fra load, og vises på forskellige måder - imens at alt bliver faded inden en ny template indsættes
- *
- *
- * To do
- * <a-link>
- * <menu-btn>
- */

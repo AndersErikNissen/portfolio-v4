@@ -6,12 +6,12 @@ the-header {
   transform: translateY(-100%);
 }
 
-the-header[hide="true"],
-the-header[hide="false"] {
+the-header[show="true"],
+the-header[show="false"] {
   transition: transform 500ms var(--cb-slow-start);
 }
 
-the-header[hide="false"] {
+the-header[show="true"] {
   transform: translateY(0%);
 }
 

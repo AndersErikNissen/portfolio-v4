@@ -8,7 +8,7 @@ class LoadingScreen extends HTMLElement {
 
     setTimeout(() => {
       this.remove();
-      this.app.hide = false;
+      this.app.show = true;
     }, 510);
   }
 
