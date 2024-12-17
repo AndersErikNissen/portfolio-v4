@@ -1,17 +1,74 @@
-stage-menu {
+stage-menu,
+menu-btn {
   display: block;
 }
 
 the-menu {
-  flex: 1 1 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
 }
 
-body:not([data-active-menu="true"]) the-menu {
-  display: none;
+[data-menu="true"] the-menu,
+[data-menu="false"] the-menu {
+  opacity: 1;
+}
+
+.menu-header {
+  padding: var(--space-edge);
+  width: 100%;
+}
+
+.menu-header-content {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: var(--scale-40);
+}
+
+.menu-header .menu-btn {
+  min-height: var(--scale-40);
+}
+
+.menu-header .menu-btn .top {
+  transform: translateY(400%) rotate(45deg);
+}
+
+.menu-header .menu-btn .bottom {
+  transform: translateY(-400%) rotate(-45deg);
+}
+
+.menu-header .menu-btn:hover svg {
+  transform: rotate(90deg);
+  transition: transform 300ms var(--cb-slow-start);
+}
+
+.menu-header-logo {
+  width: 5.787rem;
+  height: auto;
+}
+
+@media (max-width: 767px) {
+  .menu-header .menu-btn {
+    min-height: 32px;
+  }
+
+  .menu-header-content {
+    min-height: 32px;
+  }
+
+  .menu-header-logo svg {
+    width: 80px;
+  }
 }
 
 .menu-main {
@@ -22,6 +79,12 @@ body:not([data-active-menu="true"]) the-menu {
   width: calc(100% - (var(--space-edge) * 2));
   height: 100%;
   overflow: hidden;
+  border-radius: var(--scale-40);
+  transition: transform 500ms var(--cb-slow-start);
+}
+
+body:not([data-menu="true"]) .menu-main {
+  transform: scale(0.75);
 }
 
 .menu-links {
@@ -46,6 +109,14 @@ body:not([data-active-menu="true"]) the-menu {
   height: var(--scale-40);
   position: relative;
   overflow: hidden;
+  opacity: 0;
+  transform: scale(0);
+}
+
+.animate .menu-link-icon-wrapper {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 300ms var(--cb-slow-start), transform 300ms var(--cb-slow-start);
 }
 
 .menu-link-icon-1,
@@ -135,4 +206,17 @@ body:not([data-active-menu="true"]) the-menu {
 .menu-footer .link-footer {
   padding: 0;
   min-height: var(--scale-40);
+}
+
+/* TRANSITION TO MENU */
+
+[data-menu="true"] the-app,
+[data-menu="false"] the-app {
+  transition: transform 500ms var(--cb-slow-start);
+}
+
+[data-menu="true"] the-header,
+[data-menu="true"] the-app {
+  transform: translateY(-101vh);
+  pointer-events: none;
 }

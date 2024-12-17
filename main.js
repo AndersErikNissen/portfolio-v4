@@ -458,10 +458,6 @@ class StageManager extends UserInteraction {
       this.setAttribute("stage", this.stage);
     }
 
-    setTimeout(() => {
-      this.animateNodes(this.animationStages[this.stage]);
-    }, 100);
-
     this.bindEvents();
   }
 
@@ -555,42 +551,46 @@ class StageMenu extends StageDelayed {
     // Clear to stop event triggers
   }
 
-  randomize(v) {
-    let interval;
-    let randomNumber;
+  get timeout() {
+    return this._timeout;
+  }
 
-    const getRandomNumber = () => {
-      return Math.floor(Math.random() * (this.stages.length - 1));
-    };
+  set timeout(id) {
+    this._timeout = id;
+  }
 
-    if (v) {
-      randomNumber = getRandomNumber();
+  get randomNumber() {
+    return Math.floor(Math.random() * (this.stages.length - 1));
+  }
 
-      this.stage = randomNumber;
+  randomStage(bool) {
+    let nr = this.randomNumber;
 
-      interval = setInterval(() => {
-        let newRandomNumber = getRandomNumber();
-
-        while (newRandomNumber === randomNumber) {
-          newRandomNumber = getRandomNumber();
-        }
-
-        randomNumber = newRandomNumber;
-
-        this.stage = randomNumber;
-      }, 10000);
-    } else {
-      if (interval) {
-        clearInterval(interval);
-        interval = undefined;
-      }
+    while (this.stage === nr) {
+      nr = this.randomNumber;
     }
+
+    return setTimeout(() => {
+      this.stage = nr;
+      this.timeout = this.randomStage(true);
+    }, 10000);
+  }
+
+  randomize(v) {
+    if (!v) {
+      clearTimeout(this.timeout);
+      this.inanimateNodes(this.animationStages[this.stage]);
+      return;
+    }
+
+    this.animateNodes(this.animationStages[this.stage]);
+    this.timeout = this.randomStage();
   }
 
   connectedCallback() {
     this.init();
     this.cooldown = 1000;
-    this.animationDelay = 400;
+    this.animationDelay = 510;
   }
 }
 
@@ -636,7 +636,7 @@ class TheMenu extends HTMLElement {
       iconWrapper.classList.add("menu-link-icon-wrapper");
       iconWrapper.append(SNIPPETS.icon("arrow", "menu-link-icon-1"), SNIPPETS.icon("arrow", "menu-link-icon-2"));
 
-      link.append(SNIPPETS.heading(obj.title, "span", ["menu-link-label", "anton-sc-regular"], [], false), iconWrapper);
+      link.append(SNIPPETS.heading(obj.title, "span", ["menu-link-label", "anton-sc-regular"]), iconWrapper);
       elements.push(link);
     });
 
@@ -644,11 +644,20 @@ class TheMenu extends HTMLElement {
   }
 
   get active() {
-    return JSON.parse(document.body.getAttribute("data-menu-active"));
+    return JSON.parse(document.body.getAttribute("data-menu"));
   }
 
   set active(v) {
-    document.body.setAttribute("data-active-menu", JSON.stringify(v));
+    document.body.setAttribute("data-menu", JSON.stringify(v));
+
+    if (v) {
+      setTimeout(() => {
+        this.linkWrapper.classList.add("animate");
+      }, 510);
+    } else {
+      this.linkWrapper.classList.remove("animate");
+    }
+
     this.stageManager.randomize(v);
   }
 
@@ -686,19 +695,36 @@ class TheMenu extends HTMLElement {
   }
 
   render() {
+    let header = document.createElement("div");
+    header.classList.add("menu-header");
+
+    let headerContent = document.createElement("div");
+    headerContent.classList.add("menu-header-content");
+
+    let menuBtn = document.createElement("menu-btn");
+    menuBtn.classList.add("menu-btn", "h-bounce-text");
+    let label = SNIPPETS.heading("Luk", "span", ["menu-btn-label"], [], false);
+    menuBtn.append(SNIPPETS.icon("menu"), label);
+
+    let logo = document.createElement("a-link");
+    logo.appendChild(SNIPPETS.icon("logo", "menu-header-logo"));
+
+    headerContent.append(menuBtn, logo);
+    header.appendChild(headerContent);
+
     this.stageManager = document.createElement("stage-menu");
     this.stageManager.classList.add("menu-main");
 
-    let linkWrapper = document.createElement("div");
-    linkWrapper.classList.add("menu-links");
-    linkWrapper.append(...this.links);
+    this.linkWrapper = document.createElement("div");
+    this.linkWrapper.classList.add("menu-links");
+    this.linkWrapper.append(...this.links);
 
     let footer = document.createElement("div");
     footer.classList.add("menu-footer");
     footer.appendChild(SNIPPETS.link_footer());
 
-    this.stageManager.append(linkWrapper, ...this.renderImages());
-    this.replaceChildren(this.stageManager, footer);
+    this.stageManager.append(this.linkWrapper, ...this.renderImages());
+    this.replaceChildren(header, this.stageManager, footer);
   }
 
   init(data) {
@@ -707,31 +733,51 @@ class TheMenu extends HTMLElement {
     this.links = this.data.filter((item) => item.type === "page");
 
     this.render();
-    console.warn("TheMenu", this.links);
   }
 }
 
 customElements.define("the-menu", TheMenu);
 
-class MenuButton extends HTMLElement {}
+class MenuButton extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  get menu() {
+    return this._menu;
+  }
+
+  set menu(ele) {
+    this._menu = ele;
+  }
+
+  event() {
+    let swapStatus = this.menu.active ? false : true;
+    this.menu.active = swapStatus;
+  }
+
+  connectedCallback() {
+    this.menu = document.querySelector("the-menu");
+    this.addEventListener("click", this.event.bind(this));
+  }
+}
+
+customElements.define("menu-btn", MenuButton);
 
 class TheHeader extends HTMLElement {
   constructor() {
     super();
   }
 
-  menuHandler() {}
-
   createLeft() {
     let wrapper = document.createElement("div");
     wrapper.classList.add("header-left");
 
-    this.menuBtn = document.createElement("button");
+    this.menuBtn = document.createElement("menu-btn");
     this.menuBtn.id = "Menu-btn";
-    this.menuBtn.classList.add("h-bounce-text");
-    let labelIdle = SNIPPETS.heading("Menu", "span", ["menu-btn-label", "menu-active--false"], [], false);
-    let labelActive = SNIPPETS.heading("Luk", "span", ["menu-btn-label", "menu-active--true"], [], false);
-    this.menuBtn.append(SNIPPETS.icon("menu"), labelIdle, labelActive);
+    this.menuBtn.classList.add("menu-btn", "h-bounce-text");
+    let label = SNIPPETS.heading("Menu", "span", ["menu-btn-label"], [], false);
+    this.menuBtn.append(SNIPPETS.icon("menu"), label);
 
     wrapper.appendChild(this.menuBtn);
     return wrapper;
@@ -887,14 +933,14 @@ class TheApp extends HTMLElement {
     // (Header moves up)
     this.show = true;
     this.transition = true;
-    
+
     setTimeout(() => {
       this.transition = false;
-    }, 510)
-    
+    }, 510);
+
     // #2 Render new template
     await this.renderTemplate(path);
-    
+
     // #3 Show new template elements
     this.show = true;
   }

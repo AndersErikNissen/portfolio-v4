@@ -43,10 +43,7 @@ APP_TEMPLATES.page = (data) => {
       `;
 
       if (stage.title) {
-        markup += SNIPPETS.heading(stage.title, "h2", [
-          "h1",
-          "page-title",
-        ]).outerHTML;
+        markup += SNIPPETS.heading(stage.title, "h2", ["h1", "page-title"]).outerHTML;
       }
 
       if (stage.content) {
@@ -67,17 +64,10 @@ APP_TEMPLATES.page = (data) => {
 
       let markup = `
         <div 
-          class="page-image-wrapper aspect-box ${
-            index === 0 ? "active-stage" : ""
-          }" 
+          class="page-image-wrapper ${index === 0 ? "active-stage" : ""}" 
           data-stage="${index}"
         >
-          ${
-            SNIPPETS.img(
-              stage.image,
-              "(max-width: 767px) calc(100vw - 24px), 50vw"
-            ).outerHTML
-          }
+          ${SNIPPETS.img(stage.image, "(max-width: 767px) calc(100vw - 24px), 50vw").outerHTML}
         </div>
       `;
 

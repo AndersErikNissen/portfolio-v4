@@ -8,13 +8,7 @@ class Snippets {
 
     if (sizes) {
       let srcset = "";
-      let sizeNames = [
-        "medium_large",
-        "medium",
-        "large",
-        "1536x1536",
-        "2048x2048",
-      ];
+      let sizeNames = ["medium_large", "medium", "large", "1536x1536", "2048x2048"];
 
       sizeNames.forEach((name, index) => {
         if (index !== 0) {
@@ -29,19 +23,6 @@ class Snippets {
     }
 
     return IMG;
-  }
-
-  box_img(obj, sizes, aspect) {
-    const ASPECT = aspect || (obj.height / obj.width) * 100;
-    const BOX = document.createElement("div");
-    const IMG = this.img(obj, sizes);
-
-    BOX.classList.add("aspect-box");
-    BOX.style.setProperty("--aspect-ratio", ASPECT + "%");
-
-    BOX.appendChild(IMG);
-
-    return BOX;
   }
 
   link_footer(cls) {
@@ -144,11 +125,7 @@ class Snippets {
 
   icon(type, cls) {
     let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttributeNS(
-      "http://www.w3.org/2000/xmlns/",
-      "xmlns",
-      "http://www.w3.org/2000/svg"
-    );
+    svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns", "http://www.w3.org/2000/svg");
     svg.setAttribute("fill", "none");
 
     const addPath = (d, name) => {
@@ -164,10 +141,7 @@ class Snippets {
     };
 
     const addCircle = (x, y, r) => {
-      let circle = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "circle"
-      );
+      let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
       circle.setAttribute("fill", "currentColor");
       circle.setAttribute("cx", x);
       circle.setAttribute("cy", y);
@@ -276,18 +250,14 @@ class Snippets {
         addPath(
           "M25 0.980392C11.7343 0.980392 0.980392 11.7343 0.980392 25C0.980392 38.2657 11.7343 49.0196 25 49.0196C38.2657 49.0196 49.0196 38.2657 49.0196 25C49.0196 11.7343 38.2657 0.980392 25 0.980392ZM0 25C0 11.1929 11.1929 0 25 0C38.8071 0 50 11.1929 50 25C50 38.8071 38.8071 50 25 50C11.1929 50 0 38.8071 0 25Z"
         );
-        addPath(
-          "M31.0084 17.3382H18.1649V15H35V31.8351H32.6618V18.9916L16.6534 35L15 33.3466L31.0084 17.3382Z"
-        );
+        addPath("M31.0084 17.3382H18.1649V15H35V31.8351H32.6618V18.9916L16.6534 35L15 33.3466L31.0084 17.3382Z");
         size = 50;
         break;
 
       case "arrow":
         size = 40;
 
-        addPath(
-          "M32.0168 4.67642H6.32978V0H40V33.6702H35.3236V7.98315L3.30673 40L0 36.6933L32.0168 4.67642Z"
-        );
+        addPath("M32.0168 4.67642H6.32978V0H40V33.6702H35.3236V7.98315L3.30673 40L0 36.6933L32.0168 4.67642Z");
 
         break;
     }

@@ -4,6 +4,9 @@ the-header {
   padding: var(--space-edge);
   width: 100%;
   transform: translateY(-100%);
+  background-color: var(--color-bg);
+  position: relative;
+  z-index: 1;
 }
 
 the-header[show="true"],
@@ -30,23 +33,6 @@ the-header[show="true"] {
   align-items: center;
 }
 
-#Menu-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.347rem;
-}
-
-#Menu-btn > svg {
-  width: 1.736rem;
-  height: auto;
-}
-
-.menu-btn-label {
-  font-size: 0.752rem;
-  font-weight: 400;
-  transform: translateY(7%);
-}
-
 .header-left,
 .header-right {
   display: flex;
@@ -61,38 +47,14 @@ the-header[show="true"] {
 
 .header-middle {
   flex: 0 0 auto;
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .header-middle > svg {
   width: 5.787rem;
   height: auto;
-}
-
-[data-menu-active="true"] .header-right {
-  flex: 0 0 0%;
-  transition: flex 300ms ease-in-out;
-}
-
-body:not([data-menu-active="true"]) .menu-active--true,
-[data-menu-active="true"] .menu-active--false,
-[data-menu-active="true"] .header-right > * {
-  display: none;
-}
-
-#Menu-btn .top,
-#Menu-btn .bottom {
-  transform-box: fill-box;
-  transform-origin: center;
-  transition: transform 300ms ease-in-out;
-}
-
-[data-menu-active="true"] #Menu-btn .top {
-  transform: translateY(400%) rotate(45deg);
-}
-
-[data-menu-active="true"] #Menu-btn .bottom {
-  transform: translateY(-400%) rotate(-45deg);
 }
 
 .header-btns {
@@ -146,15 +108,15 @@ body:not([data-menu-active="true"]) .menu-active--true,
     display: block;
   }
 
-  #Menu-btn:hover > svg > .top {
-    animation: menuBtnTop 300ms ease-in-out forwards;
+  body:not([data-menu="true"]) #Menu-btn:hover > svg > .top {
+    animation: menuBtnSideToSideTop 300ms var(--cb-slow-start) forwards;
   }
 
-  #Menu-btn:hover > svg > .bottom {
-    animation: menuBtnBottom 300ms ease-in-out forwards;
+  body:not([data-menu="true"]) #Menu-btn:hover > svg > .bottom {
+    animation: menuBtnSideToSideBottom 300ms var(--cb-slow-start) forwards;
   }
 
-  @keyframes menuBtnTop {
+  @keyframes menuBtnSideToSideTop {
     from {
       transform: translateX(101%);
     }
@@ -163,7 +125,7 @@ body:not([data-menu-active="true"]) .menu-active--true,
     }
   }
 
-  @keyframes menuBtnBottom {
+  @keyframes menuBtnSideToSideBottom {
     from {
       transform: translateX(-101%);
     }
