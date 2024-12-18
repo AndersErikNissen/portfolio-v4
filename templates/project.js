@@ -39,13 +39,7 @@ APP_TEMPLATES.project = (data) => {
     star.setAttribute("data-animate", "");
     star.classList.add("project-star");
 
-    let year = SNIPPETS.heading(
-      data.year,
-      "p",
-      ["fs-medium", "anton-sc-regular", "project-year"],
-      [],
-      false
-    );
+    let year = SNIPPETS.heading(data.year, "p", ["fs-medium", "anton-sc-regular", "project-year"], [], false);
     wrapper.append(star, year);
     return wrapper;
   };
@@ -63,13 +57,7 @@ APP_TEMPLATES.project = (data) => {
       }
     });
 
-    return SNIPPETS.heading(
-      data.title,
-      "h1",
-      ["project-title", "h1"],
-      titleElements,
-      false
-    );
+    return SNIPPETS.heading(data.title, "h1", ["project-title", "h1"], titleElements, false);
   };
 
   const mainMeta = () => {
@@ -83,15 +71,7 @@ APP_TEMPLATES.project = (data) => {
     wrapper.appendChild(createTitle());
 
     if (data.subtitle && data.subtitle.length > 0) {
-      wrapper.appendChild(
-        SNIPPETS.heading(
-          data.subtitle,
-          "p",
-          ["fs-medium", "fw-200", "project-subtitle"],
-          [],
-          false
-        )
-      );
+      wrapper.appendChild(SNIPPETS.heading(data.subtitle, "p", ["fs-medium", "fw-200", "project-subtitle"], [], false));
     }
 
     return wrapper;
@@ -103,10 +83,7 @@ APP_TEMPLATES.project = (data) => {
     wrapper.classList.add("project-main-item");
 
     if (stage.title) {
-      let title = SNIPPETS.heading(stage.title, "h3", [
-        "h3",
-        "project-main-item-title",
-      ]);
+      let title = SNIPPETS.heading(stage.title, "h3", ["h3", "project-main-item-title"]);
       wrapper.appendChild(title);
     }
 

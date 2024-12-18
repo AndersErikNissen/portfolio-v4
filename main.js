@@ -29,22 +29,11 @@ class DataBase {
     },
   ];
 
-  get data() {
-    // sessionStorage.clear(); // PLSFIX - DEV
-
-    const STORAGE = sessionStorage.getItem("aenders_dk_db");
-
-    if (STORAGE) {
-      return JSON.parse(STORAGE);
-    }
-
-    return this.dataBase;
-  }
-
   trimObject(obj) {
     obj.title = obj.title.rendered;
     obj.content = obj.content.rendered;
     obj.type = obj.type.replace("portfolio_", "");
+    obj.name = obj.type;
 
     Object.assign(obj, obj.acf);
 
@@ -93,12 +82,23 @@ class DataBase {
     this.dataBase = this.dataBase.concat(ARRAY);
   }
 
-  async fetchData() {
-    await this.fetchDataByType("portfolio_pages");
-    await this.fetchDataByType("portfolio_projects");
-    await this.fetchDataByType("portfolio_visuals");
+  get data() {
+    return new Promise((resolve) => {
+      const STORAGE = sessionStorage.getItem("aenders_dk_db");
 
-    sessionStorage.setItem("aenders_dk_db", JSON.stringify(this.data));
+      if (STORAGE) {
+        return resolve(JSON.parse(STORAGE));
+      }
+
+      Promise.all([
+        this.fetchDataByType("portfolio_pages"),
+        this.fetchDataByType("portfolio_projects"),
+        this.fetchDataByType("portfolio_visuals"),
+      ]).then(() => {
+        sessionStorage.setItem("aenders_dk_db", JSON.stringify(this.dataBase));
+        return resolve(this.dataBase);
+      });
+    });
   }
 
   uniqueNumbers(obj) {
@@ -284,7 +284,36 @@ class ALink extends HTMLElement {
     super();
   }
 
-  connectedCallback() {}
+  get app() {
+    return this._app;
+  }
+
+  set app(ele) {
+    this._app = document.querySelector(ele);
+  }
+
+  get menu() {
+    return this._menu;
+  }
+
+  set menu(ele) {
+    this._menu = document.querySelector(ele);
+  }
+
+  get path() {
+    return new URL(this.getAttribute("the-path") || "/", location.href).pathname;
+  }
+
+  event() {
+    this.app.transitionToTemplate(this.path);
+    this.menu.active = false;
+  }
+
+  connectedCallback() {
+    this.app = "the-app";
+    this.menu = "the-menu";
+    this.addEventListener("click", this.event.bind(this));
+  }
 }
 
 customElements.define("a-link", ALink);
@@ -630,7 +659,7 @@ class TheMenu extends HTMLElement {
     combined.forEach((obj) => {
       let link = document.createElement("a-link");
       link.classList.add("menu-link", "h-bounce-text");
-      link.setAttribute("slug", obj.path);
+      link.setAttribute("the-path", obj.path);
 
       let iconWrapper = document.createElement("div");
       iconWrapper.classList.add("menu-link-icon-wrapper");
@@ -669,22 +698,26 @@ class TheMenu extends HTMLElement {
       imgWrapper.setAttribute("data-stage", index);
       imgWrapper.classList.add("menu-image", "blur-stage-animation");
 
-      let link = document.createElement("a-link");
-      link.setAttribute("slug", obj.path);
-      link.classList.add("menu-image-link");
+      imgWrapper.appendChild(SNIPPETS.img(obj.image, "100vw"));
 
-      let linkIcon = SNIPPETS.icon("url", "h-scale-icon");
-      linkIcon.setAttribute("data-animate", "");
+      if (obj.type !== "visual") {
+        let link = document.createElement("a-link");
+        link.setAttribute("the-path", obj.path);
+        link.setAttribute("data-animate", "");
+        link.classList.add("menu-image-link", "h-bounce-text", "h-scale-icon");
 
-      link.append(
-        SNIPPETS.heading(obj.type === "page" ? "Se side" : "Se projekt", "span", [
-          "menu-image-link-label",
-          "fs-medium",
-        ]),
-        linkIcon
-      );
+        let linkIcon = SNIPPETS.icon("url");
 
-      imgWrapper.append(SNIPPETS.img(obj.image, "100vw"), link);
+        link.append(
+          SNIPPETS.heading(obj.type === "page" ? "Se side" : "Se projekt", "span", [
+            "menu-image-link-label",
+            "fs-medium",
+          ]),
+          linkIcon
+        );
+
+        imgWrapper.appendChild(link);
+      }
 
       return imgWrapper;
     });
@@ -707,7 +740,8 @@ class TheMenu extends HTMLElement {
     menuBtn.append(SNIPPETS.icon("menu"), label);
 
     let logo = document.createElement("a-link");
-    logo.appendChild(SNIPPETS.icon("logo", "menu-header-logo"));
+    logo.classList.add("menu-header-logo");
+    logo.appendChild(SNIPPETS.icon("logo"));
 
     headerContent.append(menuBtn, logo);
     header.appendChild(headerContent);
@@ -837,8 +871,6 @@ customElements.define("the-header", TheHeader);
 class TheApp extends HTMLElement {
   constructor() {
     super();
-
-    this.data = new DataBase();
   }
 
   get menu() {
@@ -873,9 +905,9 @@ class TheApp extends HTMLElement {
     this.setAttribute("transition", JSON.stringify(v));
   }
 
-  loadScript(path) {
+  loadScript(name) {
     return new Promise((resolve) => {
-      const SRC = `./${path}.js`;
+      const SRC = location.origin + `/${name}.js`;
 
       if (document.querySelector('script[src="' + SRC + '"]')) {
         return resolve();
@@ -891,7 +923,8 @@ class TheApp extends HTMLElement {
 
   loadStylesheet(name) {
     return new Promise((resolve) => {
-      const HREF = `./styles/${name}.css`;
+      const HREF = location.origin + `/styles/${name}.css`;
+
       if (document.querySelector('link[href="' + HREF + '"]')) {
         return resolve();
       }
@@ -921,7 +954,7 @@ class TheApp extends HTMLElement {
 
     document.body.setAttribute("data-template", NAME);
     this.setAttribute("template", NAME);
-    this.location = DATA;
+    // this.location = DATA; PLS FIX
 
     this.innerHTML = TEMPLATE.markup;
 
@@ -929,26 +962,23 @@ class TheApp extends HTMLElement {
   }
 
   async transitionToTemplate(path) {
-    // #1 Fade out current content (header + app)
-    // (Header moves up)
-    this.show = true;
+    this.show = false;
     this.transition = true;
 
     setTimeout(() => {
       this.transition = false;
     }, 510);
 
-    // #2 Render new template
     await this.renderTemplate(path);
 
-    // #3 Show new template elements
     this.show = true;
   }
 
   async init() {
-    await this.data.fetchData();
-    this.db = this.data.dataBase;
-    console.log("DB", this.data);
+    let dataBase = new DataBase();
+    this.db = await dataBase.data;
+
+    console.log("DB", this.db);
 
     this.menu = document.querySelector("the-menu");
     this.menu.init(this.db);
@@ -959,3 +989,16 @@ class TheApp extends HTMLElement {
 }
 
 customElements.define("the-app", TheApp);
+
+/**
+ *
+ * <a-link> = luk menu
+ * - gem indholdet med det samme
+ * - vent på at menuen er lukket, og først der vis indholdet (når det er klart)
+ *
+ * Lav  CSS til [transition]
+ *
+ * <the-menu> fjern fokus/active fra det link som man klikker på, så den også gemmes
+ * - skal måske have en baggrunds farve eller andet for at skille sig en smule ud?
+ *
+ */

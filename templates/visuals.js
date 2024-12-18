@@ -24,10 +24,7 @@ APP_TEMPLATES.visuals = (data) => {
         let galleryData = document.createElement("script");
         galleryData.innerHTML = JSON.stringify(item.gallery);
         galleryOpener.append(SNIPPETS.icon("circle-plus"), galleryData);
-        galleryOpener.classList.add(
-          "visuals-item-gallery-opener",
-          "h-scale-icon"
-        );
+        galleryOpener.classList.add("visuals-item-gallery-opener", "h-scale-icon");
       }
 
       let headingParameters = [item.title, "h2", ["visuals-item-title", "h1"]];
@@ -40,12 +37,7 @@ APP_TEMPLATES.visuals = (data) => {
           data-stage="${index}"
         >
           <div class="visuals-item-image-wrapper">
-            ${
-              SNIPPETS.img(
-                item.gallery[0],
-                "(max-width: 767px) calc(100vw - 24px), 50vw"
-              ).outerHTML
-            }
+            ${SNIPPETS.img(item.gallery[0], "(max-width: 767px) calc(100vw - 24px), 50vw").outerHTML}
           </div>
           <div class="visuals-item-main">
             ${heading.outerHTML}
@@ -59,17 +51,8 @@ APP_TEMPLATES.visuals = (data) => {
   }
 
   return {
-    scripts: [
-      "components/overflow",
-      "components/carousel",
-      "components/gallery",
-    ],
-    styles: [
-      "visuals",
-      "component-overflow",
-      "component-carousel",
-      "component-gallery",
-    ],
+    scripts: ["components/overflow", "components/carousel", "components/gallery"],
+    styles: ["visuals", "component-overflow", "component-carousel", "component-gallery"],
     markup: `
       <a-carousel class="template-visuals template visuals-carousel">
         ${itemsMarkup}

@@ -17,6 +17,17 @@
   flex: 1 5 100%;
   height: 100%;
   transition: flex 300ms ease-in-out;
+  overflow: hidden;
+  border-radius: var(--scale-20);
+}
+
+.page-image-wrapper img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .page-gallery .active-stage {

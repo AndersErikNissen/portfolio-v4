@@ -17,8 +17,7 @@ APP_TEMPLATES.projects = (data) => {
   let controlMarkup = "";
 
   if (data.items && data.items.length > 0) {
-    controlMarkup +=
-      '<stage-control manager="stage-delayed" class="projects-control controller">';
+    controlMarkup += '<stage-control manager="stage-delayed" class="projects-control controller">';
 
     data.items.forEach((item, index) => {
       controlMarkup += `
@@ -38,9 +37,7 @@ APP_TEMPLATES.projects = (data) => {
         title = document.createElement("a");
 
       title.href = item.href;
-      title.appendChild(
-        SNIPPETS.heading(item.title, "h3", ["projects-item-title", "h1"])
-      );
+      title.appendChild(SNIPPETS.heading(item.title, "h3", ["projects-item-title", "h1"]));
 
       let img = SNIPPETS.img(item.image, "100vw");
       let bg = document.createElement("div");
@@ -52,11 +49,7 @@ APP_TEMPLATES.projects = (data) => {
         star.setAttribute("data-animate", "");
         star.classList.add("projects-item-star");
 
-        year = SNIPPETS.heading(item.year, "p", [
-          "fs-medium",
-          "anton-sc-regular",
-          "projects-item-year",
-        ]);
+        year = SNIPPETS.heading(item.year, "p", ["fs-medium", "anton-sc-regular", "projects-item-year"]);
 
         year.appendChild(star);
       }
@@ -66,11 +59,7 @@ APP_TEMPLATES.projects = (data) => {
       content.innerHTML = item.content;
 
       if (item.subtitle.length > 0) {
-        subtitle = SNIPPETS.heading(item.subtitle, "p", [
-          "fs-medium",
-          "fw-200",
-          "projects-item-subtitle",
-        ]);
+        subtitle = SNIPPETS.heading(item.subtitle, "p", ["fs-medium", "fw-200", "projects-item-subtitle"]);
       }
 
       itemsMarkup += `

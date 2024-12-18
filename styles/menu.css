@@ -52,7 +52,7 @@ the-menu {
   transition: transform 300ms var(--cb-slow-start);
 }
 
-.menu-header-logo {
+.menu-header-logo svg {
   width: 5.787rem;
   height: auto;
 }
@@ -198,7 +198,7 @@ body:not([data-menu="true"]) .menu-main {
   height: var(--scale-40);
 }
 
-.menu-image-link svg.animate {
+.animate.menu-image-link svg {
   transform: scale(1);
   transition: transform 300ms ease-in-out;
 }
