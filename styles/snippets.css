@@ -21,7 +21,8 @@ the-app[show="true"] .active .text-overflow-content,
 the-app[transition="true"] .animate .text-overflow-content,
 the-app[transition="true"] .active .text-overflow-content,
 the-menu .animate .text-overflow-content,
-the-menu .active .text-overflow-content {
+the-menu .active .text-overflow-content,
+the-gallery .active .text-overflow-content {
   transition: transform 500ms var(--ani-delay, 0ms) var(--cb-over-shot);
   transform: translateY(0%);
 }

@@ -220,7 +220,72 @@ the-app {
   }
 }
 
+/* COPY  */
+
+copy-clipboard {
+  display: block;
+}
+
+copy-toaster {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: var(--scale-40);
+  border-radius: 99rem;
+  padding: 0 var(--scale-20);
+  background-color: var(--color-black);
+  font-size: var(--scale-12);
+  color: var(--color-white);
+  position: fixed;
+  bottom: var(--space-edge);
+  left: 50%;
+  z-index: 99;
+}
+
+copy-toaster span {
+  flex: 0 0 auto;
+}
+
+copy-toaster:not([displaying="true"]) {
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-50%) translateY(40%);
+}
+
+copy-toaster[displaying="true"] {
+  animation: copyToaster 4000ms ease-in-out forwards;
+}
+
+@keyframes copyToaster {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(40%);
+  }
+
+  20%,
+  80% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0%);
+    pointer-events: all;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(40%);
+  }
+}
+
+@media (max-width: 767px) {
+  copy-toaster {
+    height: 32px;
+    border-radius: 99px;
+    padding: 0 16px;
+    font-size: 12px;
+  }
+}
+
 /* ICONS  */
+
 .icon-circle-plus circle,
 .icon-circle-close circle {
   opacity: 0;
@@ -246,7 +311,7 @@ the-app {
 }
 
 .h-bounce-text:hover .text-overflow-content {
-  animation: hBounceText 300ms var(--ani-delay) var(--cb-over-shot) forwards;
+  animation: hBounceText 500ms var(--ani-delay) var(--cb-over-shot) forwards;
 }
 
 @keyframes hBounceText {
@@ -256,21 +321,6 @@ the-app {
   to {
     transform: translateY(0%);
   }
-}
-
-.blur-stage-animation {
-  transition-property: transform, filter, opacity;
-  transition-duration: 300ms;
-  transition-timing-function: ease-in;
-  transform-origin: center;
-  transform: scale(1);
-  filter: blur(0);
-}
-
-.blur-stage-animation:not(.active-stage) {
-  pointer-events: 0;
-  transform: scale(2);
-  filter: blur(1rem);
 }
 
 /* TRANSITION */

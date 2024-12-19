@@ -4,6 +4,11 @@ the-app[template="projects"] {
 
 .template-projects {
   color: var(--color-white);
+  overflow: hidden;
+}
+
+.template-projects.t-curtain::before {
+  z-index: 10;
 }
 
 .projects-item {
@@ -15,6 +20,44 @@ the-app[template="projects"] {
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
+}
+
+.projects-item.active-stage {
+  z-index: 3;
+}
+
+[has-interacted="true"] .projects-item.active-stage {
+  animation: activeProjectsItem 500ms var(--cb-slow-start) forwards;
+}
+
+@keyframes activeProjectsItem {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0%);
+  }
+}
+
+.projects-item.previous-stage {
+  pointer-events: none;
+}
+
+[has-interacted="true"] .projects-item.previous-stage {
+  z-index: 1;
+  animation: previousProjectsItem 500ms var(--cb-slow-start) forwards;
+}
+
+@keyframes previousProjectsItem {
+  from {
+    transform: translateY(0%);
+  }
+
+  to {
+    transform: translateY(-100%);
+  }
 }
 
 .projects-control {
@@ -22,7 +65,7 @@ the-app[template="projects"] {
   top: 50%;
   left: var(--space-edge);
   transform: translateY(-50%);
-  z-index: 1;
+  z-index: 5;
 }
 
 .projects-item-main {
@@ -37,18 +80,36 @@ the-app[template="projects"] {
   gap: var(--scale-12);
 }
 
-.projects-item-background,
-.projects-item-background > img {
+.projects-item-background {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
 }
 
 .projects-item-background > img {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
   object-position: center;
   object-fit: cover;
+  transform: scale(1.1);
+}
+
+.active-stage .projects-item-background > img {
+  transform: scale(1);
+}
+
+.previous-stage .projects-item-background > img {
+  transform: scale(0.9);
+}
+
+[has-interacted="true"] .active-stage .projects-item-background > img,
+[has-interacted="true"] .previous-stage .projects-item-background > img {
+  transition: transform 500ms var(--cb-slow-start);
 }
 
 .projects-item-year {
@@ -80,6 +141,7 @@ the-app[template="projects"] {
   bottom: var(--space-edge);
   left: 50%;
   transform: translateX(-50%);
+  z-index: 1;
 }
 
 @media (max-width: 767px) {

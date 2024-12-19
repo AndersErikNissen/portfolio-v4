@@ -205,8 +205,14 @@ class UserInteraction extends HTMLElement {
       if (SCROLLABLE_ELEMENT) {
         stopInteraction = JSON.parse(SCROLLABLE_ELEMENT.getAttribute("scrollable"));
       }
+
+      const CONTROLLER = v.target.tagName === "CAROUSEL-CONTROL" || v.target.closest("carousel-control");
+
+      if (CONTROLLER) {
+        stopInteraction = true;
+      }
     } else {
-      stopInteraction = !!v;
+      stopInteraction = !!v; // change v to boolean
     }
 
     this._stopInteraction = stopInteraction;
@@ -328,10 +334,22 @@ class StageManager extends UserInteraction {
     return "active-stage";
   }
 
+  get hasInteracted() {
+    return JSON.parse(this.getAttribute("has-interacted"));
+  }
+
+  set hasInteracted(v) {
+    this.setAttribute("has-interacted", JSON.stringify(v));
+  }
+
   set stage(i) {
     if (i === this.stage) return;
 
     let index = i;
+
+    if (!this.hasInteracted) {
+      this.hasInteracted = true;
+    }
 
     if (!this.stages[index]) {
       index = 0;
@@ -469,6 +487,10 @@ class StageManager extends UserInteraction {
       this.setAttribute("stage", this.stage);
     }
 
+    if (!this.hasAttribute("has-interacted")) {
+      this.hasInteracted = false;
+    }
+
     this.bindEvents();
   }
 
@@ -499,10 +521,10 @@ class StageDelayed extends StageManager {
     }, this.animationDelay);
   }
 
-  connectedCallback() {
-    this.core();
+  async init() {
     this.cooldown = 1000;
-    this.animationDelay = 400;
+    this.animationDelay = 510;
+    await this.core();
   }
 }
 
@@ -679,7 +701,7 @@ class TheMenu extends HTMLElement {
     imageObjects = imageObjects.map((obj, index) => {
       let imgWrapper = document.createElement("div");
       imgWrapper.setAttribute("data-stage", index);
-      imgWrapper.classList.add("menu-image", "blur-stage-animation");
+      imgWrapper.classList.add("menu-image");
 
       imgWrapper.appendChild(SNIPPETS.img(obj.image, "100vw"));
 
@@ -835,12 +857,11 @@ class TheHeader extends HTMLElement {
   }
 
   render() {
-    let toaster = document.createElement("copy-toaster");
     let main = document.createElement("div");
     main.classList.add("header-main");
     main.append(this.createLeft(), this.createMiddle(), this.createRight());
 
-    this.append(main, toaster);
+    this.appendChild(main);
   }
 
   connectedCallback() {
@@ -850,6 +871,106 @@ class TheHeader extends HTMLElement {
 }
 
 customElements.define("the-header", TheHeader);
+
+class CopyToClipboard extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  get type() {
+    return this.getAttribute("content-type") || "email";
+  }
+
+  get content() {
+    return this._content;
+  }
+
+  get toaster() {
+    return document.querySelector("copy-toaster");
+  }
+
+  set content(type) {
+    let content = "anderseriknissen" + "@" + "gmail" + ".com";
+
+    if (type === "phone") {
+      content = "+45" + "3178" + "7389";
+    }
+
+    this._content = content;
+  }
+
+  async copy() {
+    try {
+      await navigator.clipboard.writeText(this.content);
+      console.log(this.toaster);
+      this.toaster.update(this.type);
+      console.log(this.content + " er kopieret!");
+    } catch (e) {
+      console.error("Kunne ikke kopiere til clipboard. Prøv igen!");
+    }
+  }
+
+  connectedCallback() {
+    this.content = this.type;
+    this.addEventListener("click", this.copy.bind(this));
+  }
+}
+
+customElements.define("copy-clipboard", CopyToClipboard);
+
+class CopyToaster extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  get timeout() {
+    return this._timeout;
+  }
+
+  set timeout(timing) {
+    if (this._timeout) clearTimeout(this._timeout);
+
+    this._timeout = setTimeout(() => {
+      this.displaying = false;
+    }, timing);
+  }
+
+  get timing() {
+    let timing = this.getAttribute("timing") || window.getComputedStyle(this).getPropertyValue("animation-duration");
+
+    if (timing.includes("s")) {
+      timing = timing.replace("s", "000");
+    }
+
+    return parseInt(timing);
+  }
+
+  get displaying() {
+    return JSON.parse(this.getAttribute("displaying"));
+  }
+
+  set displaying(v) {
+    this.setAttribute("displaying", JSON.stringify(v));
+  }
+
+  get content() {
+    return this._content;
+  }
+
+  set content(type) {
+    let str = type === "email" ? "E-mail" : "Telefon nummer";
+    this._content = str + " er kopieret!";
+    this.innerHTML = `<span>${this.content}</span>`;
+  }
+
+  update(type) {
+    this.content = type;
+    this.displaying = true;
+    this.timeout = this.timing + 10;
+  }
+}
+
+customElements.define("copy-toaster", CopyToaster);
 
 class TheApp extends HTMLElement {
   constructor() {
@@ -881,10 +1002,6 @@ class TheApp extends HTMLElement {
   set show(v) {
     this.setAttribute("show", JSON.stringify(v));
     this.header.setAttribute("show", JSON.stringify(v));
-
-    if (v) {
-      this.querySelectorAll(".active-stage [data-animate]").forEach((node) => node.classList.add("animate"));
-    }
   }
 
   get transition() {
@@ -948,14 +1065,15 @@ class TheApp extends HTMLElement {
     this.path = path;
     this.replaceChildren(TEMPLATE.html);
 
-    // PLS FIX
-    // history.replaceState({}, "", DATA.path);
-    // document.title = DATA.title + " - AENDERS.DK";
+    history.replaceState({}, "", DATA.path);
+    document.title = DATA.title + " - AENDERS.DK";
 
     return Promise.all([...STYLES, ...SCRIPTS]).then(async () => {
       // Uses .then() to make sure the CSS/JS has been loaded beforehand.
 
-      if (TEMPLATE.html.nodeName === "STAGE-MANAGER" || TEMPLATE.html.nodeName === "A-CAROUSEL") {
+      let customElementNames = ["STAGE-MANAGER", "STAGE-DELAYED", "A-CAROUSEL"];
+
+      if (customElementNames.indexOf(TEMPLATE.html.nodeName) > -1) {
         let customElement = TEMPLATE.html;
         await customElement.init();
 
@@ -995,6 +1113,7 @@ class TheApp extends HTMLElement {
           this.show = true;
 
           switch (customElement.nodeName) {
+            case "STAGE-DELAYED":
             case "STAGE-MANAGER":
               customElement.animateNodes(customElement.animationStages[customElement.stage]);
               break;
@@ -1011,8 +1130,6 @@ class TheApp extends HTMLElement {
   async init() {
     let dataBase = new DataBase();
     this.db = await dataBase.data;
-
-    console.log("DB", this.db);
 
     this.menu = document.querySelector("the-menu");
     this.menu.init(this.db);

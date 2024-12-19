@@ -11,8 +11,6 @@ console.log(
 );
 
 APP_TEMPLATES.projects = (data) => {
-  console.log("projects", data);
-
   let itemsMarkup = "";
   let controlMarkup = "";
 
@@ -21,10 +19,7 @@ APP_TEMPLATES.projects = (data) => {
 
     data.items.forEach((item, index) => {
       controlMarkup += `
-        <div 
-          data-stage="${index}"
-          class="control-item ${index === 0 ? "active-stage" : ""} "
-        ></div>`;
+        <div data-stage="${index}" class="control-item"></div>`;
     });
 
     controlMarkup += "</stage-control>";
@@ -63,13 +58,7 @@ APP_TEMPLATES.projects = (data) => {
       }
 
       itemsMarkup += `
-        <div 
-          class="
-            projects-item blur-stage-animation 
-            ${index === 0 ? "active-stage" : ""}
-          " 
-          data-stage="${index}"
-        >
+        <div class="projects-item" data-stage="${index}">
           ${bg.outerHTML}
 
           <div class="projects-item-main">
@@ -84,17 +73,20 @@ APP_TEMPLATES.projects = (data) => {
     });
   }
 
+  let stage = document.createElement("stage-delayed");
+  stage.classList.add("template-projects", "template", "t-curtain");
+
+  stage.innerHTML = `
+    <div class="projects-items container">
+      ${itemsMarkup}
+    </div>
+
+    ${controlMarkup}
+  `;
+
   return {
     scripts: ["components/overflow"],
     styles: ["projects", "component-overflow"],
-    markup: `
-      <stage-delayed class="template-projects template">
-        <div class="projects-items container">
-          ${itemsMarkup}
-        </div>
-
-        ${controlMarkup}
-      </stage-delayed>
-    `,
+    html: stage,
   };
 };

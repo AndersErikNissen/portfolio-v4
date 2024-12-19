@@ -4,9 +4,13 @@ the-header {
   padding: var(--space-edge);
   width: 100%;
   transform: translateY(-100%);
-  background-color: var(--color-bg);
   position: relative;
   z-index: 1;
+  background-color: var(--color-bg);
+}
+
+body[data-template="projects"] the-header {
+  background-color: transparent;
 }
 
 the-header[show="true"],

@@ -60,7 +60,7 @@ over-flow[data-animate].animate,
 
 @media (max-width: 767px) {
   .overflow-wrapper {
-    max-height: calc((18px * 1.55) * var(--max-lines, 10));
+    max-height: calc((16px * 1.55) * var(--max-lines, 10));
   }
 
   .overflow-content {

@@ -33,13 +33,7 @@ class TheGallery extends HTMLElement {
 
   set wrapper(node) {
     let closer = document.createElement("gallery-closer");
-    let label = SNIPPETS.heading(
-      "Luk",
-      "span",
-      ["gallery-closer-label", "fs-medium"],
-      [],
-      false
-    );
+    let label = SNIPPETS.heading("Luk", "span", ["gallery-closer-label", "fs-medium"], [], false);
     closer.classList.add("gallery-closer", "h-bounce-text", "h-scale-icon");
     closer.append(label, SNIPPETS.icon("circle-close"));
 
@@ -126,11 +120,7 @@ class TheGallery extends HTMLElement {
         let title = entry.target.querySelector(".gallery-image-title");
 
         this.index = itemIndex;
-        if (
-          title &&
-          title.hasAttribute("data-animate") &&
-          !title.classList.contains("active")
-        ) {
+        if (title && title.hasAttribute("data-animate") && !title.classList.contains("active")) {
           title.classList.add("active");
         }
       }
@@ -145,10 +135,7 @@ class TheGallery extends HTMLElement {
 
   async renderImage(obj) {
     return new Promise((resolve) => {
-      let img = SNIPPETS.img(
-        obj,
-        "(max-width: 767px) calc(100vw - 24px), calc(100vw - 2.314rem)"
-      );
+      let img = SNIPPETS.img(obj, "(max-width: 767px) calc(100vw - 24px), calc(100vw - 2.314rem)");
 
       let wrapper = document.createElement("div");
       wrapper.classList.add("gallery-item");
@@ -157,10 +144,7 @@ class TheGallery extends HTMLElement {
       imgWrapper.classList.add("gallery-image-wrapper");
 
       if (obj.alt.length > 0) {
-        let title = SNIPPETS.heading(obj.alt, "p", [
-          "h2",
-          "gallery-image-title",
-        ]);
+        let title = SNIPPETS.heading(obj.alt, "p", ["h2", "gallery-image-title", "fs-large"]);
         wrapper.appendChild(title);
       }
 
