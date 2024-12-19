@@ -5,8 +5,10 @@
 
 .project-gallery {
   position: relative;
-  border-radius: var(--scale-20);
-  overflow: hidden;
+}
+
+.project-gallery.t-curtain::before {
+  z-index: 99;
 }
 
 .project-gallery-item,
@@ -25,44 +27,13 @@
 }
 
 .project-gallery-item.previous-stage {
-  z-index: 1;
-}
-
-[allow-animation] .project-gallery-item.previous-stage {
-  animation: pgiPrevious 300ms var(--cb-slow-start);
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 500ms var(--cb-slow-start);
 }
 
 .project-gallery-item.active-stage {
-  transform: translateX(0);
-  z-index: 2;
-}
-
-[allow-animation] .project-gallery-item.active-stage {
-  animation: pgiActive 300ms var(--cb-slow-start);
-}
-
-@keyframes pgiPrevious {
-  from {
-    transform: translateX(0%);
-    z-index: 1;
-  }
-
-  to {
-    transform: translateX(-25%);
-    z-index: 1;
-  }
-}
-
-@keyframes pgiActive {
-  from {
-    transform: translateX(101%);
-    z-index: 2;
-  }
-
-  to {
-    transform: translateX(0%);
-    z-index: 2;
-  }
+  z-index: 1;
 }
 
 .project-content {
@@ -76,6 +47,12 @@
   align-self: self-end;
 }
 
+[show="true"] .project-meta .text-overflow-content,
+[transition="true"] .project-meta .text-overflow-content {
+  transition: transform 500ms var(--ani-delay, 0ms) var(--cb-over-shot);
+  transform: translateY(0%);
+}
+
 .project-year-wrapper {
   display: flex;
   gap: var(--scale-4);
@@ -87,19 +64,8 @@
 .project-star {
   width: 0.637rem;
   height: auto;
-  transform: scale(0) translateY(-5%);
-  transition: transform 300ms ease-in-out, opacity 300ms ease-in-out;
+  transform: scale(0);
   opacity: 0;
-
-  /* PLSFIX */
-  transform: scale(1) translateY(-5%);
-  opacity: 1;
-}
-
-.projects-item-star.animate {
-  transition: transform 300ms ease-in-out, opacity 300ms ease-in-out;
-  transform: scale(1) translateY(-5%);
-  opacity: 1;
 }
 
 .project-year {
@@ -116,6 +82,17 @@
   height: auto;
   padding-bottom: 0.55rem;
   margin-left: var(--scale-8);
+  opacity: 0;
+  transform: scale(0);
+}
+
+[show="true"] .project-star,
+[show="true"] .project-title-icon,
+[transition="true"] .project-star,
+[transition="true"] .project-title-icon {
+  transition: transform 500ms var(--cb-slow-start), opacity 500ms var(--cb-slow-start);
+  transform: scale(1);
+  opacity: 1;
 }
 
 .project-title-icon > svg {
@@ -140,23 +117,6 @@
   height: 100%;
   pointer-events: none;
   opacity: 0;
-}
-
-.project-main-item-content {
-  position: relative;
-  overflow: hidden;
-}
-
-.project-main-item-content::before {
-  content: "";
-  display: block;
-  position: absolute;
-  top: -1%;
-  left: -1%;
-  width: 102%;
-  height: 102%;
-  background-color: var(--color-bg, var(--color-white));
-  z-index: 1;
 }
 
 .project-main-item.active-stage {

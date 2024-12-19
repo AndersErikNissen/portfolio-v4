@@ -33,6 +33,16 @@
   }
 }
 
+::-moz-selection {
+  color: var(--color-white);
+  background: var(--color-black);
+}
+
+::selection {
+  color: var(--color-white);
+  background: var(--color-black);
+}
+
 html {
   font-size: 1vw;
 }
@@ -155,6 +165,7 @@ the-app {
   justify-content: center;
   align-items: center;
   padding: 16px;
+  opacity: 0;
 }
 
 @media (max-width: 767px) {
@@ -260,4 +271,47 @@ the-app {
   pointer-events: 0;
   transform: scale(2);
   filter: blur(1rem);
+}
+
+/* TRANSITION */
+
+the-app[transition="true"][show="false"] > * {
+  transition: opacity 500ms var(--cb-slow-start);
+}
+
+the-app[transition="false"][show="false"] > *,
+the-app[transition="true"][show="false"] > * {
+  opacity: 0;
+}
+
+[show="false"][transition="true"] .controller {
+  opacity: 1;
+}
+
+[show="true"] .controller {
+  opacity: 1;
+  transition: opacity 500ms var(--cb-slow-start);
+}
+
+.t-curtain {
+  position: relative;
+  overflow: hidden;
+}
+
+.t-curtain::before {
+  content: "";
+  position: absolute;
+  display: block;
+  background-color: var(--color-bg);
+  width: 102%;
+  height: 102%;
+  top: -1%;
+  left: -1%;
+  z-index: 1;
+}
+
+[show="true"] .t-curtain::before,
+[show="false"][transition="true"] .t-curtain::before {
+  transform: translateY(101%);
+  transition: transform 500ms var(--cb-slow-start);
 }

@@ -11,17 +11,10 @@ console.log(
 );
 
 APP_TEMPLATES.project = (data) => {
-  console.warn("Project(data)", data);
-
   let stageCounter = 0;
 
   let galleryMarkup = "";
   let mainMarkup = "";
-  let projectColor = "";
-
-  if (data.color && data.color.length > 0) {
-    projectColor = `style="--color-project:${data.color};"`;
-  }
 
   const createGalleryItem = (obj) => {
     let img = SNIPPETS.img(obj, "(max-width: 767px) calc(100vw - 24px), 50vw");
@@ -39,7 +32,7 @@ APP_TEMPLATES.project = (data) => {
     star.setAttribute("data-animate", "");
     star.classList.add("project-star");
 
-    let year = SNIPPETS.heading(data.year, "p", ["fs-medium", "anton-sc-regular", "project-year"], [], false);
+    let year = SNIPPETS.heading(data.year, "p", ["fs-medium", "anton-sc-regular", "project-year"]);
     wrapper.append(star, year);
     return wrapper;
   };
@@ -52,12 +45,11 @@ APP_TEMPLATES.project = (data) => {
         a.href = data[value];
         a.setAttribute("target", "_blank");
         a.appendChild(SNIPPETS.icon(value));
-        console.log(SNIPPETS.icon(value));
         return a;
       }
     });
 
-    return SNIPPETS.heading(data.title, "h1", ["project-title", "h1"], titleElements, false);
+    return SNIPPETS.heading(data.title, "h1", ["project-title", "h1"], titleElements);
   };
 
   const mainMeta = () => {
@@ -71,7 +63,7 @@ APP_TEMPLATES.project = (data) => {
     wrapper.appendChild(createTitle());
 
     if (data.subtitle && data.subtitle.length > 0) {
-      wrapper.appendChild(SNIPPETS.heading(data.subtitle, "p", ["fs-medium", "fw-200", "project-subtitle"], [], false));
+      wrapper.appendChild(SNIPPETS.heading(data.subtitle, "p", ["fs-medium", "fw-200", "project-subtitle"]));
     }
 
     return wrapper;
@@ -89,6 +81,7 @@ APP_TEMPLATES.project = (data) => {
 
     if (stage.content) {
       let content = document.createElement("over-flow");
+      content.setAttribute("data-animate", "");
       content.classList.add("project-main-item-content");
       content.innerHTML = stage.content;
       wrapper.appendChild(content);
@@ -147,28 +140,35 @@ APP_TEMPLATES.project = (data) => {
     return opener;
   };
 
+  let stageManager = document.createElement("stage-manager");
+  stageManager.classList.add("template-project", "template");
+
+  if (data.color && data.color.length > 0) {
+    stageManager.style.setProperty("--color-project", data.color);
+  }
+
+  stageManager.innerHTML = `
+    <div class="project-sxs container">
+      <div class="project-gallery t-curtain">
+        ${galleryMarkup}
+        ${galleryOpener().outerHTML}
+      </div>
+
+      ${controller().outerHTML}
+
+      <div class="project-content">
+        ${mainMeta().outerHTML}
+
+        <div class="project-main">
+          ${mainMarkup}
+        </div>
+      </div>
+    </div>
+  `;
+
   return {
     scripts: ["components/overflow", "components/gallery"],
     styles: ["project", "component-overflow", "component-gallery"],
-    markup: `
-      <stage-manager class="template-project template" ${projectColor}>
-        <div class="project-sxs container">
-          <div class="project-gallery">
-            ${galleryMarkup}
-            ${galleryOpener().outerHTML}
-          </div>
-
-          ${controller().outerHTML}
-
-          <div class="project-content">
-            ${mainMeta().outerHTML}
-
-            <div class="project-main">
-              ${mainMarkup}
-            </div>
-          </div>
-        </div>
-      </stage-manager>
-    `,
+    html: stageManager,
   };
 };

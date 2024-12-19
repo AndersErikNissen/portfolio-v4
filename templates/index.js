@@ -55,43 +55,46 @@ APP_TEMPLATES.index = () => {
     return markup;
   };
 
+  let section = document.createElement("section");
+  section.classList.add("template-index", "container");
+
+  section.innerHTML = `
+    <div class="index-inner">
+      <svg id="Index-icon" xmlns="http://www.w3.org/2000/svg" width="1142" height="337" viewBox="0 0 1142 337" fill="none">
+        <mask
+          id="mask0_1408_642"
+          style="mask-type:alpha"
+          maskUnits="userSpaceOnUse"
+          x="0"
+          y="226"
+          width="1142"
+          height="111"
+        >
+          <rect y="226" width="1142" height="111" fill="#D9D9D9" />
+        </mask>
+        <mask id="mask1_1408_642" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="1142" height="204">
+          <rect width="1142" height="204" fill="#D9D9D9" />
+        </mask>
+        <g mask="url(#mask1_1408_642)">${buildPaths(TOP_PATHS)}</g>
+        <g mask="url(#mask0_1408_642)">${buildPaths(BOTTOM_PATHS)}</g>
+      </svg>
+      <div class="index-content">
+        <over-flow>
+          <p>
+            Mit navn Anders Erik Nissen, jeg er en front-end udvikler med 2
+            års erfaring inden for e-commerce. Målet med denne portfolio er
+            at give indblik i hvem jeg er, samt vise mine programmerings og
+            kreative egenskaber.
+          </p>
+        </over-flow>
+      </div>
+    </div>
+    ${SNIPPETS.link_footer("index-link-footer").outerHTML}
+  `;
+
   return {
     scripts: ["components/overflow"],
     styles: ["index", "component-overflow"],
-    markup: `
-      <section class="template-index container">
-        <div class="index-inner">
-          <svg id="Index-icon" xmlns="http://www.w3.org/2000/svg" width="1142" height="337" viewBox="0 0 1142 337" fill="none">
-            <mask
-              id="mask0_1408_642"
-              style="mask-type:alpha"
-              maskUnits="userSpaceOnUse"
-              x="0"
-              y="226"
-              width="1142"
-              height="111"
-            >
-              <rect y="226" width="1142" height="111" fill="#D9D9D9" />
-            </mask>
-            <mask id="mask1_1408_642" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="1142" height="204">
-              <rect width="1142" height="204" fill="#D9D9D9" />
-            </mask>
-            <g mask="url(#mask1_1408_642)">${buildPaths(TOP_PATHS)}</g>
-            <g mask="url(#mask0_1408_642)">${buildPaths(BOTTOM_PATHS)}</g>
-          </svg>
-          <div class="index-content">
-            <over-flow>
-              <p>
-                Mit navn Anders Erik Nissen, jeg er en front-end udvikler med 2
-                års erfaring inden for e-commerce. Målet med denne portfolio er
-                at give indblik i hvem jeg er, samt vise mine programmerings og
-                kreative egenskaber.
-              </p>
-            </over-flow>
-          </div>
-        </div>
-        ${SNIPPETS.link_footer("index-link-footer").outerHTML}
-      </section>
-    `,
+    html: section,
   };
 };

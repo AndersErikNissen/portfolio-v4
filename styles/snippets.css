@@ -16,8 +16,12 @@
   transform: translateY(105%);
 }
 
-.animate .text-overflow-content,
-.active .text-overflow-content {
-  transition: transform 300ms var(--ani-delay, 0ms) var(--cb-over-shot);
+the-app[show="true"] .animate .text-overflow-content,
+the-app[show="true"] .active .text-overflow-content,
+the-app[transition="true"] .animate .text-overflow-content,
+the-app[transition="true"] .active .text-overflow-content,
+the-menu .animate .text-overflow-content,
+the-menu .active .text-overflow-content {
+  transition: transform 500ms var(--ani-delay, 0ms) var(--cb-over-shot);
   transform: translateY(0%);
 }

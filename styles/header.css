@@ -53,6 +53,7 @@ the-header[show="true"] {
 }
 
 .header-middle > svg {
+  cursor: pointer;
   width: 5.787rem;
   height: auto;
 }

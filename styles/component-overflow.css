@@ -11,7 +11,7 @@ over-flow[data-animate] {
 
 over-flow[data-animate].animate,
 .active over-flow[data-animate] {
-  transition: opacity 300ms ease-in-out, transform 300ms ease-in-out;
+  transition: opacity 500ms var(--cb-slow-start), transform 500ms var(--cb-slow-start);
   opacity: 1;
   transform: translateY(0%);
 }

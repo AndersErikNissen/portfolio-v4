@@ -37,6 +37,8 @@ class LoadingScreen extends HTMLElement {
 
   progressInterval() {
     return new Promise((resolve) => {
+      // PLS FIX
+      return resolve();
       let interval;
 
       this.progress = 1;

@@ -55,6 +55,7 @@ the-menu {
 .menu-header-logo svg {
   width: 5.787rem;
   height: auto;
+  cursor: pointer;
 }
 
 @media (max-width: 767px) {
@@ -201,6 +202,15 @@ body:not([data-menu="true"]) .menu-main {
 .animate.menu-image-link svg {
   transform: scale(1);
   transition: transform 300ms ease-in-out;
+}
+
+[data-menu="false"] .menu-footer {
+  transform: translateY(calc(100% + var(--space-edge)));
+}
+
+[data-menu="true"] .menu-footer {
+  transform: translateY(0);
+  transition: transform 500ms var(--cb-slow-start);
 }
 
 .menu-footer .link-footer {

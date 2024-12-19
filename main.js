@@ -292,21 +292,12 @@ class ALink extends HTMLElement {
     this._app = document.querySelector(ele);
   }
 
-  get menu() {
-    return this._menu;
-  }
-
-  set menu(ele) {
-    this._menu = document.querySelector(ele);
-  }
-
   get path() {
     return new URL(this.getAttribute("the-path") || "/", location.href).pathname;
   }
 
   event() {
     this.app.transitionToTemplate(this.path);
-    this.menu.active = false;
   }
 
   connectedCallback() {
@@ -331,7 +322,7 @@ class StageManager extends UserInteraction {
   }
 
   get previousStage() {
-    return this._previousStage || 0;
+    return this._previousStage;
   }
 
   get previousStageClass() {
@@ -344,10 +335,6 @@ class StageManager extends UserInteraction {
 
   set stage(i) {
     if (i === this.stage) return;
-
-    if (!this.hasAttribute("allow-animation")) {
-      this.setAttribute("allow-animation", "");
-    }
 
     let index = i;
 
@@ -471,7 +458,7 @@ class StageManager extends UserInteraction {
     this.stage = parseInt(newIndex);
   }
 
-  init() {
+  async init() {
     this.timing = 1000;
     this.listening = true;
     this.stages = this.nodes;
@@ -490,8 +477,9 @@ class StageManager extends UserInteraction {
     this.bindEvents();
   }
 
-  connectedCallback() {
-    this.init();
+  async callInit() {
+    // Is being extended, in other types of <stage-manager>.
+    await this.init();
   }
 }
 
@@ -818,7 +806,7 @@ class TheHeader extends HTMLElement {
   }
 
   createMiddle() {
-    let wrapper = document.createElement("div");
+    let wrapper = document.createElement("a-link");
     wrapper.classList.add("header-middle");
     wrapper.appendChild(SNIPPETS.icon("logo"));
     return wrapper;
@@ -881,10 +869,13 @@ class TheApp extends HTMLElement {
     this._menu = ele;
   }
 
-  set location(data) {
-    if (location.pathname !== data.path) {
-      history.replaceState({}, "", data.path);
-      document.title = data.title + " - AENDERS.DK";
+  get path() {
+    return this._path;
+  }
+
+  set path(path) {
+    if (this._path !== path) {
+      this._path = path;
     }
   }
 
@@ -895,6 +886,10 @@ class TheApp extends HTMLElement {
   set show(v) {
     this.setAttribute("show", JSON.stringify(v));
     this.header.setAttribute("show", JSON.stringify(v));
+
+    if (v) {
+      this.querySelectorAll(".active-stage [data-animate]").forEach((node) => node.classList.add("animate"));
+    }
   }
 
   get transition() {
@@ -954,24 +949,57 @@ class TheApp extends HTMLElement {
 
     document.body.setAttribute("data-template", NAME);
     this.setAttribute("template", NAME);
-    // this.location = DATA; PLS FIX
 
-    this.innerHTML = TEMPLATE.markup;
+    this.path = path;
+    this.replaceChildren(TEMPLATE.html);
 
-    Promise.all([...STYLES, ...SCRIPTS]);
+    let promises = [...STYLES, ...SCRIPTS];
+
+    let stageManager;
+
+    if (TEMPLATE.html.nodeName === "STAGE-MANAGER") {
+      stageManager = TEMPLATE.html;
+      promises.push(stageManager.callInit());
+    }
+
+    Promise.all(promises);
+    // PLS FIX
+    // history.replaceState({}, "", DATA.path);
+    // document.title = DATA.title + " - AENDERS.DK";
+
+    return stageManager;
   }
 
   async transitionToTemplate(path) {
+    if (path === this.path) {
+      if (this.menu.active) this.menu.active = false;
+      return;
+    }
+
     this.show = false;
-    this.transition = true;
 
-    setTimeout(() => {
-      this.transition = false;
-    }, 510);
+    const preRender = () => {
+      if (!this.menu.active) this.transition = true;
+      if (this.menu.active) this.menu.active = false;
 
-    await this.renderTemplate(path);
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          if (!this.menu.active) this.transition = false;
+          return resolve();
+        }, 510);
+      });
+    };
 
-    this.show = true;
+    preRender()
+      .then(async () => {
+        return await this.renderTemplate(path);
+      })
+      .then((stageManager) => {
+        window.requestAnimationFrame(() => {
+          this.show = true;
+          if (stageManager) stageManager.animateNodes(stageManager.animationStages[stageManager.stage]);
+        });
+      });
   }
 
   async init() {

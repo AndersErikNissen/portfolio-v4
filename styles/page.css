@@ -1,5 +1,6 @@
 .template-page {
   position: relative;
+  overflow: hidden;
 }
 
 .page-sxs {
@@ -66,6 +67,15 @@
 
 .page-title {
   flex: 0 0 auto;
+}
+
+.page-footer {
+  transform: translateY(calc(100% + var(--space-edge)));
+}
+
+[show="true"] .page-footer {
+  transition: transform 500ms var(--cb-slow-start);
+  transform: translateY(0);
 }
 
 @media (max-width: 767px) {

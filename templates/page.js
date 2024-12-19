@@ -80,26 +80,29 @@ APP_TEMPLATES.page = (data) => {
     });
   }
 
+  let stageManager = document.createElement("stage-manager");
+  stageManager.classList.add("template-page", "template");
+
+  stageManager.innerHTML = `
+    <div class="page-sxs container">
+      <div class="page-main page-sxs-item">
+        <div class="page-main-stages">
+          ${contentMarkup}
+        </div>
+        ${SNIPPETS.link_footer("page-footer").outerHTML}
+      </div>
+      
+      ${controlMarkup}
+
+      <div class="page-gallery t-curtain page-sxs-item">
+        ${galleryMarkup}
+      </div>
+    </div>
+  `;
+
   return {
     scripts: ["components/overflow"],
     styles: ["page", "component-overflow"],
-    markup: `
-      <stage-manager class="template-page container">
-        <div class="page-sxs container">
-          <div class="page-main page-sxs-item">
-            <div class="page-main-stages">
-              ${contentMarkup}
-            </div>
-            ${SNIPPETS.link_footer("page-footer").outerHTML}
-          </div>
-          
-          ${controlMarkup}
-
-          <div class="page-gallery page-sxs-item">
-            ${galleryMarkup}
-          </div>
-        </div>
-      </stage-manager>
-    `,
+    html: stageManager,
   };
 };
