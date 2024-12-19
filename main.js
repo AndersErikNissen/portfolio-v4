@@ -22,12 +22,6 @@ class DataBase {
       name: "visuals",
       items: [],
     },
-    {
-      title: "404",
-      name: "404",
-      template: "404",
-      default_template: true,
-    },
   ];
 
   trimObject(obj) {
