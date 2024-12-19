@@ -8,6 +8,7 @@ class DataBase {
       title: "Forside",
       path: "/",
       name: "index",
+      default_template: true,
     },
     {
       name: "projects",
@@ -458,7 +459,7 @@ class StageManager extends UserInteraction {
     this.stage = parseInt(newIndex);
   }
 
-  async init() {
+  async core() {
     this.timing = 1000;
     this.listening = true;
     this.stages = this.nodes;
@@ -477,13 +478,91 @@ class StageManager extends UserInteraction {
     this.bindEvents();
   }
 
-  async callInit() {
+  async init() {
     // Is being extended, in other types of <stage-manager>.
-    await this.init();
+    await this.core();
   }
 }
 
 customElements.define("stage-manager", StageManager);
+
+class StageDelayed extends StageManager {
+  get animationDelay() {
+    return this._animationDelay || 0;
+  }
+
+  set animationDelay(ms) {
+    this._animationDelay = ms;
+  }
+
+  animateNodes(nodes) {
+    setTimeout(() => {
+      nodes.forEach((node) => {
+        if (!node.classList.contains(this._animationClass)) {
+          node.classList.add(this._animationClass);
+        }
+      });
+    }, this.animationDelay);
+  }
+
+  connectedCallback() {
+    this.core();
+    this.cooldown = 1000;
+    this.animationDelay = 400;
+  }
+}
+
+customElements.define("stage-delayed", StageDelayed);
+
+class StageMenu extends StageDelayed {
+  bindEvents() {
+    // Clear to stop event triggers
+  }
+
+  get timeout() {
+    return this._timeout;
+  }
+
+  set timeout(id) {
+    this._timeout = id;
+  }
+
+  get randomNumber() {
+    return Math.floor(Math.random() * (this.stages.length - 1));
+  }
+
+  randomStage(bool) {
+    let nr = this.randomNumber;
+
+    while (this.stage === nr) {
+      nr = this.randomNumber;
+    }
+
+    return setTimeout(() => {
+      this.stage = nr;
+      this.timeout = this.randomStage(true);
+    }, 10000);
+  }
+
+  randomize(v) {
+    if (!v) {
+      clearTimeout(this.timeout);
+      this.inanimateNodes(this.animationStages[this.stage]);
+      return;
+    }
+
+    this.animateNodes(this.animationStages[this.stage]);
+    this.timeout = this.randomStage();
+  }
+
+  connectedCallback() {
+    this.core();
+    this.cooldown = 1000;
+    this.animationDelay = 510;
+  }
+}
+
+customElements.define("stage-menu", StageMenu);
 
 class StageControl extends HTMLElement {
   constructor() {
@@ -534,84 +613,6 @@ class StageControl extends HTMLElement {
 }
 
 customElements.define("stage-control", StageControl);
-
-class StageDelayed extends StageManager {
-  get animationDelay() {
-    return this._animationDelay || 0;
-  }
-
-  set animationDelay(ms) {
-    this._animationDelay = ms;
-  }
-
-  animateNodes(nodes) {
-    setTimeout(() => {
-      nodes.forEach((node) => {
-        if (!node.classList.contains(this._animationClass)) {
-          node.classList.add(this._animationClass);
-        }
-      });
-    }, this.animationDelay);
-  }
-
-  connectedCallback() {
-    this.init();
-    this.cooldown = 1000;
-    this.animationDelay = 400;
-  }
-}
-
-customElements.define("stage-delayed", StageDelayed);
-
-class StageMenu extends StageDelayed {
-  bindEvents() {
-    // Clear to stop event triggers
-  }
-
-  get timeout() {
-    return this._timeout;
-  }
-
-  set timeout(id) {
-    this._timeout = id;
-  }
-
-  get randomNumber() {
-    return Math.floor(Math.random() * (this.stages.length - 1));
-  }
-
-  randomStage(bool) {
-    let nr = this.randomNumber;
-
-    while (this.stage === nr) {
-      nr = this.randomNumber;
-    }
-
-    return setTimeout(() => {
-      this.stage = nr;
-      this.timeout = this.randomStage(true);
-    }, 10000);
-  }
-
-  randomize(v) {
-    if (!v) {
-      clearTimeout(this.timeout);
-      this.inanimateNodes(this.animationStages[this.stage]);
-      return;
-    }
-
-    this.animateNodes(this.animationStages[this.stage]);
-    this.timeout = this.randomStage();
-  }
-
-  connectedCallback() {
-    this.init();
-    this.cooldown = 1000;
-    this.animationDelay = 510;
-  }
-}
-
-customElements.define("stage-menu", StageMenu);
 
 class TheMenu extends HTMLElement {
   constructor() {
@@ -953,21 +954,22 @@ class TheApp extends HTMLElement {
     this.path = path;
     this.replaceChildren(TEMPLATE.html);
 
-    let promises = [...STYLES, ...SCRIPTS];
-
-    let stageManager;
-
-    if (TEMPLATE.html.nodeName === "STAGE-MANAGER") {
-      stageManager = TEMPLATE.html;
-      promises.push(stageManager.callInit());
-    }
-
-    Promise.all(promises);
     // PLS FIX
     // history.replaceState({}, "", DATA.path);
     // document.title = DATA.title + " - AENDERS.DK";
 
-    return stageManager;
+    return Promise.all([...STYLES, ...SCRIPTS]).then(async () => {
+      // Uses .then() to make sure the CSS/JS has been loaded beforehand.
+
+      if (TEMPLATE.html.nodeName === "STAGE-MANAGER" || TEMPLATE.html.nodeName === "A-CAROUSEL") {
+        let customElement = TEMPLATE.html;
+        await customElement.init();
+
+        return customElement;
+      }
+
+      return false;
+    });
   }
 
   async transitionToTemplate(path) {
@@ -994,10 +996,20 @@ class TheApp extends HTMLElement {
       .then(async () => {
         return await this.renderTemplate(path);
       })
-      .then((stageManager) => {
+      .then((customElement) => {
         window.requestAnimationFrame(() => {
           this.show = true;
-          if (stageManager) stageManager.animateNodes(stageManager.animationStages[stageManager.stage]);
+
+          switch (customElement.nodeName) {
+            case "STAGE-MANAGER":
+              customElement.animateNodes(customElement.animationStages[customElement.stage]);
+              break;
+            case "A-CAROUSEL":
+              setTimeout(() => {
+                customElement.activateOnRender();
+              }, 510);
+              break;
+          }
         });
       });
   }
@@ -1017,16 +1029,3 @@ class TheApp extends HTMLElement {
 }
 
 customElements.define("the-app", TheApp);
-
-/**
- *
- * <a-link> = luk menu
- * - gem indholdet med det samme
- * - vent på at menuen er lukket, og først der vis indholdet (når det er klart)
- *
- * Lav  CSS til [transition]
- *
- * <the-menu> fjern fokus/active fra det link som man klikker på, så den også gemmes
- * - skal måske have en baggrunds farve eller andet for at skille sig en smule ud?
- *
- */

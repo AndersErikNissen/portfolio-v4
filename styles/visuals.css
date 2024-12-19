@@ -1,3 +1,11 @@
+a-carousel {
+  display: block;
+}
+
+.visuals-carousel.t-curtain::before {
+  z-index: 10;
+}
+
 .visuals-carousel {
   display: flex;
   overflow: hidden;
@@ -71,13 +79,14 @@
 }
 
 .visuals-controls {
-  position: absolute;
+  position: fixed;
   right: calc(var(--space-edge) * 2);
   bottom: calc(var(--space-edge) * 2);
   width: calc(50% - (var(--space-edge) * 3.5));
   display: flex;
   justify-content: space-between;
   z-index: 2;
+  opacity: 0;
 }
 
 .visuals-controls > carousel-control {
@@ -94,6 +103,12 @@
 .visuals-controls svg {
   width: 40%;
   height: 40%;
+}
+
+[show="true"][listening="true"] .visuals-controls,
+[listening="true"] .visuals-controls {
+  opacity: 1;
+  transition: opacity 500ms var(--cb-slow-start);
 }
 
 @media (max-width: 767px) {
@@ -115,10 +130,14 @@
 
   .visuals-controls {
     bottom: unset;
-    top: calc((100% - (var(--space-edge) * 2)) * 0.6);
+    top: calc(60% - var(--space-edge));
     left: calc(var(--space-edge) * 2);
     width: auto;
-    transform: translateY(-100%);
+    transform: translateY(-50%);
+  }
+
+  .visuals-item-image-wrapper > img {
+    border-radius: 20px;
   }
 
   .visuals-controls > carousel-control {

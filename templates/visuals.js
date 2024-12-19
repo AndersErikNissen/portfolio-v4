@@ -32,10 +32,7 @@ APP_TEMPLATES.visuals = (data) => {
       let heading = SNIPPETS.heading(...headingParameters);
 
       itemsMarkup += `
-        <div 
-          class="visuals-item carousel-item ${index === 0 ? "active" : ""}"
-          data-stage="${index}"
-        >
+        <div class="visuals-item carousel-item" data-stage="${index}">
           <div class="visuals-item-image-wrapper">
             ${SNIPPETS.img(item.gallery[0], "(max-width: 767px) calc(100vw - 24px), 50vw").outerHTML}
           </div>
@@ -50,14 +47,11 @@ APP_TEMPLATES.visuals = (data) => {
     });
   }
 
-  let wrapper = document.createElement("section");
-  wrapper.classList.add("template-visuals", "template");
+  let carousel = document.createElement("a-carousel");
+  carousel.classList.add("template-visuals", "visuals-carousel", "template", "t-curtain");
 
-  wrapper.innerHTML = `
-    <a-carousel class="visuals-carousel container">
-      ${itemsMarkup}
-    </a-carousel>
-
+  carousel.innerHTML = `
+    ${itemsMarkup}
     <div class="visuals-controls">
       <carousel-control mode="prev" class="h-scale-icon">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
@@ -74,7 +68,7 @@ APP_TEMPLATES.visuals = (data) => {
 
   return {
     scripts: ["components/overflow", "components/carousel", "components/gallery"],
-    styles: ["visuals", "component-overflow", "component-carousel", "component-gallery"],
-    html: wrapper,
+    styles: ["visuals", "component-overflow", "component-gallery"],
+    html: carousel,
   };
 };

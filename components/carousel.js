@@ -12,10 +12,7 @@ class ACarousel extends UserInteraction {
   }
 
   get gap() {
-    const GAP = window
-      .getComputedStyle(this)
-      .getPropertyValue("gap")
-      .replace("px", "");
+    const GAP = window.getComputedStyle(this).getPropertyValue("gap").replace("px", "");
     return parseFloat(GAP);
   }
 
@@ -30,8 +27,7 @@ class ACarousel extends UserInteraction {
   }
 
   set maxElementTransform(elementsInView) {
-    let slideWidth =
-      (this.getBoundingClientRect().width - this.gap) / elementsInView;
+    let slideWidth = (this.getBoundingClientRect().width - this.gap) / elementsInView;
 
     if (elementsInView === 1) {
       slideWidth += this.gap;
@@ -45,7 +41,7 @@ class ACarousel extends UserInteraction {
   }
 
   get elements() {
-    return this._elements || this.children;
+    return this._elements;
   }
 
   set elements(elements) {
@@ -70,15 +66,6 @@ class ACarousel extends UserInteraction {
     if (index < 0) index = this.lastIndex;
 
     this._index = index;
-  }
-
-  core() {
-    this.timing = 1000;
-    this.listening = true;
-    this.elements = this.elements;
-    this.lastIndex = this.elements.length - 1;
-    this.maxElementTransform = this.elementsInView;
-    this.limitIndex = this.elements.length - this.elementsInView;
   }
 
   prev() {
@@ -142,16 +129,11 @@ class ACarousel extends UserInteraction {
     }
 
     // later to limit = set all to -length (- in view)
-    let fromFirstToLimit =
-        this.prevIndex === 0 && this.index === this.limitIndex,
-      fromLaterToLimit =
-        this.prevIndex > this.index && this.index === this.limitIndex;
+    let fromFirstToLimit = this.prevIndex === 0 && this.index === this.limitIndex,
+      fromLaterToLimit = this.prevIndex > this.index && this.index === this.limitIndex;
 
     if (fromFirstToLimit || fromLaterToLimit) {
-      transformX =
-        (this.elements.length - this.elementsInView) *
-        this.maxElementTransform *
-        -1;
+      transformX = (this.elements.length - this.elementsInView) * this.maxElementTransform * -1;
     }
 
     if (transformX !== undefined) {
@@ -188,8 +170,17 @@ class ACarousel extends UserInteraction {
     }
   }
 
-  connectedCallback() {
-    this.core();
+  activateOnRender() {
+    this.elements[this.index].element.classList.add("active");
+  }
+
+  async init() {
+    this.timing = 1000;
+    this.listening = true;
+    this.elements = this.querySelectorAll(".carousel-item");
+    this.lastIndex = this.elements.length - 1;
+    this.maxElementTransform = this.elementsInView;
+    this.limitIndex = this.elements.length - this.elementsInView;
 
     this.bindEvents();
   }
@@ -220,13 +211,14 @@ class CarouselControl extends HTMLElement {
 
   callback() {
     this.carousel[this.mode]();
+    this.carousel.listening = false;
+    setTimeout(() => {
+      this.carousel.listening = true;
+    }, this.carousel.cooldown);
   }
 
   connectedCallback() {
-    this.carousel =
-      this.getAttribute("carousel") ||
-      this.closest("a-carousel") ||
-      document.querySelector("a-carousel");
+    this.carousel = this.getAttribute("carousel") || this.closest("a-carousel") || document.querySelector("a-carousel");
     this.mode = this.getAttribute("mode");
     this.addEventListener("click", this.callback.bind(this));
   }
