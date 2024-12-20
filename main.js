@@ -557,7 +557,7 @@ class StageMenu extends StageDelayed {
     return setTimeout(() => {
       this.stage = nr;
       this.timeout = this.randomStage(true);
-    }, 10000);
+    }, 5000);
   }
 
   randomize(v) {
