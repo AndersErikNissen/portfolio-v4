@@ -16,6 +16,11 @@ the-app[template="projects"] {
   z-index: 10;
 }
 
+.projects-item-title {
+  display: block;
+  cursor: pointer;
+}
+
 .projects-item {
   position: absolute;
   top: 0;

@@ -29,9 +29,10 @@ APP_TEMPLATES.projects = (data) => {
     data.items.forEach((item, index) => {
       let year = "",
         subtitle = "",
-        title = document.createElement("a");
+        title = document.createElement("a-link");
 
       title.href = item.href;
+      title.setAttribute("the-path", item.path);
       title.appendChild(SNIPPETS.heading(item.title, "h3", ["projects-item-title", "h1"]));
 
       let img = SNIPPETS.img(item.image, "100vw");
