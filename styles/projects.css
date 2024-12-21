@@ -1,3 +1,8 @@
+body[data-template="projects"] {
+  --color-btn-1: var(--color-white);
+  --color-btn-2: var(--color-black);
+}
+
 the-app[template="projects"] {
   padding: 0;
 }

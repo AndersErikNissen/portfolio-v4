@@ -847,7 +847,7 @@ class TheHeader extends HTMLElement {
     );
 
     let emailBtn = document.createElement("copy-clipboard");
-    emailBtn.classList.add("header-btn", "h-scale-icon");
+    emailBtn.classList.add("header-btn", "h-scale-icon", "header-btn--email");
     emailBtn.appendChild(SNIPPETS.icon("mail"));
 
     btns.append(phoneBtn, emailBtn);
@@ -902,7 +902,6 @@ class CopyToClipboard extends HTMLElement {
   async copy() {
     try {
       await navigator.clipboard.writeText(this.content);
-      console.log(this.toaster);
       this.toaster.update(this.type);
       console.log(this.content + " er kopieret!");
     } catch (e) {
@@ -1108,23 +1107,25 @@ class TheApp extends HTMLElement {
       .then(async () => {
         return await this.renderTemplate(path);
       })
-      .then((customElement) => {
-        window.requestAnimationFrame(() => {
-          this.show = true;
+      .then((customElement) => this.displayAfterRender(customElement));
+  }
 
-          switch (customElement.nodeName) {
-            case "STAGE-DELAYED":
-            case "STAGE-MANAGER":
-              customElement.animateNodes(customElement.animationStages[customElement.stage]);
-              break;
-            case "A-CAROUSEL":
-              setTimeout(() => {
-                customElement.activateOnRender();
-              }, 510);
-              break;
-          }
-        });
-      });
+  displayAfterRender(customElement) {
+    window.requestAnimationFrame(() => {
+      this.show = true;
+
+      switch (customElement.nodeName) {
+        case "STAGE-DELAYED":
+        case "STAGE-MANAGER":
+          customElement.animateNodes(customElement.animationStages[customElement.stage]);
+          break;
+        case "A-CAROUSEL":
+          setTimeout(() => {
+            customElement.activateOnRender();
+          }, 510);
+          break;
+      }
+    });
   }
 
   async init() {
@@ -1135,7 +1136,9 @@ class TheApp extends HTMLElement {
     this.menu.init(this.db);
     this.header = document.querySelector("the-header");
 
-    this.renderTemplate(location.pathname);
+    let template = await this.renderTemplate(location.pathname);
+
+    return template;
   }
 }
 

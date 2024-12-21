@@ -294,15 +294,17 @@ copy-toaster[displaying="true"] {
 /* ANIMATION */
 
 .h-scale-icon:hover svg {
-  animation: hScaleIcon 300ms ease-in-out forwards;
+  animation: hScaleIcon 500ms var(--cb-slow-start) forwards;
 }
 
 @keyframes hScaleIcon {
   from {
-    transform: scale(0);
+    -webkit-transform: translate(0px, 0px) scale(0);
+    transform: translate(0px, 0px) scale(0);
   }
   to {
-    transform: scale(1);
+    -webkit-transform: translate(0px, 0px) scale(1);
+    transform: translate(0px, 0px) scale(1);
   }
 }
 

@@ -68,13 +68,17 @@ the-header[show="true"] {
 
 .header-btn {
   height: var(--scale-40);
-  min-width: var(--scale-40);
-  background-color: var(--color-white);
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 99rem;
-  color: var(--color-black);
+  line-height: 1;
+  background-color: var(--color-btn-1, var(--color-black));
+  color: var(--color-btn-2, var(--color-white));
+}
+
+.header-btn--email {
+  width: var(--scale-40);
 }
 
 .header-btn > svg {
@@ -101,8 +105,8 @@ the-header[show="true"] {
   }
 
   .header-btn:hover {
-    color: var(--color-white);
-    background-color: var(--color-black);
+    background-color: var(--color-btn-2);
+    color: var(--color-btn-1);
   }
 
   #Menu-btn > svg {

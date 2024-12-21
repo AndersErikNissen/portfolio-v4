@@ -1,11 +1,17 @@
 /* .heading() */
-.text-overflow-word,
 .text-overflow {
   display: inline-block;
 }
 
+.text-overflow-word {
+  display: inline-flex;
+}
+
 .text-overflow {
   overflow: hidden;
+  /* Make room for when animation "over shoots" */
+  padding-top: 15%;
+  margin-top: -15%;
 }
 
 .text-overflow-content {

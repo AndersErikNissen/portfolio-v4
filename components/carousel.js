@@ -1,6 +1,4 @@
 class ACarousel extends UserInteraction {
-  _start;
-  timing = 1000;
   direction = 1;
 
   get start() {
@@ -176,6 +174,7 @@ class ACarousel extends UserInteraction {
 
   async init() {
     this.timing = 1000;
+    this.cooldown = this.timing + 500;
     this.listening = true;
     this.elements = this.querySelectorAll(".carousel-item");
     this.lastIndex = this.elements.length - 1;

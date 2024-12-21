@@ -72,7 +72,8 @@ class LoadingScreen extends HTMLElement {
 
     this.swapLabels();
 
-    Promise.all([this.app.init(), this.progressInterval()]).then((v) => {
+    Promise.all([this.app.init(), this.progressInterval()]).then((values) => {
+      this.app.displayAfterRender(values[0]);
       this.removeItself();
     });
   }

@@ -81,3 +81,8 @@ button {
   color: inherit;
   font: inherit;
 }
+
+svg {
+  /* Bug(Old Safari): SVG incorrect placement */
+  -webkit-transform: translate(0px,0px);
+}
