@@ -31,7 +31,6 @@ APP_TEMPLATES.projects = (data) => {
         subtitle = "",
         title = document.createElement("a-link");
 
-      title.href = item.href;
       title.setAttribute("the-path", item.path);
       title.appendChild(SNIPPETS.heading(item.title, "h3", ["projects-item-title", "h1"]));
 
