@@ -66,9 +66,8 @@ a-carousel {
 }
 
 .visuals-item-gallery-opener {
-  width: 3.1rem;
+  width: 2.95rem;
   height: auto;
-  /* padding-bottom: 0.55rem; */
   margin-left: var(--scale-12);
 }
 

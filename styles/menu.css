@@ -72,6 +72,7 @@ the-menu {
   overflow: hidden;
   border-radius: var(--scale-40);
   transition: transform 500ms var(--cb-slow-start);
+  color: var(--color-white);
 }
 
 body:not([data-menu="true"]) .menu-main {

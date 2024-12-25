@@ -89,11 +89,16 @@ class ACarousel extends UserInteraction {
     let transformIndexes = this.elements.map((obj, index) => index),
       transformX;
 
-    // limit to later (or limit to 0) = move all by +length (all but in view)
-    if (this.prevIndex === this.limitIndex) {
-      if (this.index > this.prevIndex || this.index === 0) {
-        transformIndexes.splice(this.limitIndex, this.lastIndex);
+    if (this.index > this.prevIndex || this.index === 0) {
+      if (this.prevIndex === this.limitIndex) {
+        transformIndexes.splice(this.limitIndex, this.elementsInView);
         transformX = this.maxElementTransform * this.elementsInView;
+      }
+
+      if (this.prevIndex === this.lastIndex) {
+        transformIndexes.pop(); 
+        transformIndexes.shift(); 
+        transformX = this.maxElementTransform * (this.elementsInView - 1);
       }
     }
 
@@ -102,6 +107,12 @@ class ACarousel extends UserInteraction {
       transformIndexes.splice(0, this.elementsInView);
       transformX = this.elements.length * this.maxElementTransform * -1;
     }
+    
+    // if (this.prevIndex === this.lastIndex && this.index < this.prevIndex) {
+    //   transformIndexes.splice(this.index, 1);
+    //   console.log("!", transformIndexes)
+    //   transformX = this.elementsInView * this.maxElementTransform * -1;
+    // }
 
     if (transformX !== undefined) {
       this.presetElements(transformIndexes, transformX);
@@ -123,6 +134,7 @@ class ACarousel extends UserInteraction {
 
     // last to 0 = reset all
     if (this.prevIndex === this.lastIndex && this.index === 0) {
+      console.log("last to 0 = reset all")
       transformX = 0;
     }
 

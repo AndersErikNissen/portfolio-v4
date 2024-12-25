@@ -30,11 +30,13 @@ APP_TEMPLATES.visuals = (data) => {
       let headingParameters = [item.title, "h2", ["visuals-item-title", "h1"]];
       if (galleryOpener) headingParameters.push([galleryOpener]);
       let heading = SNIPPETS.heading(...headingParameters);
+    
+      let img = item.image || item.gallery[0];
 
       itemsMarkup += `
         <div class="visuals-item carousel-item" data-stage="${index}">
           <div class="visuals-item-image-wrapper">
-            ${SNIPPETS.img(item.gallery[0], "(max-width: 767px) calc(100vw - 24px), 50vw").outerHTML}
+            ${SNIPPETS.img(img, "(max-width: 767px) calc(100vw - 24px), 50vw").outerHTML}
           </div>
           <div class="visuals-item-main">
             ${heading.outerHTML}

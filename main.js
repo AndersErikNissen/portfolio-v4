@@ -1064,7 +1064,7 @@ class TheApp extends HTMLElement {
     this.path = path;
     this.replaceChildren(TEMPLATE.html);
 
-    history.replaceState({}, "", DATA.path);
+    // history.replaceState({}, "", DATA.path); PLS FIX
     document.title = DATA.title + " - AENDERS.DK";
 
     return Promise.all([...STYLES, ...SCRIPTS]).then(async () => {

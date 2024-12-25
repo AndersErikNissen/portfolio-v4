@@ -79,6 +79,7 @@ the-header[show="true"] {
 
 .header-btn--email {
   width: var(--scale-40);
+  position: relative;
 }
 
 .header-btn > svg {
@@ -105,8 +106,8 @@ the-header[show="true"] {
   }
 
   .header-btn:hover {
-    background-color: var(--color-btn-2);
-    color: var(--color-btn-1);
+    background-color: var(--color-btn-2, var(--color-white));
+    color: var(--color-btn-1), var(--color-black);
   }
 
   #Menu-btn > svg {
