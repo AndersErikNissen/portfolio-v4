@@ -69,6 +69,12 @@ a-carousel {
   width: 2.95rem;
   height: auto;
   margin-left: var(--scale-12);
+  transform: scale(0);
+}
+
+.active .visuals-item-gallery-opener {
+  transform: scale(1);
+  transition: transform 500ms var(--cb-slow-start);
 }
 
 .visuals-item-gallery-opener > svg {
@@ -76,6 +82,7 @@ a-carousel {
   width: 100%;
   height: 100%;
 }
+
 
 .visuals-controls {
   position: fixed;
