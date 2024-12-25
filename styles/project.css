@@ -80,7 +80,7 @@
   display: block;
   width: 3.1rem;
   height: auto;
-  padding-bottom: 0.55rem;
+  /* padding-bottom: 0.55rem; */
   margin-left: var(--scale-8);
   opacity: 0;
   transform: scale(0);
