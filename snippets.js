@@ -50,10 +50,13 @@ class Snippets {
 
     LINKS.forEach((link) => {
       let a = document.createElement("a");
+      let span = document.createElement("span");
       a.href = link.url;
       a.classList.add("underlined-btn", "external-link");
       a.setAttribute("target", "_blank");
-      a.textContent = link.label;
+      span.classList.add('underlined-btn-label');
+      span.textContent = link.label;
+      a.appendChild(span);
       WRAPPER.appendChild(a);
     });
 

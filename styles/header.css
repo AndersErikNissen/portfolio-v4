@@ -77,6 +77,10 @@ the-header[show="true"] {
   color: var(--color-btn-2, var(--color-white));
 }
 
+.header-btn-phone-label {
+  transform: translateY(-6%);
+}
+
 .header-btn--email {
   width: var(--scale-40);
   position: relative;

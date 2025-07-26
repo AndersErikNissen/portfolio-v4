@@ -842,7 +842,7 @@ class TheHeader extends HTMLElement {
     phoneBtn.setAttribute("content-type", "phone");
     phoneBtn.classList.add("header-btn", "h-bounce-text", "header-btn-call", "h-scale-icon");
     phoneBtn.append(
-      SNIPPETS.heading("Giv et kald", "span", ["header-btn-label", "fs-small"], [], false),
+      SNIPPETS.heading("Giv et kald", "span", ["header-btn-label", "fs-small", "header-btn-phone-label"], [], false),
       SNIPPETS.icon("phone")
     );
 

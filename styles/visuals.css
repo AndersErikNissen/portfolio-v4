@@ -34,15 +34,27 @@ a-carousel {
   flex: 0 0 60%;
 }
 
+.visuals-item-image-cover,
 .visuals-item-image-wrapper > img {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+}
+
+.visuals-item-image-wrapper > img {
   object-position: center;
   border-radius: var(--scale-20);
+  object-fit: cover;
+}
+
+.visuals-item-image-cover {
+  cursor: pointer;
+}
+
+.active .visuals-item-image-cover {
+  display: none;
 }
 
 .visuals-item-main {
@@ -82,7 +94,6 @@ a-carousel {
   width: 100%;
   height: 100%;
 }
-
 
 .visuals-controls {
   position: fixed;
