@@ -230,6 +230,8 @@ class UserInteraction extends HTMLElement {
     this.stopInteraction = e;
     if (!this.listening || this.stopInteraction) return;
 
+    this.triggerEvent = 'wheel';
+
     this.listening = false;
 
     if (e.deltaY > 0) {
@@ -245,6 +247,7 @@ class UserInteraction extends HTMLElement {
 
   handleTouchStart(e) {
     if (!this.listening) return;
+
     this.stopInteraction = e;
     if (this.stopInteraction) return;
 
@@ -257,8 +260,11 @@ class UserInteraction extends HTMLElement {
   }
 
   handleTouchEnd(e) {
-    if (this.listening && !this.stopInteraction) {
+    const isTriggeredByControl = e.target.nodeName === 'STAGE-CONTROL' || e.target.closest('stage-control');
+
+    if (this.listening && !this.stopInteraction && !isTriggeredByControl) {
       this.listening = false;
+      this.triggerEvent = 'touch';
 
       let touchY = e.changedTouches[0].clientY;
       if (this.startY < touchY) this.next();
@@ -277,7 +283,7 @@ class UserInteraction extends HTMLElement {
     this.addEventListener("touchstart", this.handleTouchStart.bind(this));
     this.addEventListener("touchmove", this.handleTouchMove.bind(this));
     this.addEventListener("touchend", this.handleTouchEnd.bind(this));
-  }
+  } 
 }
 
 class ALink extends HTMLElement {
@@ -333,7 +339,15 @@ class StageManager extends UserInteraction {
   get activeStageClass() {
     return "active-stage";
   }
-
+  
+  get directionUpClass() {
+    return "direction-up";
+  }
+  
+  get directionDownClass() {
+    return "direction-down";
+  }
+  
   get hasInteracted() {
     return JSON.parse(this.getAttribute("has-interacted"));
   }
@@ -347,6 +361,17 @@ class StageManager extends UserInteraction {
 
     let index = i;
 
+    // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
+    // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
+    // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
+    // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
+    // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
+    // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
+    // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
+    // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
+    // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
+    let directionClass = this.directionUpClass;
+
     if (!this.hasInteracted) {
       this.hasInteracted = true;
     }
@@ -356,7 +381,8 @@ class StageManager extends UserInteraction {
     }
 
     if (this.stage !== index) {
-      this.history = index;
+
+      if (this.stage > i) directionClass = this.directionDownClass;
 
       this.deactivateNodes(this.stages[this.stage]);
       this.inanimateNodes(this.animationStages[this.stage]);
@@ -365,7 +391,8 @@ class StageManager extends UserInteraction {
         this.deactivateNodes(this.stages[this.previousStage], this.previousStageClass);
       }
 
-      this.activateNodes(this.stages[this.stage], this.previousStageClass);
+      // active previous stage nodes
+      this.activateNodes(this.stages[this.stage], this.previousStageClass, directionClass);
 
       this._previousStage = this.stage;
       this._stage = index;
@@ -374,7 +401,7 @@ class StageManager extends UserInteraction {
         this.setAttribute("stage", index);
       }
 
-      this.activateNodes(this.stages[this.stage]);
+      this.activateNodes(this.stages[this.stage], this.activeStageClass, directionClass);
       this.animateNodes(this.animationStages[this.stage]);
     }
   }
@@ -430,26 +457,34 @@ class StageManager extends UserInteraction {
     this.stage = 0 > this.stage - 1 ? this.stages.length - 1 : this.stage - 1;
   }
 
-  activateNodes(nodes, cls = this.activeStageClass) {
+  activateNodes(nodes, cls = this.activeStageClass, directionClass) {
     nodes.forEach((node) => {
       if (!node.classList.contains(cls)) {
         node.classList.add(cls);
+      }
+
+      if (directionClass) {
+        node.classList.add(directionClass);
       }
     });
   }
 
   deactivateNodes(nodes, cls = this.activeStageClass) {
+    const classesToRemove = [cls, this.directionUpClass, this.directionDownClass];
+
     nodes.forEach((node) => {
-      if (node.classList.contains(cls)) {
-        node.classList.remove(cls);
-      }
+      classesToRemove.forEach((rmvCls) => {
+        if (node.classList.contains(rmvCls)) {
+          node.classList.remove(rmvCls);
+        };
+      });
     });
   }
 
   animateNodes(nodes) {
     nodes.forEach((node) => {
       if (!node.classList.contains(this._animationClass)) {
-        node.classList.add(this._animationClass);
+        node.classList.add(this._animationClass, this.directionClass);
       }
     });
   }
@@ -468,6 +503,7 @@ class StageManager extends UserInteraction {
 
   attributeChangedCallback(attrName, oldIndex, newIndex) {
     if (attrName !== "stage") return;
+    this.triggerEvent = 'control';
     this.stage = parseInt(newIndex);
   }
 

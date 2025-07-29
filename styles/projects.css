@@ -37,13 +37,27 @@ the-app[template="projects"] {
   z-index: 3;
 }
 
-[has-interacted="true"] .projects-item.active-stage {
-  animation: activeProjectsItem 500ms var(--cb-slow-start) forwards;
+[has-interacted="true"] .projects-item.active-stage.direction-up {
+  animation: activeProjectsItemUp 500ms var(--cb-slow-start) forwards;
 }
 
-@keyframes activeProjectsItem {
+@keyframes activeProjectsItemUp {
   from {
     transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0%);
+  }
+}
+
+[has-interacted="true"] .projects-item.active-stage.direction-down {
+  animation: activeProjectsItemDown 500ms var(--cb-slow-start) forwards;
+}
+
+@keyframes activeProjectsItemDown {
+  from {
+    transform: translateY(-100%);
   }
 
   to {
@@ -55,18 +69,33 @@ the-app[template="projects"] {
   pointer-events: none;
 }
 
-[has-interacted="true"] .projects-item.previous-stage {
+[has-interacted="true"] .projects-item.previous-stage.direction-up {
   z-index: 1;
-  animation: previousProjectsItem 500ms var(--cb-slow-start) forwards;
+  animation: previousProjectsItemUp 500ms var(--cb-slow-start) forwards;
 }
 
-@keyframes previousProjectsItem {
+@keyframes previousProjectsItemUp {
   from {
     transform: translateY(0%);
   }
 
   to {
     transform: translateY(-100%);
+  }
+}
+
+[has-interacted="true"] .projects-item.previous-stage.direction-down {
+  z-index: 1;
+  animation: previousProjectsItemDown 500ms var(--cb-slow-start) forwards;
+}
+
+@keyframes previousProjectsItemDown {
+  from {
+    transform: translateY(0%);
+  }
+
+  to {
+    transform: translateY(100%);
   }
 }
 
