@@ -84,6 +84,17 @@ the-app {
   height: 100%;
 }
 
+.cover {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  z-index: 1;
+}
+
 .underlined-btn {
   position: relative;
   display: inline-block;

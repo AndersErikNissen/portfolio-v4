@@ -79,6 +79,7 @@ class DataBase {
 
   get data() {
     return new Promise((resolve) => {
+      sessionStorage.clear(); // PLS FIX
       const STORAGE = sessionStorage.getItem("aenders_dk_db");
 
       if (STORAGE) {
@@ -102,8 +103,8 @@ class DataBase {
     return nos.filter((nr, index, array) => array.indexOf(nr) === index);
   }
 
-  createStage(nr, obj) {
-    const STAGE = {};
+  createAndPushStage(nr, obj, target) {
+    let stage = {};
 
     Object.keys(obj).forEach((key) => {
       let split = key.split("-");
@@ -111,14 +112,14 @@ class DataBase {
       if (split[1] === nr) {
         if (obj[key]) {
           // Use an array, if the key already exist
-          if (STAGE[split[0]]) {
-            if (!Array.isArray(STAGE[split[0]])) {
-              STAGE[split[0]] = [STAGE[split[0]]];
+          if (stage[split[0]]) {
+            if (!Array.isArray(stage[split[0]])) {
+              stage[split[0]] = [stage[split[0]]];
             }
 
-            STAGE[split[0]].push(obj[key]);
+            stage[split[0]].push(obj[key]);
           } else {
-            STAGE[split[0]] = obj[key];
+            stage[split[0]] = obj[key];
           }
         }
 
@@ -126,13 +127,18 @@ class DataBase {
       }
     });
 
-    return STAGE;
+    // Push if stage has data
+    for (const key in stage) {
+      if (Object.hasOwn(stage, key)) {
+        return target.push(stage);
+      }
+    }
   }
 
   upgradePage(obj) {
     obj.stages = [];
 
-    this.uniqueNumbers(obj).forEach((unique) => obj.stages.push(this.createStage(unique, obj)));
+    this.uniqueNumbers(obj).forEach((unique) => this.createAndPushStage(unique, obj, obj.stages));
 
     return obj;
   }
@@ -140,7 +146,7 @@ class DataBase {
   upgradeProject(obj) {
     obj.stages = [];
 
-    this.uniqueNumbers(obj).forEach((unique) => obj.stages.push(this.createStage(unique, obj)));
+    this.uniqueNumbers(obj).forEach((unique) => this.createAndPushStage(unique, obj, obj.stages));
 
     return obj;
   }
@@ -359,23 +365,11 @@ class StageManager extends UserInteraction {
   set stage(i) {
     if (i === this.stage) return;
 
-    let index = this.stages[i] && i || 0;
-
-    // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
-    // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
-    // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
-    // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
-    // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
-    // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
-    // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
-    // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
-    // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
-
-    console.log("😎", i, index);
-
     if (!this.hasInteracted) {
       this.hasInteracted = true;
     }
+
+    let index = this.stages[i] && i || 0;
 
     if (this.stage !== index) {
       // Make the animations look more natural based on the event type

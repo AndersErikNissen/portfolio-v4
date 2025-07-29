@@ -262,6 +262,10 @@ body:not([data-menu="true"]) .menu-main {
   .menu-header-logo svg {
     width: 80px;
   }
+
+  .menu-links {
+    gap: 10px;
+  }
 }
 
 /* TRANSITION TO MENU */

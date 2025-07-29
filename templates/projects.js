@@ -29,10 +29,7 @@ APP_TEMPLATES.projects = (data) => {
     data.items.forEach((item, index) => {
       let year = "",
         subtitle = "",
-        title = document.createElement("a-link");
-
-      title.setAttribute("the-path", item.path);
-      title.appendChild(SNIPPETS.heading(item.title, "h3", ["projects-item-title", "h1"]));
+        title = SNIPPETS.heading(item.title, "h3", ["projects-item-title", "h1"]);
 
       let img = SNIPPETS.img(item.image, "100vw");
       let bg = document.createElement("div");
@@ -57,6 +54,10 @@ APP_TEMPLATES.projects = (data) => {
         subtitle = SNIPPETS.heading(item.subtitle, "p", ["fs-medium", "fw-200", "projects-item-subtitle"]);
       }
 
+      let coverLink = document.createElement("a-link");
+      coverLink.setAttribute("the-path", item.path);
+      coverLink.classList.add("cover");
+
       itemsMarkup += `
         <div class="projects-item" data-stage="${index}">
           ${bg.outerHTML}
@@ -68,6 +69,7 @@ APP_TEMPLATES.projects = (data) => {
           </div>
 
           ${subtitle.outerHTML}
+          ${coverLink.outerHTML}
         </div>      
       `;
     });
