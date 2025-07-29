@@ -359,7 +359,7 @@ class StageManager extends UserInteraction {
   set stage(i) {
     if (i === this.stage) return;
 
-    let index = i;
+    let index = this.stages[i] && i || 0;
 
     // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
     // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
@@ -370,19 +370,40 @@ class StageManager extends UserInteraction {
     // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
     // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
     // SHOULD BOTH CHANGE BASED ON INDEX DIRECTION... BUT ALSO DEPENDING WHAT TRIGGERED THE STATE CHANGE
-    let directionClass = this.directionUpClass;
+
+    console.log("😎", i, index);
 
     if (!this.hasInteracted) {
       this.hasInteracted = true;
     }
 
-    if (!this.stages[index]) {
-      index = 0;
-    }
-
     if (this.stage !== index) {
+      // Make the animations look more natural based on the event type
+      let directionClass = this.directionUpClass;
 
-      if (this.stage > i) directionClass = this.directionDownClass;
+      const fromLastToFirstIndex = this.stages.length - 1 === this.stage && index === 0;
+      const fromFirstToLastIndex = this.stage === 0 && index === this.stages.length - 1;
+      const toSmallerIndex = this.stage > index;
+
+      if (this.triggerEvent === 'wheel') {
+        if (toSmallerIndex && !fromLastToFirstIndex || fromFirstToLastIndex) {
+          directionClass = this.directionDownClass;
+        } 
+      }
+
+      if (this.triggerEvent === 'touch') {
+        if (!toSmallerIndex && !fromFirstToLastIndex || fromLastToFirstIndex) {
+          directionClass = this.directionDownClass;
+        }
+      }
+
+      if (this.triggerEvent === 'control') {
+        if (toSmallerIndex) {
+          directionClass = this.directionDownClass;
+        }
+      }
+
+      // Handle nodes
 
       this.deactivateNodes(this.stages[this.stage]);
       this.inanimateNodes(this.animationStages[this.stage]);
