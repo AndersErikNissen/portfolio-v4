@@ -65,16 +65,17 @@ class ComponentDigitalClock extends HTMLElement {
   movement() {
     const now = new Date();
     const hours = now.getHours();
+    const minutes = now.getMinutes();
     const currentTimeOfDay = hours >= 11 ? "day" : "night";
-
-    this.currentTime = {
-      hours: hours,
-      minutes: now.getMinutes(),
-    };
 
     if (this.timeOfDay !== currentTimeOfDay) {
       this.timeOfDay = currentTimeOfDay;
     }
+
+    this.currentTime = {
+      hours: hours,
+      minutes: minutes,
+    };
 
     this.replaceChildren(this.iconMarkup, this.labelMarkup);
   }
@@ -87,7 +88,7 @@ class ComponentDigitalClock extends HTMLElement {
       this.movement();
     }, secondsToNextFullMinute);
 
-    setInterval(this.movement.bind(this), 1000);
+    setInterval(this.movement.bind(this), 60000);
   }
 
   connectedCallback() {

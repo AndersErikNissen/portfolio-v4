@@ -11,6 +11,7 @@ a-carousel {
   overflow: hidden;
   gap: var(--space-edge);
   border-radius: var(--scale-20);
+  position: relative;
 }
 
 .visuals-item {
@@ -134,23 +135,21 @@ a-carousel {
   }
 
   .visuals-item-main {
-    padding: 24px 0;
+    padding: 24px 0 0;
     gap: 8px;
   }
 
   .visuals-item-gallery-opener {
-    width: 38px;
-    height: auto;
-    padding-bottom: 6px;
-    margin-left: 8px;
+    width: 36.5px;
+    margin-left: 6px;
   }
 
   .visuals-controls {
+    position: absolute;
     bottom: unset;
-    top: calc(60% - var(--space-edge));
+    top: calc(var(--space-edge) * 2);
     left: calc(var(--space-edge) * 2);
     width: auto;
-    transform: translateY(-50%);
   }
 
   .visuals-item-image-wrapper > img {

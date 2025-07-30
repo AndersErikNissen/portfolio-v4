@@ -93,6 +93,7 @@ gallery-closer {
 the-gallery .gallery-controller {
   position: fixed;
   top: 50%;
+  transform: translateY(-50%);
   right: calc(var(--space-edge) * 2);
   z-index: 1;
   opacity: 1;

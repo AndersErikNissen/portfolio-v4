@@ -79,7 +79,6 @@ class DataBase {
 
   get data() {
     return new Promise((resolve) => {
-      sessionStorage.clear(); // PLS FIX
       const STORAGE = sessionStorage.getItem("aenders_dk_db");
 
       if (STORAGE) {
@@ -240,7 +239,7 @@ class UserInteraction extends HTMLElement {
 
     this.listening = false;
 
-    if (e.deltaY > 0) {
+    if (e.deltaY > 0 || e.deltaX > 0) {
       this.next();
     } else {
       this.prev();

@@ -29,7 +29,10 @@ APP_TEMPLATES.projects = (data) => {
     data.items.forEach((item, index) => {
       let year = "",
         subtitle = "",
-        title = SNIPPETS.heading(item.title, "h3", ["projects-item-title", "h1"]);
+        title = document.createElement("a-link");
+
+      title.setAttribute("the-path", item.path);
+      title.appendChild(SNIPPETS.heading(item.title, "h3", ["projects-item-title", "h1"]));
 
       let img = SNIPPETS.img(item.image, "100vw");
       let bg = document.createElement("div");
@@ -46,12 +49,18 @@ APP_TEMPLATES.projects = (data) => {
         year.appendChild(star);
       }
 
+      let contentWrapper = document.createElement("a-link");
+      contentWrapper.setAttribute("the-path", item.path);
+      contentWrapper.innerHTML = item.content;
+
       let content = document.createElement("over-flow");
       content.setAttribute("data-animate", "");
-      content.innerHTML = item.content;
+      content.innerHTML = contentWrapper.outerHTML;
 
       if (item.subtitle.length > 0) {
-        subtitle = SNIPPETS.heading(item.subtitle, "p", ["fs-medium", "fw-200", "projects-item-subtitle"]);
+        subtitle = document.createElement("a-link");
+        subtitle.setAttribute("the-path", item.path);
+        subtitle.appendChild(SNIPPETS.heading(item.subtitle, "p", ["fs-medium", "fw-200", "projects-item-subtitle"]));
       }
 
       let coverLink = document.createElement("a-link");
@@ -61,6 +70,7 @@ APP_TEMPLATES.projects = (data) => {
       itemsMarkup += `
         <div class="projects-item" data-stage="${index}">
           ${bg.outerHTML}
+          ${coverLink.outerHTML}
 
           <div class="projects-item-main">
             ${year.outerHTML}
@@ -69,7 +79,6 @@ APP_TEMPLATES.projects = (data) => {
           </div>
 
           ${subtitle.outerHTML}
-          ${coverLink.outerHTML}
         </div>      
       `;
     });

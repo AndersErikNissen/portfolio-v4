@@ -55,6 +55,7 @@ body {
   font-variation-settings: "YOPQ" 300;
   width: 100%;
   height: 100vh;
+  max-height: 100svh; /* fix issue, where height goes past the top and bottom UI on mobile browsers */
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -92,7 +93,6 @@ the-app {
   width: 100%;
   height: 100%;
   cursor: pointer;
-  z-index: 1;
 }
 
 .underlined-btn {
@@ -316,7 +316,8 @@ copy-toaster[displaying="true"] {
 /* ICONS  */
 
 .icon-circle-plus circle,
-.icon-circle-close circle {
+.icon-circle-close circle,
+.icon-circle-back circle {
   opacity: 0;
 }
 

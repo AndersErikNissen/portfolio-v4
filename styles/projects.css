@@ -157,6 +157,10 @@ the-app[template="projects"] {
   line-height: 1;
 }
 
+.project-year-wrapper {
+  pointer-events: none;
+}
+
 .projects-item-star {
   display: block;
   position: absolute;
@@ -181,6 +185,7 @@ the-app[template="projects"] {
   left: 50%;
   transform: translateX(-50%);
   z-index: 1;
+  cursor: pointer;
 }
 
 @media (max-width: 767px) {
