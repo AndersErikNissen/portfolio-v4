@@ -137,6 +137,10 @@ APP_TEMPLATES.project = (data) => {
     opener.append(SNIPPETS.icon("circle-plus"), openerData);
     opener.classList.add("project-gallery-opener", "h-scale-icon");
 
+    if (data.color && data.color.length > 0) {
+      opener.setAttribute('gallery-custom-color', data.color);
+    }
+
     return opener;
   };
 

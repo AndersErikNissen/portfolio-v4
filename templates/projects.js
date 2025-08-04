@@ -10,14 +10,37 @@ console.log(
   "background-color: purple; color: white; padding: 4px 8px 3px; border-radius: 2px;"
 );
 
-APP_TEMPLATES.projects = (data) => {
+APP_TEMPLATES.projects = (data, params) => {
+
+
+
+  console.log("params",params);
+
+
+
+  let projects = data.items;
   let itemsMarkup = "";
   let controlMarkup = "";
+  
+  projects.sort((a, b) => {
+    return parseInt(b.year + b.month) - parseInt(a.year + a.month);
+  });
+  
 
-  if (data.items && data.items.length > 0) {
+  
+  // Possibly change the start stage to match the given project
+  let startStageIndex = 0;
+  if (params.project) {
+    let projectIndex = projects.map((project) => project.slug).indexOf(params.project);
+    if (projectIndex > -1) {
+      startStageIndex = projectIndex;
+    }
+  }
+
+  if (projects && projects.length > 0) {
     controlMarkup += '<stage-control manager="stage-delayed" class="projects-control controller">';
 
-    data.items.forEach((item, index) => {
+    projects.forEach((item, index) => {
       controlMarkup += `
         <div data-stage="${index}" class="control-item"></div>`;
     });
@@ -25,8 +48,8 @@ APP_TEMPLATES.projects = (data) => {
     controlMarkup += "</stage-control>";
   }
 
-  if (data.items.length > 1) {
-    data.items.forEach((item, index) => {
+  if (projects.length > 1) {
+    projects.forEach((item, index) => {
       let year = "",
         subtitle = "",
         title = document.createElement("a-link");
@@ -85,6 +108,7 @@ APP_TEMPLATES.projects = (data) => {
   }
 
   let stage = document.createElement("stage-delayed");
+  stage.setAttribute("stage", startStageIndex);
   stage.classList.add("template-projects", "template", "t-curtain");
 
   stage.innerHTML = `

@@ -308,8 +308,16 @@ class ALink extends HTMLElement {
     return new URL(this.getAttribute("the-path") || "/", location.href).pathname;
   }
 
+  get params() {
+    if (this.hasAttribute('the-params')) {
+      return JSON.parse(this.getAttribute('the-params'));
+    }
+
+    return {};
+  }
+
   event() {
-    this.app.transitionToTemplate(this.path);
+    this.app.transitionToTemplate(this.path, this.params);
   }
 
   connectedCallback() {
@@ -1094,7 +1102,7 @@ class TheApp extends HTMLElement {
     });
   }
 
-  async renderTemplate(path) {
+  async renderTemplate(path, params) {
     const DATA = this.db.find((data) => data.path === path) || this.db.find((data) => data.default_template === true);
 
     const NAME = DATA.name;
@@ -1103,7 +1111,7 @@ class TheApp extends HTMLElement {
       await this.loadScript("templates/" + NAME);
     }
 
-    const TEMPLATE = APP_TEMPLATES[NAME](DATA);
+    const TEMPLATE = APP_TEMPLATES[NAME](DATA, params);
 
     const STYLES = TEMPLATE.styles.map((path) => this.loadStylesheet(path));
     const SCRIPTS = TEMPLATE.scripts.map((path) => this.loadScript(path));
@@ -1133,7 +1141,7 @@ class TheApp extends HTMLElement {
     });
   }
 
-  async transitionToTemplate(path) {
+  async transitionToTemplate(path, params) {
     if (path === this.path) {
       if (this.menu.active) this.menu.active = false;
       return;
@@ -1155,7 +1163,7 @@ class TheApp extends HTMLElement {
 
     preRender()
       .then(async () => {
-        return await this.renderTemplate(path);
+        return await this.renderTemplate(path, params);
       })
       .then((customElement) => this.displayAfterRender(customElement));
   }
