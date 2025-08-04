@@ -31,6 +31,14 @@ class TheGallery extends HTMLElement {
     return this._wrapper;
   }
 
+  set customFontColor(color) {
+    if (color) {
+      this.style.setProperty('--gallery-custom-color', color);
+    } else {
+      this.style.removeProperty('--gallery-custom-color');
+    }
+  }
+
   set wrapper(node) {
     let closer = document.createElement("gallery-closer");
     let label = SNIPPETS.heading("Luk", "span", ["gallery-closer-label", "fs-medium"], [], false);
@@ -224,8 +232,13 @@ class GalleryOpener extends HTMLElement {
     this._images = JSON.parse(script.innerHTML);
   }
 
+  get galleryFontColor() {
+    return this.getAttribute("gallery-custom-color") || false;
+  }
+
   pushToGallery() {
     this.gallery.render(this.images);
+    this.gallery.customFontColor = this.galleryFontColor;
   }
 
   connectedCallback() {
@@ -244,6 +257,7 @@ class GalleryCloser extends HTMLElement {
 
   closeGallery() {
     this.gallery.open = false;
+    this.gallery.customFontColor = false;
   }
 
   connectedCallback() {

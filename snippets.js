@@ -50,10 +50,13 @@ class Snippets {
 
     LINKS.forEach((link) => {
       let a = document.createElement("a");
+      let span = document.createElement("span");
       a.href = link.url;
       a.classList.add("underlined-btn", "external-link");
       a.setAttribute("target", "_blank");
-      a.textContent = link.label;
+      span.classList.add('underlined-btn-label');
+      span.textContent = link.label;
+      a.appendChild(span);
       WRAPPER.appendChild(a);
     });
 
@@ -206,6 +209,18 @@ class Snippets {
         addPath(
           "M24.5856 26L18.9287 31.6569L20.3429 33.0711L25.9998 27.4142L31.6566 33.0711L33.0708 31.6569L27.414 26L33.0708 20.3432L31.6566 18.929L25.9998 24.5858L20.3429 18.929L18.9287 20.3432L24.5856 26Z",
           "close"
+        );
+        addPath(
+          "M26 1.5C12.469 1.5 1.5 12.469 1.5 26C1.5 39.531 12.469 50.5 26 50.5C39.531 50.5 50.5 39.531 50.5 26C50.5 12.469 39.531 1.5 26 1.5ZM0.5 26C0.5 11.9167 11.9167 0.5 26 0.5C40.0833 0.5 51.5 11.9167 51.5 26C51.5 40.0833 40.0833 51.5 26 51.5C11.9167 51.5 0.5 40.0833 0.5 26Z"
+        );
+        break;
+
+      case "circle-back":
+        size = 52;
+        addCircle(26, 26, 25);
+        addPath(
+          "M20.7071 26.9071L26.2 32.4L25.2 33.4L18 26.2L25.2 19L26.2 20L20.7071 25.4929H34.4V26.9071H20.7071Z",
+          "back"
         );
         addPath(
           "M26 1.5C12.469 1.5 1.5 12.469 1.5 26C1.5 39.531 12.469 50.5 26 50.5C39.531 50.5 50.5 39.531 50.5 26C50.5 12.469 39.531 1.5 26 1.5ZM0.5 26C0.5 11.9167 11.9167 0.5 26 0.5C40.0833 0.5 51.5 11.9167 51.5 26C51.5 40.0833 40.0833 51.5 26 51.5C11.9167 51.5 0.5 40.0833 0.5 26Z"

@@ -55,6 +55,7 @@ body {
   font-variation-settings: "YOPQ" 300;
   width: 100%;
   height: 100vh;
+  max-height: 100svh; /* fix issue, where height goes past the top and bottom UI on mobile browsers */
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -84,24 +85,42 @@ the-app {
   height: 100%;
 }
 
+.cover {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
 .underlined-btn {
   position: relative;
   display: inline-block;
   color: var(--color-black);
   font-size: var(--scale-16);
-  padding: var(--scale-8) 0;
+  padding: var(--scale-12) var(--scale-16);
   font-weight: 700;
+  overflow: hidden;
+  transition: color 300ms var(--cb-slow-start), border-radius 300ms var(--cb-slow-start);
+}
+
+.underlined-btn:hover {
+  color: var(--color-white);
+  border-radius: 9999px;
 }
 
 .underlined-btn::before {
   content: "";
   display: block;
   position: absolute;
-  height: var(--scale-1);
-  bottom: 0;
+  height: 100%;
   left: 0;
-  right: 0;
+  width: 100%;
+  bottom: calc(-100% + var(--scale-1));
   background-color: var(--color-grey-subtle);
+  transition: background-color 300ms var(--cb-slow-start), transform 300ms var(--cb-slow-start);
 }
 
 .underlined-btn.light {
@@ -110,6 +129,16 @@ the-app {
 
 .underlined-btn.light::before {
   background-color: var(--color-grey-intense);
+}
+
+.underlined-btn:hover::before {
+  transform: translateY(calc(-100% + var(--scale-1)));
+  background-color: var(--color-black);
+}
+
+.underlined-btn-label {
+  position: relative;
+  z-index: 1;
 }
 
 .link-footer {
@@ -149,7 +178,7 @@ the-app {
 .menu-btn-label {
   font-size: 0.752rem;
   font-weight: 400;
-  transform: translateY(7%);
+  transform: translateY(-1%);
 }
 
 .menu-btn .top,
@@ -287,7 +316,8 @@ copy-toaster[displaying="true"] {
 /* ICONS  */
 
 .icon-circle-plus circle,
-.icon-circle-close circle {
+.icon-circle-close circle,
+.icon-circle-back circle {
   opacity: 0;
 }
 

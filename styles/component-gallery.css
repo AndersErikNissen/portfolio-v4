@@ -10,7 +10,7 @@ the-gallery {
   display: grid;
   grid-template-rows: 1fr;
   grid-template-columns: 1fr;
-  color: var(--color-white);
+  color: var(--gallery-custom-color, --color-white);
 }
 
 the-gallery:not([open="true"]) {
@@ -48,6 +48,14 @@ the-gallery[open="true"] {
 .gallery-closer > svg {
   width: var(--scale-40);
   height: var(--scale-40);
+}
+
+.gallery-closer .icon-circle-close circle {
+  opacity: 1;
+}
+
+.gallery-closer .icon-circle-close .close {
+  color: var(--color-white);
 }
 
 gallery-opener,
@@ -93,6 +101,7 @@ gallery-closer {
 the-gallery .gallery-controller {
   position: fixed;
   top: 50%;
+  transform: translateY(-50%);
   right: calc(var(--space-edge) * 2);
   z-index: 1;
   opacity: 1;

@@ -102,8 +102,8 @@ class DataBase {
     return nos.filter((nr, index, array) => array.indexOf(nr) === index);
   }
 
-  createStage(nr, obj) {
-    const STAGE = {};
+  createAndPushStage(nr, obj, target) {
+    let stage = {};
 
     Object.keys(obj).forEach((key) => {
       let split = key.split("-");
@@ -111,14 +111,14 @@ class DataBase {
       if (split[1] === nr) {
         if (obj[key]) {
           // Use an array, if the key already exist
-          if (STAGE[split[0]]) {
-            if (!Array.isArray(STAGE[split[0]])) {
-              STAGE[split[0]] = [STAGE[split[0]]];
+          if (stage[split[0]]) {
+            if (!Array.isArray(stage[split[0]])) {
+              stage[split[0]] = [stage[split[0]]];
             }
 
-            STAGE[split[0]].push(obj[key]);
+            stage[split[0]].push(obj[key]);
           } else {
-            STAGE[split[0]] = obj[key];
+            stage[split[0]] = obj[key];
           }
         }
 
@@ -126,13 +126,18 @@ class DataBase {
       }
     });
 
-    return STAGE;
+    // Push if stage has data
+    for (const key in stage) {
+      if (Object.hasOwn(stage, key)) {
+        return target.push(stage);
+      }
+    }
   }
 
   upgradePage(obj) {
     obj.stages = [];
 
-    this.uniqueNumbers(obj).forEach((unique) => obj.stages.push(this.createStage(unique, obj)));
+    this.uniqueNumbers(obj).forEach((unique) => this.createAndPushStage(unique, obj, obj.stages));
 
     return obj;
   }
@@ -140,7 +145,7 @@ class DataBase {
   upgradeProject(obj) {
     obj.stages = [];
 
-    this.uniqueNumbers(obj).forEach((unique) => obj.stages.push(this.createStage(unique, obj)));
+    this.uniqueNumbers(obj).forEach((unique) => this.createAndPushStage(unique, obj, obj.stages));
 
     return obj;
   }
@@ -230,9 +235,11 @@ class UserInteraction extends HTMLElement {
     this.stopInteraction = e;
     if (!this.listening || this.stopInteraction) return;
 
+    this.triggerEvent = 'wheel';
+
     this.listening = false;
 
-    if (e.deltaY > 0) {
+    if (e.deltaY > 0 || e.deltaX > 0) {
       this.next();
     } else {
       this.prev();
@@ -245,6 +252,7 @@ class UserInteraction extends HTMLElement {
 
   handleTouchStart(e) {
     if (!this.listening) return;
+
     this.stopInteraction = e;
     if (this.stopInteraction) return;
 
@@ -257,8 +265,11 @@ class UserInteraction extends HTMLElement {
   }
 
   handleTouchEnd(e) {
-    if (this.listening && !this.stopInteraction) {
+    const isTriggeredByControl = e.target.nodeName === 'STAGE-CONTROL' || e.target.closest('stage-control');
+
+    if (this.listening && !this.stopInteraction && !isTriggeredByControl) {
       this.listening = false;
+      this.triggerEvent = 'touch';
 
       let touchY = e.changedTouches[0].clientY;
       if (this.startY < touchY) this.next();
@@ -277,7 +288,7 @@ class UserInteraction extends HTMLElement {
     this.addEventListener("touchstart", this.handleTouchStart.bind(this));
     this.addEventListener("touchmove", this.handleTouchMove.bind(this));
     this.addEventListener("touchend", this.handleTouchEnd.bind(this));
-  }
+  } 
 }
 
 class ALink extends HTMLElement {
@@ -297,8 +308,16 @@ class ALink extends HTMLElement {
     return new URL(this.getAttribute("the-path") || "/", location.href).pathname;
   }
 
+  get params() {
+    if (this.hasAttribute('the-params')) {
+      return JSON.parse(this.getAttribute('the-params'));
+    }
+
+    return {};
+  }
+
   event() {
-    this.app.transitionToTemplate(this.path);
+    this.app.transitionToTemplate(this.path, this.params);
   }
 
   connectedCallback() {
@@ -333,7 +352,15 @@ class StageManager extends UserInteraction {
   get activeStageClass() {
     return "active-stage";
   }
-
+  
+  get directionUpClass() {
+    return "direction-up";
+  }
+  
+  get directionDownClass() {
+    return "direction-down";
+  }
+  
   get hasInteracted() {
     return JSON.parse(this.getAttribute("has-interacted"));
   }
@@ -345,18 +372,39 @@ class StageManager extends UserInteraction {
   set stage(i) {
     if (i === this.stage) return;
 
-    let index = i;
-
     if (!this.hasInteracted) {
       this.hasInteracted = true;
     }
 
-    if (!this.stages[index]) {
-      index = 0;
-    }
+    let index = this.stages[i] && i || 0;
 
     if (this.stage !== index) {
-      this.history = index;
+      // Make the animations look more natural based on the event type
+      let directionClass = this.directionUpClass;
+
+      const fromLastToFirstIndex = this.stages.length - 1 === this.stage && index === 0;
+      const fromFirstToLastIndex = this.stage === 0 && index === this.stages.length - 1;
+      const toSmallerIndex = this.stage > index;
+
+      if (this.triggerEvent === 'wheel') {
+        if (toSmallerIndex && !fromLastToFirstIndex || fromFirstToLastIndex) {
+          directionClass = this.directionDownClass;
+        } 
+      }
+
+      if (this.triggerEvent === 'touch') {
+        if (!toSmallerIndex && !fromFirstToLastIndex || fromLastToFirstIndex) {
+          directionClass = this.directionDownClass;
+        }
+      }
+
+      if (this.triggerEvent === 'control') {
+        if (toSmallerIndex) {
+          directionClass = this.directionDownClass;
+        }
+      }
+
+      // Handle nodes
 
       this.deactivateNodes(this.stages[this.stage]);
       this.inanimateNodes(this.animationStages[this.stage]);
@@ -365,7 +413,8 @@ class StageManager extends UserInteraction {
         this.deactivateNodes(this.stages[this.previousStage], this.previousStageClass);
       }
 
-      this.activateNodes(this.stages[this.stage], this.previousStageClass);
+      // active previous stage nodes
+      this.activateNodes(this.stages[this.stage], this.previousStageClass, directionClass);
 
       this._previousStage = this.stage;
       this._stage = index;
@@ -374,7 +423,7 @@ class StageManager extends UserInteraction {
         this.setAttribute("stage", index);
       }
 
-      this.activateNodes(this.stages[this.stage]);
+      this.activateNodes(this.stages[this.stage], this.activeStageClass, directionClass);
       this.animateNodes(this.animationStages[this.stage]);
     }
   }
@@ -430,26 +479,34 @@ class StageManager extends UserInteraction {
     this.stage = 0 > this.stage - 1 ? this.stages.length - 1 : this.stage - 1;
   }
 
-  activateNodes(nodes, cls = this.activeStageClass) {
+  activateNodes(nodes, cls = this.activeStageClass, directionClass) {
     nodes.forEach((node) => {
       if (!node.classList.contains(cls)) {
         node.classList.add(cls);
+      }
+
+      if (directionClass) {
+        node.classList.add(directionClass);
       }
     });
   }
 
   deactivateNodes(nodes, cls = this.activeStageClass) {
+    const classesToRemove = [cls, this.directionUpClass, this.directionDownClass];
+
     nodes.forEach((node) => {
-      if (node.classList.contains(cls)) {
-        node.classList.remove(cls);
-      }
+      classesToRemove.forEach((rmvCls) => {
+        if (node.classList.contains(rmvCls)) {
+          node.classList.remove(rmvCls);
+        };
+      });
     });
   }
 
   animateNodes(nodes) {
     nodes.forEach((node) => {
       if (!node.classList.contains(this._animationClass)) {
-        node.classList.add(this._animationClass);
+        node.classList.add(this._animationClass, this.directionClass);
       }
     });
   }
@@ -468,6 +525,7 @@ class StageManager extends UserInteraction {
 
   attributeChangedCallback(attrName, oldIndex, newIndex) {
     if (attrName !== "stage") return;
+    this.triggerEvent = 'control';
     this.stage = parseInt(newIndex);
   }
 
@@ -842,7 +900,7 @@ class TheHeader extends HTMLElement {
     phoneBtn.setAttribute("content-type", "phone");
     phoneBtn.classList.add("header-btn", "h-bounce-text", "header-btn-call", "h-scale-icon");
     phoneBtn.append(
-      SNIPPETS.heading("Giv et kald", "span", ["header-btn-label", "fs-small"], [], false),
+      SNIPPETS.heading("Giv et kald", "span", ["header-btn-label", "fs-small", "header-btn-phone-label"], [], false),
       SNIPPETS.icon("phone")
     );
 
@@ -1044,7 +1102,7 @@ class TheApp extends HTMLElement {
     });
   }
 
-  async renderTemplate(path) {
+  async renderTemplate(path, params) {
     const DATA = this.db.find((data) => data.path === path) || this.db.find((data) => data.default_template === true);
 
     const NAME = DATA.name;
@@ -1053,7 +1111,7 @@ class TheApp extends HTMLElement {
       await this.loadScript("templates/" + NAME);
     }
 
-    const TEMPLATE = APP_TEMPLATES[NAME](DATA);
+    const TEMPLATE = APP_TEMPLATES[NAME](DATA, params);
 
     const STYLES = TEMPLATE.styles.map((path) => this.loadStylesheet(path));
     const SCRIPTS = TEMPLATE.scripts.map((path) => this.loadScript(path));
@@ -1083,7 +1141,7 @@ class TheApp extends HTMLElement {
     });
   }
 
-  async transitionToTemplate(path) {
+  async transitionToTemplate(path, params) {
     if (path === this.path) {
       if (this.menu.active) this.menu.active = false;
       return;
@@ -1105,7 +1163,7 @@ class TheApp extends HTMLElement {
 
     preRender()
       .then(async () => {
-        return await this.renderTemplate(path);
+        return await this.renderTemplate(path, params);
       })
       .then((customElement) => this.displayAfterRender(customElement));
   }

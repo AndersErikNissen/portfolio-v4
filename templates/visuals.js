@@ -37,6 +37,7 @@ APP_TEMPLATES.visuals = (data) => {
         <div class="visuals-item carousel-item" data-stage="${index}">
           <div class="visuals-item-image-wrapper">
             ${SNIPPETS.img(img, "(max-width: 767px) calc(100vw - 24px), 50vw").outerHTML}
+            <carousel-control mode="next" class="visuals-item-image-cover"></carousel-control>
           </div>
           <div class="visuals-item-main">
             ${heading.outerHTML}

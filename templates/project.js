@@ -137,8 +137,28 @@ APP_TEMPLATES.project = (data) => {
     opener.append(SNIPPETS.icon("circle-plus"), openerData);
     opener.classList.add("project-gallery-opener", "h-scale-icon");
 
+    if (data.color && data.color.length > 0) {
+      opener.setAttribute('gallery-custom-color', data.color);
+    }
+
     return opener;
   };
+
+  const backToProjectsBtn = () => {
+    const backToProjectsPath = data.path.replace("/" + data.slug, '');
+    const params = {
+      project: data.slug,
+    };
+    
+    let label = SNIPPETS.heading("Tilbage", "span", ["project-backbtn-label", "fs-medium"], [], false);
+    let btn = document.createElement('a-link');
+    btn.classList.add("project-backbtn", "h-bounce-text", "h-scale-icon");
+    btn.append(SNIPPETS.icon("circle-back"), label);
+    btn.setAttribute('the-path', backToProjectsPath);
+    btn.setAttribute('the-params', JSON.stringify(params));
+
+    return btn;
+  }
 
   let stageManager = document.createElement("stage-manager");
   stageManager.classList.add("template-project", "template");
@@ -152,6 +172,7 @@ APP_TEMPLATES.project = (data) => {
       <div class="project-gallery t-curtain">
         ${galleryMarkup}
         ${galleryOpener().outerHTML}
+        ${backToProjectsBtn().outerHTML}
       </div>
 
       ${controller().outerHTML}

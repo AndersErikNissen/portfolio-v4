@@ -3,6 +3,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .index-inner {
@@ -38,6 +39,7 @@
 
   .index-content {
     max-width: 100%;
+    padding-top: 16px;
   }
 }
 
