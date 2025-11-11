@@ -211,9 +211,8 @@ class UserInteraction extends HTMLElement {
         stopInteraction = JSON.parse(SCROLLABLE_ELEMENT.getAttribute("scrollable"));
       }
 
-      const CONTROLLER = v.target.tagName === "CAROUSEL-CONTROL" || v.target.closest("carousel-control");
-
-      if (CONTROLLER) {
+      const CONTROLLER = v.target.tagName === "CAROUSEL-CONTROL" && v.target || v.target.closest("carousel-control");
+      if (CONTROLLER && !CONTROLLER.hasAttribute('allow-scroll')) {
         stopInteraction = true;
       }
     } else {
@@ -1122,12 +1121,11 @@ class TheApp extends HTMLElement {
     this.path = path;
     this.replaceChildren(TEMPLATE.html);
 
-    // history.replaceState({}, "", DATA.path); PLS FIX
+    history.replaceState({}, "", DATA.path);
     document.title = DATA.title + " - AENDERS.DK";
 
+    // Uses .then() to make sure the CSS/JS has been loaded beforehand.
     return Promise.all([...STYLES, ...SCRIPTS]).then(async () => {
-      // Uses .then() to make sure the CSS/JS has been loaded beforehand.
-
       let customElementNames = ["STAGE-MANAGER", "STAGE-DELAYED", "A-CAROUSEL"];
 
       if (customElementNames.indexOf(TEMPLATE.html.nodeName) > -1) {

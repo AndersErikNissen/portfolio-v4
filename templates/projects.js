@@ -11,13 +11,6 @@ console.log(
 );
 
 APP_TEMPLATES.projects = (data, params) => {
-
-
-
-  console.log("params",params);
-
-
-
   let projects = data.items;
   let itemsMarkup = "";
   let controlMarkup = "";
@@ -26,9 +19,7 @@ APP_TEMPLATES.projects = (data, params) => {
     return parseInt(b.year + b.month) - parseInt(a.year + a.month);
   });
   
-
-  
-  // Possibly change the start stage to match the given project
+  // Possibility to change the start stage to match the given project
   let startStageIndex = 0;
   if (params.project) {
     let projectIndex = projects.map((project) => project.slug).indexOf(params.project);
